@@ -90,8 +90,17 @@ const balances = async () => {
     pair1 = await uniswapFactoryContract.functions.getPair(wjewelAddress, xjewelAddress);
     console.log('Pair address for xJewel-wJewel from Factory Contract (getPair()):\n', pair1);
 
-    const route = new Route([pair1, wjewelAddress]);
-    console.log(route);
+    //NEED TO FIGURE OUT FUCKING GETRESERVES IN ORDER TO DETERMINE A PRICE
+    //JUST NEED TO GET RESERVES OF TOKEN1 AND TOKEN2 THEN DO THE MATH, TO START
+    reserves = await pair1.functions.getReserves();
+    console.log(reserves);
+
+
+
+
+
+    // const route = new Route([pair1, wjewelAddress]);
+    // console.log(route);
     // const trade = new Trade(route, new TokenAmount(wjewelAddress, '100000000000000', TradeType.EXACT_INPUT));
     // console.log(trade);
 
@@ -159,15 +168,15 @@ const balances = async () => {
     // console.log(ethers.utils.formatUnits(crystalUsdcBalance), 'CRYSTAL-USDC');
     // console.log('-'.repeat(60));
 
-    // jewelXJewelName = await jewelXJewelContract.name();
-    // console.log('Name:', jewelXJewelName);
-    // jewelXJewelSymbol = await jewelXJewelContract.symbol();
-    // console.log('Symbol:', jewelXJewelSymbol);
-    // jewelXJewelDecimals = await jewelXJewelContract.decimals();
-    // console.log('Decimals:', jewelXJewelDecimals);
-    // jewelXJewelBalance = await jewelXJewelContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(jewelXJewelBalance), 'JEWEL-xJEWEL');
-    // console.log('-'.repeat(60));
+    jewelXJewelName = await jewelXJewelContract.name();
+    console.log('Name:', jewelXJewelName);
+    jewelXJewelSymbol = await jewelXJewelContract.symbol();
+    console.log('Symbol:', jewelXJewelSymbol);
+    jewelXJewelDecimals = await jewelXJewelContract.decimals();
+    console.log('Decimals:', jewelXJewelDecimals);
+    jewelXJewelBalance = await jewelXJewelContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(jewelXJewelBalance), 'JEWEL-xJEWEL');
+    console.log('-'.repeat(60));
 
     // jewelCrystalName = await jewelCrystalContract.name();
     // console.log('Name:', crystalUsdcName);
