@@ -63,29 +63,83 @@ const woneJewelContract = new ethers.Contract(woneJewelPair, woneJewelAbi, hmyPr
 
 
 const balances = async () => {
-    console.log('        DFK Chain Balances');
+    console.log('#'.repeat(50),
+        '\n DFK Chain Balances\n',
+        rxWalletAddress, 
+        '\n', 
+        '#'.repeat(50));
     console.log('-'.repeat(50));
 
-    // blockNumber = await provider.getBlockNumber();
-    // console.log('DFK Chain block #', blockNumber);
-    // jewelBalance = await provider.getBalance(rxWalletAddress);
-    // console.log(ethers.utils.formatEther(jewelBalance), 'JEWEL');
+    blockNumber = await provider.getBlockNumber();
+    console.log('DFK Chain block #', blockNumber);
+    jewelBalance = await provider.getBalance(rxWalletAddress);
+    console.log(ethers.utils.formatEther(jewelBalance), 'JEWEL');
 
-    // console.log('-'.repeat(50), '\nBank\n');
-    // bankBalance = await bankContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(bankBalance), 'xCRYSTAL in Bank');
-    // bankSupply = await bankContract.totalSupply();
-    // console.log(ethers.utils.formatUnits(bankSupply), 'Bank Total Supply');
+    console.log('-'.repeat(50), '\nBank\n');
+    bankBalance = await bankContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(bankBalance), 'xCRYSTAL in Bank');
+    bankSupply = await bankContract.totalSupply();
+    console.log(ethers.utils.formatUnits(bankSupply), 'Bank Total Supply');
 
-    // console.log('-'.repeat(50), '\nWallet Tokens\n');
-    // crystalName = await crystalContract.name();
-    // console.log('Name:', crystalName);
-    // crystalSymbol = await crystalContract.symbol();
-    // console.log('Symbol:', crystalSymbol);
-    // crystalDecimals = await crystalContract.decimals();
-    // console.log('Decimals:', crystalDecimals);
-    // crystalBalance = await crystalContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(crystalBalance), 'CRYSTAL');
+    console.log('-'.repeat(50), '\nERC20 Tokens\n');
+    crystalName = await crystalContract.name();
+    console.log('Name:', crystalName);
+    crystalSymbol = await crystalContract.symbol();
+    console.log('Symbol:', crystalSymbol);
+    crystalDecimals = await crystalContract.decimals();
+    console.log('Decimals:', crystalDecimals);
+    crystalBalance = await crystalContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(crystalBalance), 'CRYSTAL');
+
+    xcrystalName = await xcrystalContract.name();
+    console.log('Name:', xcrystalName);
+    xcrystalSymbol = await xcrystalContract.symbol();
+    console.log('Symbol:', xcrystalSymbol);
+    xcrystalDecimals = await xcrystalContract.decimals();
+    console.log('Decimals:', xcrystalDecimals);
+    xcrystalBalance = await xcrystalContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(xcrystalBalance), 'xCRYSTAL');
+    console.log('-'.repeat(60));
+
+    wjewelName = await wjewelContract.name();
+    console.log('Name:', wjewelName);
+    wjewelSymbol = await wjewelContract.symbol();
+    console.log('Symbol:', wjewelSymbol);
+    wjewelDecimals = await wjewelContract.decimals();
+    console.log('Decimals:', wjewelDecimals);
+    wjewelBalance = await wjewelContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(wjewelBalance), 'WJEWEL');
+    console.log('-'.repeat(60));
+
+    xjewelName = await xjewelContract.name();
+    console.log('Name:', xjewelName);
+    xjewelSymbol = await xjewelContract.symbol();
+    console.log('Symbol:', xjewelSymbol);
+    xjewelDecimals = await xjewelContract.decimals();
+    console.log('Decimals:', xjewelDecimals);
+    xjewelBalance = await xjewelContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(xjewelBalance), 'xJEWEL');
+    console.log('-'.repeat(60));
+
+    usdcName = await usdcContract.name();
+    console.log('Name:', usdcName);
+    usdcSymbol = await usdcContract.symbol();
+    console.log('Symbol:', usdcSymbol);
+    usdcDecimals = await usdcContract.decimals();
+    console.log('Decimals:', usdcDecimals);
+    usdcBalance = await usdcContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(usdcBalance), 'USDC');
+    console.log('-'.repeat(60));
+
+    goldName = await goldContract.name();
+    console.log('Name:', goldName);
+    goldSymbol = await goldContract.symbol();
+    console.log('Symbol:', goldSymbol);
+    goldDecimals = await goldContract.decimals();
+    console.log('Decimals:', goldDecimals);
+    goldBalance = await goldContract.balanceOf(rxWalletAddress);
+    console.log(ethers.utils.formatUnits(goldBalance), 'DFKGOLD');
+    console.log('-'.repeat(60));
 
     // console.log('-'.repeat(50), '\nGardens\n');
     // gardenPending = await masterGardenerContract.pendingReward(2, rxWalletAddress);
@@ -102,15 +156,15 @@ const balances = async () => {
 
     console.log('-'.repeat(50), '\nPairs\n');
     pair1 = await uniswapFactoryContract.functions.getPair(wjewelAddress, xjewelAddress);
-    console.log('Pair address for xJewel-wJewel from Factory Contract (getPair()):\n', pair1);
+    console.log('Pair address for xJewel-wJewel pulled from Factory Contract using getPair():\n', pair1);
 
     // console.log(jewelCrystalContract);
 
     // reserves1 = await ethUsdcEthContract.functions.getReserves();
     // console.log(reserves1);
 
-    reserves2 = await woneJewelContract.functions.getReserves();
-    console.log('\n #### Harmony - wONE-JEWEL pair token reserves #### \n', reserves2, '\n');
+    // reserves2 = await woneJewelContract.functions.getReserves();
+    // console.log('\n #### Harmony - wONE-JEWEL pair token reserves #### \n', reserves2, '\n');
 
     reserves = await jewelXJewelContract.functions.getReserves();
     console.log('\n #### DFK Chain - wJEWEL-xJEWEL pair token reserves #### \n', reserves, '\n');
@@ -124,59 +178,8 @@ const balances = async () => {
     // const trade = new Trade(route, new TokenAmount(wjewelAddress, '100000000000000', TradeType.EXACT_INPUT));
     // console.log(trade);
 
-
     // a = pair_con.getAmountsOut(1.0, [wjewelAddress, xjewelAddress]);
     // console.log(a);
-
-    // xcrystalName = await xcrystalContract.name();
-    // console.log('Name:', xcrystalName);
-    // xcrystalSymbol = await xcrystalContract.symbol();
-    // console.log('Symbol:', xcrystalSymbol);
-    // xcrystalDecimals = await xcrystalContract.decimals();
-    // console.log('Decimals:', xcrystalDecimals);
-    // xcrystalBalance = await xcrystalContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(xcrystalBalance), 'xCRYSTAL');
-    // console.log('-'.repeat(60));
-
-    // wjewelName = await wjewelContract.name();
-    // console.log('Name:', wjewelName);
-    // wjewelSymbol = await wjewelContract.symbol();
-    // console.log('Symbol:', wjewelSymbol);
-    // wjewelDecimals = await wjewelContract.decimals();
-    // console.log('Decimals:', wjewelDecimals);
-    // wjewelBalance = await wjewelContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(wjewelBalance), 'WJEWEL');
-    // console.log('-'.repeat(60));
-
-    // xjewelName = await xjewelContract.name();
-    // console.log('Name:', xjewelName);
-    // xjewelSymbol = await xjewelContract.symbol();
-    // console.log('Symbol:', xjewelSymbol);
-    // xjewelDecimals = await xjewelContract.decimals();
-    // console.log('Decimals:', xjewelDecimals);
-    // xjewelBalance = await xjewelContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(xjewelBalance), 'xJEWEL');
-    // console.log('-'.repeat(60));
-
-    // usdcName = await usdcContract.name();
-    // console.log('Name:', usdcName);
-    // usdcSymbol = await usdcContract.symbol();
-    // console.log('Symbol:', usdcSymbol);
-    // usdcDecimals = await usdcContract.decimals();
-    // console.log('Decimals:', usdcDecimals);
-    // usdcBalance = await usdcContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(usdcBalance), 'USDC');
-    // console.log('-'.repeat(60));
-
-    // goldName = await goldContract.name();
-    // console.log('Name:', goldName);
-    // goldSymbol = await goldContract.symbol();
-    // console.log('Symbol:', goldSymbol);
-    // goldDecimals = await goldContract.decimals();
-    // console.log('Decimals:', goldDecimals);
-    // goldBalance = await goldContract.balanceOf(rxWalletAddress);
-    // console.log(ethers.utils.formatUnits(goldBalance), 'DFKGOLD');
-    // console.log('-'.repeat(60));
 
     // crystalUsdcName = await crystalUsdcContract.name();
     // console.log('Name:', crystalUsdcName);
