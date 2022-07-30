@@ -35,7 +35,8 @@ const xjewelContract = new ethers.Contract(xjewelAddress, erc20Abi, provider);
 const crystalUsdcPair = '0x04Dec678825b8DfD2D0d9bD83B538bE3fbDA2926';
 const crystalUsdcContract = new ethers.Contract(crystalUsdcPair, erc20Abi, provider);
 const jewelXJewelPair = '0x6AC38A4C112F125eac0eBDbaDBed0BC8F4575d0d';
-const jewelXJewelContract = new ethers.Contract(jewelXJewelPair, erc20Abi, provider);
+const jewelXJewelAbi = fs.readFileSync("./abis/ethUsdcAbi.json").toString();
+const jewelXJewelContract = new ethers.Contract(jewelXJewelPair, jewelXJewelAbi, provider);
 const jewelCrystalPair = '0x48658E69D741024b4686C8f7b236D3F1D291f386';
 const jewelCrystalContract = new ethers.Contract(jewelCrystalPair, erc20Abi, provider);
 const wjewelAddress = '0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260';
@@ -46,6 +47,19 @@ const usdcAddress = '0x3AD9DFE640E1A9Cc1D9B0948620820D975c3803a';
 const usdcContract = new ethers.Contract(usdcAddress, erc20Abi, provider);
 const goldAddress = '0x576C260513204392F0eC0bc865450872025CB1cA';
 const goldContract = new ethers.Contract(goldAddress, erc20Abi, provider);
+
+
+const ethUrl = 'https://eth-mainnet.g.alchemy.com/v2/Me9TM57oKMh4sMHIiLBSLgOfWG1SCqx0';
+const ethProvider = new ethers.providers.JsonRpcProvider(ethUrl);
+const ethUsdcEthPair = '0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc';
+const ethUsdcAbi = fs.readFileSync("./abis/ethUsdcAbi.json").toString();
+const ethUsdcEthContract = new ethers.Contract(ethUsdcEthPair, ethUsdcAbi, ethProvider);
+
+const hmyUrl = 'https://api.s0.t.hmny.io/';
+const hmyProvider = new ethers.providers.JsonRpcProvider(hmyUrl);
+const woneJewelPair = '0xEb579ddcD49A7beb3f205c9fF6006Bb6390F138f';
+const woneJewelAbi = fs.readFileSync("./abis/ethUsdcAbi.json").toString();
+const woneJewelContract = new ethers.Contract(woneJewelPair, woneJewelAbi, hmyProvider);
 
 
 const balances = async () => {
@@ -90,10 +104,16 @@ const balances = async () => {
     pair1 = await uniswapFactoryContract.functions.getPair(wjewelAddress, xjewelAddress);
     console.log('Pair address for xJewel-wJewel from Factory Contract (getPair()):\n', pair1);
 
-    //NEED TO FIGURE OUT FUCKING GETRESERVES IN ORDER TO DETERMINE A PRICE
-    //JUST NEED TO GET RESERVES OF TOKEN1 AND TOKEN2 THEN DO THE MATH, TO START
-    reserves = await pair1.functions.getReserves();
-    console.log(reserves);
+    // console.log(jewelCrystalContract);
+
+    // reserves1 = await ethUsdcEthContract.functions.getReserves();
+    // console.log(reserves1);
+
+    reserves2 = await woneJewelContract.functions.getReserves();
+    console.log('\n #### Harmony - wONE-JEWEL pair token reserves #### \n', reserves2, '\n');
+
+    reserves = await jewelXJewelContract.functions.getReserves();
+    console.log('\n #### DFK Chain - wJEWEL-xJEWEL pair token reserves #### \n', reserves, '\n');
 
 
 
@@ -168,15 +188,15 @@ const balances = async () => {
     // console.log(ethers.utils.formatUnits(crystalUsdcBalance), 'CRYSTAL-USDC');
     // console.log('-'.repeat(60));
 
-    jewelXJewelName = await jewelXJewelContract.name();
-    console.log('Name:', jewelXJewelName);
-    jewelXJewelSymbol = await jewelXJewelContract.symbol();
-    console.log('Symbol:', jewelXJewelSymbol);
-    jewelXJewelDecimals = await jewelXJewelContract.decimals();
-    console.log('Decimals:', jewelXJewelDecimals);
-    jewelXJewelBalance = await jewelXJewelContract.balanceOf(rxWalletAddress);
-    console.log(ethers.utils.formatUnits(jewelXJewelBalance), 'JEWEL-xJEWEL');
-    console.log('-'.repeat(60));
+    // jewelXJewelName = await jewelXJewelContract.name();
+    // console.log('Name:', jewelXJewelName);
+    // jewelXJewelSymbol = await jewelXJewelContract.symbol();
+    // console.log('Symbol:', jewelXJewelSymbol);
+    // jewelXJewelDecimals = await jewelXJewelContract.decimals();
+    // console.log('Decimals:', jewelXJewelDecimals);
+    // jewelXJewelBalance = await jewelXJewelContract.balanceOf(rxWalletAddress);
+    // console.log(ethers.utils.formatUnits(jewelXJewelBalance), 'JEWEL-xJEWEL');
+    // console.log('-'.repeat(60));
 
     // jewelCrystalName = await jewelCrystalContract.name();
     // console.log('Name:', crystalUsdcName);
