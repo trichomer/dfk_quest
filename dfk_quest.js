@@ -46,10 +46,10 @@ const quester = async () => {
   // filter2 = await wjewelContract.filters.Transfer(null, rxWalletAddress);// List all token transfers *to* myAddress:
   // console.log(filter2);
 
-  questFilter1 = await questCoreV2Contract.filters.QuestXP();
-  questFilter2 = await questCoreV2Contract.filters.QuestReward();
-  questFilter3 = await questCoreV2Contract.filters.RewardMinted();
-  questFilter4 = await questCoreV2Contract.filters.QuestSkillUp();
+  questFilter1 = await questCoreV2Contract.filters.QuestXP(100594378);
+  questFilter2 = await questCoreV2Contract.filters.QuestReward(100594378);
+  questFilter3 = await questCoreV2Contract.filters.RewardMinted(100594378);
+  questFilter4 = await questCoreV2Contract.filters.QuestSkillUp(100594378);
   console.log(
     questFilter1, 
     questFilter2, 
