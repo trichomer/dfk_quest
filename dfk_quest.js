@@ -1,4 +1,4 @@
-const { ethers } = require("ethers");
+const { ethers, BigNumber } = require("ethers");
 const fs = require("fs");
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
@@ -30,8 +30,7 @@ const quester = async () => {
     console.log('\nWallet', rxWalletAddress, 'Current Quests:');
     accountActiveQuests = await questCoreV2Contract.functions.getAccountActiveQuests(rxWalletAddress);
     console.log(
-        accountActiveQuests[0],
-        accountActiveQuests[1]
+        accountActiveQuests[0]
         );
 }
 
