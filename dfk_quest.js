@@ -16,47 +16,81 @@ const questCoreV2Contract = new ethers.Contract(
   provider
 );
 
+const wjewelAddress = '0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260';
+const wjewelAbi = fs.readFileSync("./abis/erc20.json").toString();
+const wjewelContract = new ethers.Contract(
+  wjewelAddress,
+  wjewelAbi,
+  provider
+);
+
 const quester = async () => {
   console.log("-".repeat(50));
-  console.log("\nHero 93141 Current Stamina:");
-  heroCurrentStamina = await questCoreV2Contract.functions.getCurrentStamina(
-    93141
-  );
-  console.log(heroCurrentStamina);
+  // console.log("\nHero 121591 Current Stamina:");
+  // heroCurrentStamina = await questCoreV2Contract.functions.getCurrentStamina(
+  //   194957
+  // );
+  // console.log("stamina: " + heroCurrentStamina);
+  // console.log("\nHero 133062 Current Stamina:");
+  // heroCurrentStamina = await questCoreV2Contract.functions.getCurrentStamina(
+  //   133062
+  // );
+  // console.log("stamina: " + heroCurrentStamina);
+  
+  // feeData = await provider.getFeeData();//recommended FeeData to use in a txn
+  // console.log(ethers.utils.formatUnits(feeData.maxFeePerGas, "gwei"));//converted from wei into gwei
 
-  console.log("-".repeat(50));
-  console.log("\nWallet", rxWalletAddress, "Current Quests:");
-  accountActiveQuests =
-    await questCoreV2Contract.functions.getAccountActiveQuests(rxWalletAddress);
-  console.log("accountActiveQuests: " + typeof accountActiveQuests);
-  console.log("accountActiveQuests Keys: " + Object.keys(accountActiveQuests));
-  console.log("accountActiveQuests[0]: " + typeof accountActiveQuests[0]);
+  // testEventFilter = await wjewelContract.filters.Transfer(rxWalletAddress);// List all token transfers *from* myAddress
+  // console.log(testEventFilter);
 
-  console.log("Keys Length: " + Object.keys(accountActiveQuests).length);
+  // filter2 = await wjewelContract.filters.Transfer(null, rxWalletAddress);// List all token transfers *to* myAddress:
+  // console.log(filter2);
 
-  const data = accountActiveQuests[0];
-  // const [id, questAddress, level, heroes, player, startBlock] = element;
-
-  console.log(`Data Length: ${data.length}`);
-  console.log(`Data: ${data}`);
-
-  data.forEach((element, i) => {
-    const [
-      id,
-      questAddress,
-      level,
-      heroes,
-      player,
-      startBlock,
-      startAtTime,
-      completeAtTime,
-      attempts,
-      status,
-    ] = element;
-    console.log(
-      `ID: ${id} || Quest Address: ${questAddress} || Level: ${level} || Hero: ${heroes} || Player: ${player} || Start Block: ${startBlock} || Start Time: ${startAtTime} || Complete Time: ${completeAtTime} || Attempts: ${attempts} || Status : ${status}`
+  questFilter1 = await questCoreV2Contract.filters.QuestXP();
+  questFilter2 = await questCoreV2Contract.filters.QuestReward();
+  questFilter3 = await questCoreV2Contract.filters.RewardMinted();
+  questFilter4 = await questCoreV2Contract.filters.QuestSkillUp();
+  console.log(
+    questFilter1, 
+    questFilter2, 
+    questFilter3,
+    questFilter4
     );
-  });
+
+
+  // console.log("-".repeat(50));
+  // console.log("\nWallet", rxWalletAddress, "Current Quests:");
+  // accountActiveQuests =
+  //   await questCoreV2Contract.functions.getAccountActiveQuests(rxWalletAddress);
+  // console.log("accountActiveQuests: " + typeof accountActiveQuests);
+  // console.log("accountActiveQuests Keys: " + Object.keys(accountActiveQuests));
+  // console.log("accountActiveQuests[0]: " + typeof accountActiveQuests[0]);
+
+  // console.log("Keys Length: " + Object.keys(accountActiveQuests).length);
+
+  // const data = accountActiveQuests[0];
+  // // const [id, questAddress, level, heroes, player, startBlock] = element;
+
+  // console.log(`Data Length: ${data.length}`);
+  // console.log(`Data: ${data}`);
+
+  // data.forEach((element, i) => {
+  //   const [
+  //     id,
+  //     questAddress,
+  //     level,
+  //     heroes,
+  //     player,
+  //     startBlock,
+  //     startAtTime,
+  //     completeAtTime,
+  //     attempts,
+  //     status,
+  //   ] = element;
+  //   console.log(
+  //     `ID: ${id} \n Quest Address: ${questAddress} \n Level: ${level} \n Hero: ${heroes} \n Player: ${player} \n Start Block: ${startBlock} \n Start Time: ${startAtTime} \n Complete Time: ${completeAtTime} \n Attempts: ${attempts} \n Status : ${status}`
+  //   );
+  // });
 };
 
 quester();

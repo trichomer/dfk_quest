@@ -212,6 +212,10 @@ const balances = async () => {
   // reserves2 = await woneJewelContract.functions.getReserves();
   // console.log('\n #### Harmony - wONE-JEWEL pair token reserves #### \n', reserves2, '\n');
 
+
+
+
+  
   reserves = await jewelXJewelContract.functions.getReserves();
   console.log(
     "\n #### DFK Chain - wJEWEL-xJEWEL pair token reserves #### \n",
@@ -242,6 +246,10 @@ const balances = async () => {
   console.log(route);
   // const trade = new Trade(route, new TokenAmount(wjewelAddress, '100000000000000', TradeType.EXACT_INPUT));
   // console.log(trade);
+
+
+
+
 
   // a = pair_con.getAmountsOut(1.0, [wjewelAddress, xjewelAddress]);
   // console.log(a);
