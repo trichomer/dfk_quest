@@ -15,14 +15,11 @@ const questCoreV2Contract = new ethers.Contract(
   questCoreV2Abi,
   provider
 );
+const questCoreV2Interface = new ethers.utils.Interface(questCoreV2Abi);
 
-const wjewelAddress = '0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260';
+const wjewelAddress = "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260";
 const wjewelAbi = fs.readFileSync("./abis/erc20.json").toString();
-const wjewelContract = new ethers.Contract(
-  wjewelAddress,
-  wjewelAbi,
-  provider
-);
+const wjewelContract = new ethers.Contract(wjewelAddress, wjewelAbi, provider);
 
 const quester = async () => {
   console.log("-".repeat(50));
@@ -36,7 +33,7 @@ const quester = async () => {
   //   133062
   // );
   // console.log("stamina: " + heroCurrentStamina);
-  
+
   // feeData = await provider.getFeeData();//recommended FeeData to use in a txn
   // console.log(ethers.utils.formatUnits(feeData.maxFeePerGas, "gwei"));//converted from wei into gwei
 
@@ -50,13 +47,43 @@ const quester = async () => {
   questFilter2 = await questCoreV2Contract.filters.QuestReward(100594378);
   questFilter3 = await questCoreV2Contract.filters.RewardMinted(100594378);
   questFilter4 = await questCoreV2Contract.filters.QuestSkillUp(100594378);
-  console.log(
-    questFilter1, 
-    questFilter2, 
-    questFilter3,
-    questFilter4
-    );
+  console.log(questFilter1, questFilter2, questFilter3, questFilter4);
 
+  const abi = [
+    "event QuestXP(uint256 indexed questId, address indexed player, uint256 heroId, uint64 xpEarned)",
+  ];
+  const interface = new ethers.utils.Interface(abi);
+  const testLog = {
+    address:
+      "0x9c39d9087162b6ffb6a639ad9d9134db96598a684324deb4a05a8cc57fcd7c0e",
+    topics: [
+      "0x9c39d9087162b6ffb6a639ad9d9134db96598a684324deb4a05a8cc57fcd7c0e",
+      // "0xd24d0ec0941a2f5cf71e34aab5120a6ec265b4ff45c78e510a05928202f82786",
+      // "0x0000000000000000000000000000000000000000000000000000000005fef2ca",
+    ],
+    questId: 100594378,
+  };
+  console.log(interface.events);
+  const logs = await provider.getLogs({
+    address: "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154",
+    topics: [
+      "0xdc5746df27e443efb54d93e1b78111844a3fe5efcabce72a649a9ce2ecbdf8e1",
+    ],
+  });
+
+  console.log(logs);
+  // console.log(interface.parseLog(testLog));
+
+  // const q1Data = questFilter1.address;
+  // const q1topics = questFilter1.topics;
+
+  // console.log(q1Data);
+  // console.log(q1topics);
+
+  // console.log(questCoreV2Interface.parseLog({ questFilter1 }));
+
+  // const questCoreV2Interface = new ethers.utils.Interface(questCoreV2Abi);
+  // console.log(questCoreV2Interface);
 
   // console.log("-".repeat(50));
   // console.log("\nWallet", rxWalletAddress, "Current Quests:");
