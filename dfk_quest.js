@@ -1,14 +1,11 @@
-const { ethers, BigNumber } = require("ethers");
+const { ethers } = require("ethers");
 const fs = require("fs");
-const { EthersProvider } = require("simple-uniswap-sdk");
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
-const signer = provider.getSigner();
 const rxWalletAddress = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
 const privateKey = fs.readFileSync(".secret").toString().trim();
 const wallet = new ethers.Wallet(privateKey, provider);
 
-const heroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const questCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
 const questCoreV2Abi = fs.readFileSync("./abis/QuestCoreV2.json").toString();
 const questCoreV2Contract = new ethers.Contract(
@@ -23,6 +20,7 @@ const wjewelAbi = fs.readFileSync("./abis/erc20.json").toString();
 const wjewelContract = new ethers.Contract(wjewelAddress, wjewelAbi, provider);
 
 const trichomerWallet = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
+const signerWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const questXP = "QuestXP(uint256,address,uint256,uint64)";
 const questXPHash = ethers.utils.id(questXP);
@@ -110,18 +108,18 @@ const quester = async () => {
   //   topics: [interface.id("QuestXP(uint256,address,uint256,uint64)")],
   // });
   // console.log(interface.id("Quest(uint256,address,uint256,uint64)"));
-  console.log(
-    "\nQuestXP hash: " +
-      ethers.utils.id(questXP) +
-      "\nQuestReward hash: " +
-      ethers.utils.id(questReward) +
-      "\nQuestSkillUp hash: " +
-      ethers.utils.id(questSkillUp) +
-      "\nQuestStaminaSpent hash: " +
-      ethers.utils.id(questStaminaSpent) +
-      "\nRewardMinted hash: " +
-      ethers.utils.id (rewardMinted)
-  );
+  // console.log(
+  //   "\nQuestXP hash: " +
+  //     ethers.utils.id(questXP) +
+  //     "\nQuestReward hash: " +
+  //     ethers.utils.id(questReward) +
+  //     "\nQuestSkillUp hash: " +
+  //     ethers.utils.id(questSkillUp) +
+  //     "\nQuestStaminaSpent hash: " +
+  //     ethers.utils.id(questStaminaSpent) +
+  //     "\nRewardMinted hash: " +
+  //     ethers.utils.id (rewardMinted)
+  // );
 
   console.log(logs);
   console.log(logs.length + " logs returned.");
