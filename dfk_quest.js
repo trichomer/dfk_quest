@@ -166,7 +166,7 @@ const quester = async () => {
   // };
 };
 
-quester();
+// quester();
 
 const getQuestRewards = async () => {
   const questRewardsAbi = [
@@ -188,7 +188,7 @@ const getQuestRewards = async () => {
     fromBlock: 5315909,
     toBlock: 5315909,
   });
-  console.log(logs);
+  // console.log(logs);
   console.log(logs.length + " Logs returned");
 
   const decoder = new ethers.utils.AbiCoder();
@@ -199,9 +199,10 @@ const getQuestRewards = async () => {
   });
 
   console.log(parseData);
-  parseData.forEach((questReward) => {
+  parseData.forEach((questReward, i) => {
     console.log(
-      `QuestID: ${questReward.args[6]} | Hero ID: ${questReward.args[7]} | Amount: ${questReward.args[8]} | Data: ${questReward.args[9]}}`
+      questReward.args
+      // `QuestID: ${questReward.logDescription.args[0]} | Hero ID: ${questReward.args[1]} | Amount: ${questReward.args[2]} | Data: ${questReward.args[3]}}`
     );
   });
 };
