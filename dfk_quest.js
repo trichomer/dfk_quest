@@ -199,6 +199,11 @@ const getQuestRewards = async () => {
   });
 
   console.log(parseData);
+  parseData.forEach((questReward) => {
+    console.log(
+      `QuestID: ${questReward.args[6]} | Hero ID: ${questReward.args[7]} | Amount: ${questReward.args[8]} | Data: ${questReward.args[9]}}`
+    );
+  });
 };
 
 getQuestRewards();
