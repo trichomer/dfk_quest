@@ -1,5 +1,6 @@
 const { ethers, BigNumber } = require("ethers");
 const fs = require("fs");
+const { EthersProvider } = require("simple-uniswap-sdk");
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
 const signer = provider.getSigner();
@@ -22,6 +23,23 @@ const wjewelAbi = fs.readFileSync("./abis/erc20.json").toString();
 const wjewelContract = new ethers.Contract(wjewelAddress, wjewelAbi, provider);
 
 const trichomerWallet = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
+
+const questXP = "QuestXP(uint256,address,uint256,uint64)";
+const questXPHash = ethers.utils.id(questXP);
+const questReward = "QuestReward(uint256,address,uint256,address,uint256)";
+const questRewardHash = ethers.utils.id(questReward);
+const questSkillUp = "QuestSkillUp(uint256,address,uint256,uint8,uint16)";
+const questSkillUpHash = ethers.utils.id(questSkillUp);
+const questStaminaSpent = "QuestStaminaSpent(uint256,address,uint256,uint256,uint256)";
+const questStaminaSpentHash = ethers.utils.id(questStaminaSpent);
+const rewardMinted = "RewardMinted(uint256,address,uint256,address,uint256,uint256)";
+const rewardMintedHash = ethers.utils.id(rewardMinted);
+// console.log(questXPHash, '\n', questRewardHash, '\n', questSkillUpHash, '\n', questStaminaSpentHash, '\n', rewardMintedHash);
+
+const miningCrystalAddress = "0x98b3C85ac3cC3EF36Ff25A9229857AbACE3e7410";
+const miningGoldAddress = "0x75912145f5cFEfb980616FA47B2f103210FaAb94";
+const fishingAddress = "0x407ab39B3675f29A719476af6eb3B9E5d93969E6";
+const foragingAddress = "0xAd51199B453075C73FA106aFcAAD59f705EF7872";
 
 const quester = async () => {
   console.log("-".repeat(50));
@@ -85,14 +103,24 @@ const quester = async () => {
     fromBlock: 5315909,
     toBlock: 5315909,
   });
+
+
   // const logs = await provider.getLogs({
   //   address: "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154",
   //   topics: [interface.id("QuestXP(uint256,address,uint256,uint64)")],
   // });
   // console.log(interface.id("Quest(uint256,address,uint256,uint64)"));
   console.log(
-    "QuestXP hash: " +
-      ethers.utils.id("QuestXP(uint256,address,uint256,uint64)")
+    "\nQuestXP hash: " +
+      ethers.utils.id(questXP) +
+      "\nQuestReward hash: " +
+      ethers.utils.id(questReward) +
+      "\nQuestSkillUp hash: " +
+      ethers.utils.id(questSkillUp) +
+      "\nQuestStaminaSpent hash: " +
+      ethers.utils.id(questStaminaSpent) +
+      "\nRewardMinted hash: " +
+      ethers.utils.id (rewardMinted)
   );
 
   console.log(logs);
