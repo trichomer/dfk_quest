@@ -21,6 +21,8 @@ const wjewelAddress = "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260";
 const wjewelAbi = fs.readFileSync("./abis/erc20.json").toString();
 const wjewelContract = new ethers.Contract(wjewelAddress, wjewelAbi, provider);
 
+const trichomerWallet = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
+
 const quester = async () => {
   console.log("-".repeat(50));
   // console.log("\nHero 121591 Current Stamina:");
@@ -47,7 +49,7 @@ const quester = async () => {
   questFilter2 = await questCoreV2Contract.filters.QuestReward(100594378);
   questFilter3 = await questCoreV2Contract.filters.RewardMinted(100594378);
   questFilter4 = await questCoreV2Contract.filters.QuestSkillUp(100594378);
-  console.log(questFilter1, questFilter2, questFilter3, questFilter4);
+  // console.log(questFilter1, questFilter2, questFilter3, questFilter4);
 
   const abi = [
     "event QuestXP(uint256 indexed questId, address indexed player, uint256 heroId, uint64 xpEarned)",
@@ -60,64 +62,81 @@ const quester = async () => {
       "0x9c39d9087162b6ffb6a639ad9d9134db96598a684324deb4a05a8cc57fcd7c0e",
       // "0xd24d0ec0941a2f5cf71e34aab5120a6ec265b4ff45c78e510a05928202f82786",
       // "0x0000000000000000000000000000000000000000000000000000000005fef2ca",
+      ,
     ],
     questId: 100594378,
   };
   console.log(interface.events);
   const logs = await provider.getLogs({
-    address: "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154",
+    address: "0x407ab39B3675f29A719476af6eb3B9E5d93969E6",
+
     topics: [
-      "0xdc5746df27e443efb54d93e1b78111844a3fe5efcabce72a649a9ce2ecbdf8e1",
+      // "0xdc5746df27e443efb54d93e1b78111844a3fe5efcabce72a649a9ce2ecbdf8e1",
+      ethers.utils.id("QuestXP(uint256,address,uint256,uint64)"),
+      // null,
+      null,
+      ethers.utils.hexZeroPad(trichomerWallet, 32),
+      // "0x0000000000000000000000009ab773a84e0acbf2f793b1ec267465293208dfb7",
+      // "0x0000000000000000000000000000000000000000000000000000000005fef2ce",
+      // questFilter1.topics[0],
+      // null,
+      // ethers.utils.getAddress(trichomerWallet),
     ],
+    fromBlock: 5315909,
+    toBlock: 5315909,
   });
+  // const logs = await provider.getLogs({
+  //   address: "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154",
+  //   topics: [interface.id("QuestXP(uint256,address,uint256,uint64)")],
+  // });
+  // console.log(interface.id("Quest(uint256,address,uint256,uint64)"));
+  console.log(
+    "QuestXP hash: " +
+      ethers.utils.id("QuestXP(uint256,address,uint256,uint64)")
+  );
 
   console.log(logs);
-  // console.log(interface.parseLog(testLog));
+  console.log(logs.length + " logs returned.");
 
-  // const q1Data = questFilter1.address;
-  // const q1topics = questFilter1.topics;
+  const decodedEvents = logs.map((log) => {
+    return interface.decodeEventLog("QuestXP", log.data, log.topics);
+  });
 
-  // console.log(q1Data);
-  // console.log(q1topics);
+  console.log(decodedEvents);
 
-  // console.log(questCoreV2Interface.parseLog({ questFilter1 }));
+  const questIds = decodedEvents.map((event) => {
+    // console.log(event[3]);
+    return event.questId;
+  });
 
-  // const questCoreV2Interface = new ethers.utils.Interface(questCoreV2Abi);
-  // console.log(questCoreV2Interface);
+  decodedEvents.forEach((event) => {
+    console.log(
+      `ID: ${event.questId} | Player: ${event.player} | Hero: ${event.heroId} | XP Earned: ${event.xpEarned}`
+    );
+  });
 
-  // console.log("-".repeat(50));
-  // console.log("\nWallet", rxWalletAddress, "Current Quests:");
-  // accountActiveQuests =
-  //   await questCoreV2Contract.functions.getAccountActiveQuests(rxWalletAddress);
-  // console.log("accountActiveQuests: " + typeof accountActiveQuests);
-  // console.log("accountActiveQuests Keys: " + Object.keys(accountActiveQuests));
-  // console.log("accountActiveQuests[0]: " + typeof accountActiveQuests[0]);
-
-  // console.log("Keys Length: " + Object.keys(accountActiveQuests).length);
-
-  // const data = accountActiveQuests[0];
-  // // const [id, questAddress, level, heroes, player, startBlock] = element;
-
-  // console.log(`Data Length: ${data.length}`);
-  // console.log(`Data: ${data}`);
-
-  // data.forEach((element, i) => {
-  //   const [
-  //     id,
-  //     questAddress,
-  //     level,
-  //     heroes,
-  //     player,
-  //     startBlock,
-  //     startAtTime,
-  //     completeAtTime,
-  //     attempts,
-  //     status,
-  //   ] = element;
-  //   console.log(
-  //     `ID: ${id} \n Quest Address: ${questAddress} \n Level: ${level} \n Hero: ${heroes} \n Player: ${player} \n Start Block: ${startBlock} \n Start Time: ${startAtTime} \n Complete Time: ${completeAtTime} \n Attempts: ${attempts} \n Status : ${status}`
-  //   );
+  // console.log(questIds);
+  // questIds.forEach((id) => {
+  //   console.log(`ID: ${id}`);
   // });
+  // const eventFilterv5 = async (contractAddress, erc20abi, _provider) => {
+  //   const iface = new ethers.utils.Interface(erc20abi.abi);
+  //   const provider = _provider;
+  //   const logs = await provider.getLogs({
+  //     address: contractAddress,
+  //     topics: [null, null, ethers.utils.hexZeroPad(trichomerWallet, 32)],
+  //     fromBlock: 5315909,
+  //     toBlock: 5315909,
+  //   });
+  //   console.log(logs);
+  // const decodedEvents = logs.map((log) => {
+  //   iface.decodeEventLog("QuestXP", log.data, log.topics);
+  // });
+  // console.log(decodedEvents);
+  // const questIds = decodedEvents.map((event) => event["values"]["questId"]);
+  // const player = decodedEvents.map((event) => event["values"]["player"]);
+  // return [player, questIds];
+  // };
 };
 
 quester();
