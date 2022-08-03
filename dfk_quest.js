@@ -28,9 +28,11 @@ const questReward = "QuestReward(uint256,address,uint256,address,uint256)";
 const questRewardHash = ethers.utils.id(questReward);
 const questSkillUp = "QuestSkillUp(uint256,address,uint256,uint8,uint16)";
 const questSkillUpHash = ethers.utils.id(questSkillUp);
-const questStaminaSpent = "QuestStaminaSpent(uint256,address,uint256,uint256,uint256)";
+const questStaminaSpent =
+  "QuestStaminaSpent(uint256,address,uint256,uint256,uint256)";
 const questStaminaSpentHash = ethers.utils.id(questStaminaSpent);
-const rewardMinted = "RewardMinted(uint256,address,uint256,address,uint256,uint256)";
+const rewardMinted =
+  "RewardMinted(uint256,address,uint256,address,uint256,uint256)";
 const rewardMintedHash = ethers.utils.id(rewardMinted);
 // console.log(questXPHash, '\n', questRewardHash, '\n', questSkillUpHash, '\n', questStaminaSpentHash, '\n', rewardMintedHash);
 
@@ -102,7 +104,6 @@ const quester = async () => {
     toBlock: 5315909,
   });
 
-
   // const logs = await provider.getLogs({
   //   address: "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154",
   //   topics: [interface.id("QuestXP(uint256,address,uint256,uint64)")],
@@ -166,3 +167,38 @@ const quester = async () => {
 };
 
 quester();
+
+const getQuestRewards = async () => {
+  const questRewardsAbi = [
+    "event RewardMinted(uint256 indexed questId, address indexed player, uint256 heroId, address indexed reward, uint256 amount, uint256 data)",
+  ];
+
+  const interface = new ethers.utils.Interface(questRewardsAbi);
+  console.log(interface);
+  const logs = await provider.getLogs({
+    // address: "0x407ab39B3675f29A719476af6eb3B9E5d93969E6",
+    topics: [
+      ethers.utils.id(
+        "RewardMinted(uint256,address,uint256,address,uint256,uint256)",
+        null,
+        // ethers.utils.hexZeroPad(trichomerWallet, 32),
+        null
+      ),
+    ],
+    fromBlock: 5315909,
+    toBlock: 5315909,
+  });
+  console.log(logs);
+  console.log(logs.length + " Logs returned");
+
+  const decoder = new ethers.utils.AbiCoder();
+  const parseData = logs.map((log) => {
+    const topics = log.topics;
+    const data = log.data;
+    return interface.parseLog({ data, topics });
+  });
+
+  console.log(parseData);
+};
+
+getQuestRewards();
