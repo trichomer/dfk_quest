@@ -9,8 +9,13 @@ const wallet = new ethers.Wallet(privateKey, provider);
 const trichomerWallet = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
 const signerWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 const foragingAddress = "0xAd51199B453075C73FA106aFcAAD59f705EF7872";
-const wjewelAddress = "0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260";
-const wjewelAbi = fs.readFileSync("./abis/erc20.json").toString();
+const crystalAddress = "0x04b9dA42306B023f3572e106B11D82aAd9D32EBb";
+const crystalAbi = fs.readFileSync("./abis/erc20.json").toString();
+const crystalContract = new ethers.Contract(
+    crystalAddress,
+    crystalAbi,
+    wallet
+);
 const questCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
 const questCoreV2Abi = fs.readFileSync("./abis/QuestCoreUpgradeable.json").toString();//ABI using QuestCoreUpgradeable.json
 const questCoreV2Contract = new ethers.Contract(
@@ -35,8 +40,13 @@ const banger = async () => {
         to: trichomerWallet,
         value: ethers.utils.parseEther("0.01")
     };
-    await wallet.sendTransaction(tx);
+    // await wallet.sendTransaction(tx);
+    getPrice = await wallet.getGasPrice();
+    console.log("Current gas price: " + getPrice);
+    gasEstimate = await wallet.estimateGas(tx);
+    console.log("Estimated gas cost of txn: " + gasEstimate);
     
+
 }
 
 banger();
