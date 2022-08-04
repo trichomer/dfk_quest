@@ -36,15 +36,16 @@ const banger = async () => {
         balance / 1e18 + 
         "\nNonce: " + 
         nonce);
-    tx = {
+    tx1 = {
         to: trichomerWallet,
         value: ethers.utils.parseEther("0.01")
     };
-    // await wallet.sendTransaction(tx);
+    // await wallet.sendTransaction(tx1);
+
     getPrice = await wallet.getGasPrice();
-    console.log("Current gas price on-chain: " + getPrice);
-    gasEstimate = await wallet.estimateGas(tx);
-    console.log("Estimated gas cost of txn 1: " + gasEstimate);
+    console.log("\nCurrent gas price on-chain: " + getPrice);
+    // gasEstimate = await wallet.estimateGas(tx1);
+    // console.log("Estimated gas cost of txn 1: " + gasEstimate);
     
     console.log("-".repeat(40), "\nERC20 Token Contract Testing:\n");
     erc20Symbol = await crystalContract.symbol();
@@ -53,6 +54,23 @@ const banger = async () => {
     console.log("ERC20 Decimals: " + erc20Dec);
     erc20Bal = await crystalContract.balanceOf(thisWallet);
     // console.log("ERC20 Token Balance: " + erc20Bal / 1e(erc20Dec));
+
+    console.log("\nSending 0.01 ERC20 to: " + trichomerWallet);
+    preBalSrc = await crystalContract.balanceOf(thisWallet);
+    console.log("\nSource ERC20 Balance Before txn: " + preBalSrc / 1e18 + " " + erc20Symbol);
+    preBalDest = await crystalContract.balanceOf(trichomerWallet);
+    console.log("Destination ERC20 Balance Before txn: " + preBalDest / 1e18 + " " + erc20Symbol);
+    console.log("\nCalling Transfer...");
+    tx2 = await crystalContract.transfer(trichomerWallet, ethers.utils.parseUnits("0.01"));
+    // gasEstimate2 = await wallet.estimateGas(tx2);
+    // console.log("Estimated gas cost of txn 1: " + gasEstimate2);
+    console.log("\ntxn2 Details: " + tx2);
+    tx2Pending = await tx2.wait();
+    console.log("\ntxn2 Pending: " + tx2Pending);
+    postBalSrc = await crystalContract.balanceOf(thisWallet);
+    console.log("\nSource ERC20 Balance After txn: " + postBalSrc / 1e18 + " " + erc20Symbol);
+    postBalDest = await crystalContract.balanceOf(trichomerWallet);
+    console.log("Destination ERC20 Balance After txn: " + postBalDest / 1e18 + " " + erc20Symbol);
 }
 
 banger();
