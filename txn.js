@@ -42,11 +42,17 @@ const banger = async () => {
     };
     // await wallet.sendTransaction(tx);
     getPrice = await wallet.getGasPrice();
-    console.log("Current gas price: " + getPrice);
+    console.log("Current gas price on-chain: " + getPrice);
     gasEstimate = await wallet.estimateGas(tx);
-    console.log("Estimated gas cost of txn: " + gasEstimate);
+    console.log("Estimated gas cost of txn 1: " + gasEstimate);
     
-
+    console.log("-".repeat(40), "\nERC20 Token Contract Testing:\n");
+    erc20Symbol = await crystalContract.symbol();
+    console.log("ERC20 Symbol: " + erc20Symbol);
+    erc20Dec = await crystalContract.decimals();
+    console.log("ERC20 Decimals: " + erc20Dec);
+    erc20Bal = await crystalContract.balanceOf(thisWallet);
+    // console.log("ERC20 Token Balance: " + erc20Bal / 1e(erc20Dec));
 }
 
 banger();
