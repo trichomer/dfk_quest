@@ -64,9 +64,9 @@ const banger = async () => {
     tx2 = await crystalContract.transfer(trichomerWallet, ethers.utils.parseUnits("0.01"));
     // gasEstimate2 = await wallet.estimateGas(tx2);
     // console.log("Estimated gas cost of txn 1: " + gasEstimate2);
-    console.log("\ntxn2 Details: " + tx2);
+    // console.log(tx2);
     tx2Pending = await tx2.wait();
-    console.log("\ntxn2 Pending: " + tx2Pending);
+    // console.log(tx2Pending);
     postBalSrc = await crystalContract.balanceOf(thisWallet);
     console.log("\nSource ERC20 Balance After txn: " + postBalSrc / 1e18 + " " + erc20Symbol);
     postBalDest = await crystalContract.balanceOf(trichomerWallet);
