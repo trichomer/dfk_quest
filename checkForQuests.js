@@ -35,24 +35,28 @@ const checkForQuests = async () => {
     console.log(`Current Time: ${Math.round(Date.now() / 1000)} `);
 
     let runningQuests = activeQuests.filter((quest) => {
-      console.log(quest);
-      return quest.completeAtTime <= Math.round(Date.now() / 1000);
+      return quest.completeAtTime >= Math.round(Date.now() / 1000);
     });
 
-    console.log(runningQuests.length);
     runningQuests.forEach((quest) => {
       console.log(
         `Quest led by hero ${quest.heroes[0]} is due to complete at ${quest.completeAtTime}.`
       );
-
-      let doneQuests = activeQuests.filter(
-        (quest) => !runningQuests.includes(quest)
-      );
-
-      for (quest of doneQuests) {
-        console.log(`Hero ${quest.heroe[0]} is done questing.`);
-      }
     });
+
+    let doneQuests = activeQuests.filter(
+      (quest) => !runningQuests.includes(quest)
+    );
+
+    console.log(doneQuests.length + " done quests.");
+
+    doneQuests.forEach((quest) => {
+      console.log(`Hero ${quest.heroes[0]} is done questing.`);
+    });
+
+    // for (quest of doneQuests) {
+    //   console.log(`Hero ${quest.heroe[0]} is done questing.`);
+    // }
   } catch (err) {
     console.log(err.message);
   }
