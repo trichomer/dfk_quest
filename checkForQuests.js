@@ -35,9 +35,9 @@ const checkForQuests = async () => {
   try {
     console.log("\nChecking for quests...\n");
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
-    console.log(`Active Quests: ${activeQuests}`);
-    console.log(`Complete at Time : ${activeQuests[0][7]}`);
-    console.log(`Current Time: ${Math.round(Date.now() / 1000)} `);
+    // console.log(`Active Quests: ${activeQuests}`);
+    // console.log(`Complete at Time : ${activeQuests[0][7]}`);
+    // console.log(`Current Time: ${Math.round(Date.now() / 1000)} `);
 
     let runningQuests = activeQuests.filter((quest) => {
       return quest.completeAtTime >= Math.round(Date.now() / 1000);
@@ -56,7 +56,7 @@ const checkForQuests = async () => {
     console.log(doneQuests.length + " done quests.");
 
     for (quest of doneQuests) {
-      console.log(`Hero ${quest.heroes[0]} is done questing.`);
+      await completeQuest(quest.heroes[0]);
     }
   } catch (err) {
     console.log("Check For Quests error: " + err.message);
@@ -68,7 +68,7 @@ const completeQuest = async (heroId) => {
     console.log(`Completing quest led by hero ${heroId}.`);
     let receipt = await tryTransaction(() => {
       questContract.connect(wallet).completeQuest(heroId, callOptions);
-    }, 2);
+    }, 3);
 
     console.log(`\n **** Completed quest led by hero ${heroId}. ****`);
 
@@ -110,6 +110,9 @@ const tryTransaction = async (transaction, attempts) => {
     try {
       var tx = await transaction();
       let receipt = await tx.wait();
+      if (receipt.status === undefined) {
+        console.log(tx);
+      }
       if (receipt.status !== 1)
         throw new Error(`Receipt had a status of ${receipt.status}`);
       return receipt;
@@ -125,4 +128,4 @@ function getRewardDescription(rewardAddress) {
 }
 
 main();
-completeQuest(282744);
+// completeQuest(282744);
