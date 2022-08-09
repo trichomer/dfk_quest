@@ -66,9 +66,10 @@ const checkForQuests = async () => {
 const completeQuest = async (heroId) => {
   try {
     console.log(`Completing quest led by hero ${heroId}.`);
-    let receipt = await tryTransaction(() => {
-      questContract.connect(wallet).completeQuest(heroId, callOptions);
-    }, 3);
+    let receipt = await tryTransaction(
+      () => questContract.connect(wallet).completeQuest(heroId, callOptions),
+      3
+    );
 
     console.log(`\n **** Completed quest led by hero ${heroId}. ****`);
 
