@@ -232,6 +232,24 @@ const sendFishers = () => {
   }
 };
 
+const checkHeroeStamina = async (heroId) => {
+  let staminaProvider = new ethers.providers.JsonRpcProvider(url);
+  let QCV2contract = new ethers.Contract(
+    questContractDFKQCV2,
+    abi,
+    staminaProvider
+  );
+  let currnetStamina = await QCV2contract.functions.getCurrentStamina(heroId);
+  return currnetStamina;
+};
+
+config.quests.forEach((q) => {
+  q.professionHeroes.forEach(async (h) => {
+    let heroStamina = await checkHeroeStamina(h);
+    console.log(`${q.name} Hero ${h} stamina: ${heroStamina}`);
+  });
+});
 // sendBatch();
-main();
+// main();
 // sendFishers();
+// checkHeroesStamina();
