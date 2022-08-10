@@ -255,7 +255,9 @@ const sendForagers = () => {
 
 const sendAllHeroes = () => {
   sendFishers();
-  setTimeout(sendForagers(), 7000);
+  setTimeout(() => {
+    sendForagers();
+  }, 7000);
 };
 
 const checkHeroeStamina = async (heroId) => {
@@ -278,8 +280,8 @@ const checkHeroesStamina = async () => {
   });
 };
 // sendBatch();
-// main();
+main();
 // sendFishers();
 // sendForagers();
 // checkHeroesStamina();
-sendAllHeroes();
+// sendAllHeroes();
