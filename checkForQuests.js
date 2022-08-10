@@ -21,7 +21,7 @@ let provider = new ethers.providers.JsonRpcProvider(url);
 let questContract = new ethers.Contract(questContractDFKQCV2, abi, provider);
 
 const wallet = new ethers.Wallet(privateKey, provider);
-const callOptions = { gasPrice: 1600000000, gasLimit: 1000000 };
+const callOptions = { gasPrice: 1600000000, gasLimit: 2000000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const main = async () => {
