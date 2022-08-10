@@ -16,5 +16,7 @@
       "level": 0,
       "professionMaxAttempts": 1
     }
-  ]
+  ],
+  "gasPrice": 1600000000,
+  "gasLimit": 2500000
 }

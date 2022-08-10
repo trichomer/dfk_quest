@@ -9,19 +9,19 @@ let questContractDFKQCV2 = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
 const abi = [
   "function getCurrentStamina(uint256 _heroId) external view returns (uint256)",
   "function getAccountActiveQuests(address _account) external view returns (tuple(uint256 id, address questAddress, uint8 level, uint256[] heroes, address player, uint256 startBlock, uint256 startAtTime, uint256 completeAtTime, uint8 attempts, uint8 status)[])",
-  "function completeQuest(uint256 _heroId) external",
+  "function completeQuest(uint256 _heroId)",
   "event QuestCompleted(uint256 indexed questId, address indexed player, uint256 indexed heroId, tuple(uint256 id, address questAddress, uint8 level, uint256[] heroes, address player, uint256 startBlock, uint256 startAtTime, uint256 completeAtTime, uint8 attempts, uint8 status) quest)",
   "event QuestXP(uint256 indexed questId, address indexed player, uint256 heroId, uint64 xpEarned)",
   "event QuestSkillUp(uint256 indexed questId, address indexed player, uint256 heroId, uint8 profession, uint16 skillUp)",
   "event QuestReward(uint256 indexed questId, address indexed player, uint256 heroId, address rewardItem, uint256 itemQuantity)",
   "function multiStartQuest(address[] _questAddress, uint256[][] _heroIds, uint8[] _attempts, uint8[] _level) external",
-  "function startQuest(uint256[] _heroIds, address _questAddress, uint8 _attempts, uint8 _level) external;",
+  "function startQuest(uint256[] _heroIds, address _questAddress, uint8 _attempts, uint8 _level)",
 ];
 let provider;
 let questContract;
 let wallet;
 
-const callOptions = { gasPrice: 1600000000, gasLimit: 2000000 };
+const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const main = async () => {
@@ -191,23 +191,47 @@ const tryTransaction = async (transaction, attempts) => {
 //   }
 // }
 
-main();
-
 const sendBatch = async () => {
-  provider = new ethers.providers.JsonRpcProvider(url);
-  wallet = new ethers.Wallet(privateKey, provider);
-  config.quests.forEach((quest) => {
+  try {
+    provider = new ethers.providers.JsonRpcProvider(url);
+    wallet = new ethers.Wallet(privateKey, provider);
+    config.quests.forEach((quest) => {
+      let contract = new ethers.Contract(questContractDFKQCV2, abi, provider);
+      contract
+        .connect(wallet)
+        .startQuest(
+          quest.professionHeroes,
+          quest.contractAddress,
+          quest.professionMaxAttempts,
+          quest.level,
+          callOptions
+        );
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+const sendFishers = () => {
+  try {
+    provider = new ethers.providers.JsonRpcProvider(url);
+    wallet = new ethers.Wallet(privateKey, provider);
     let contract = new ethers.Contract(questContractDFKQCV2, abi, provider);
+    let fishingQuest = config.quests[0];
     contract
       .connect(wallet)
       .startQuest(
-        quest.professionHeroes,
-        quest.contractAddress,
-        quest.professionMaxAttempts,
-        quest.level,
+        fishingQuest.professionHeroes,
+        fishingQuest.contractAddress,
+        fishingQuest.professionMaxAttempts,
+        fishingQuest.level,
         callOptions
       );
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // sendBatch();
+main();
+// sendFishers();
