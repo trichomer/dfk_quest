@@ -2,8 +2,7 @@ const { ethers } = require("ethers");
 const fs = require("fs");
 
 const privateKey = fs.readFileSync(".secret").toString().trim();
-const rewardLookup = require("./rewards.json");
-
+const config = require("./config.json");
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 
 let questContractDFKQCV2 = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
