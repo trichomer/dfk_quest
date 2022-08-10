@@ -16,9 +16,10 @@ const abi = [
   "event QuestSkillUp(uint256 indexed questId, address indexed player, uint256 heroId, uint8 profession, uint16 skillUp)",
   "event QuestReward(uint256 indexed questId, address indexed player, uint256 heroId, address rewardItem, uint256 itemQuantity)",
   "function multiStartQuest(address[] _questAddress, uint256[][] _heroIds, uint8[] _attempts, uint8[] _level) external",
+  "function startQuest(uint256[] _heroIds, address _questAddress, uint8 _attempts, uint8 _level) external;",
 ];
-let provider = new ethers.providers.JsonRpcProvider(url);
-let questContract = new ethers.Contract(questContractDFKQCV2, abi, provider);
+let provider;
+let questContract;
 
 const wallet = new ethers.Wallet(privateKey, provider);
 const callOptions = { gasPrice: 1600000000, gasLimit: 1500000 };
@@ -26,6 +27,9 @@ const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const main = async () => {
   try {
+    provider = new ethers.providers.JsonRpcProvider(url);
+    questContract = new ethers.Contract(questContractDFKQCV2, abi, provider);
+
     checkForQuests();
   } catch (err) {
     console.log(`${err.message}`);
@@ -36,6 +40,7 @@ const checkForQuests = async () => {
   try {
     console.log("\nChecking for quests...\n");
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
+    console.log(activeQuests);
     // console.log(`Active Quests: ${activeQuests}`);
     // console.log(`Complete at Time : ${activeQuests[0][7]}`);
     // console.log(`Current Time: ${Math.round(Date.now() / 1000)} `);
