@@ -2,6 +2,7 @@ const { ethers } = require("ethers");
 const fs = require("fs");
 
 const privateKey = fs.readFileSync(".secret").toString().trim();
+const rewardLookup = require("./rewards.json");
 
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 
@@ -92,6 +93,7 @@ const completeQuest = async (heroId) => {
     );
 
     let rwEvents = receipt.events.filter((e) => e.event === "QuestReward");
+    console.log(`Total Reward = ${rwEvents.length}`);
     rwEvents.forEach((result) =>
       console.log(
         `${result.args.itemQuantity} x ${getRewardDescription(
