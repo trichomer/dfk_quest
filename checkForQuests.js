@@ -253,6 +253,11 @@ const sendForagers = () => {
   }
 };
 
+const sendAllHeroes = () => {
+  sendFishers();
+  sendForagers();
+};
+
 const checkHeroeStamina = async (heroId) => {
   let staminaProvider = new ethers.providers.JsonRpcProvider(url);
   let QCV2contract = new ethers.Contract(
@@ -274,6 +279,7 @@ const checkHeroesStamina = async () => {
 };
 // sendBatch();
 // main();
-sendFishers();
+// sendFishers();
 // sendForagers();
 // checkHeroesStamina();
+sendAllHeroes();
