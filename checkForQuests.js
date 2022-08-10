@@ -116,4 +116,3 @@ const tryTransaction = async (transaction, attempts) => {
 };
 
 main();
-// completeQuest(282744);
