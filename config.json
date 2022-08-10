@@ -15,6 +15,70 @@
       "contractAddress": "0xAd51199B453075C73FA106aFcAAD59f705EF7872",
       "level": 0,
       "professionMaxAttempts": 1
+    },
+    {
+      "name": "Strength",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
+    },
+    {
+      "name": "Agility",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
+    },
+    {
+      "name": "Intelligence",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
+    },
+    {
+      "name": "Wisdom",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
+    },
+    {
+      "name": "Luck",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
+    },
+    {
+      "name": "Dexterity",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
+    },
+    {
+      "name": "Vitality",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
+    },
+    {
+      "name": "Endurance",
+      "professionHeroes": [],
+      "nonProfessionHeroes": [],
+      "contractAddress": "",
+      "level": 1,
+      "professionMaxAttempts": 1
     }
   ],
   "gasPrice": 1600000000,
