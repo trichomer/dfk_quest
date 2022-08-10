@@ -19,14 +19,15 @@ const abi = [
 ];
 let provider;
 let questContract;
+let wallet;
 
-const wallet = new ethers.Wallet(privateKey, provider);
-const callOptions = { gasPrice: 1600000000, gasLimit: 1500000 };
+const callOptions = { gasPrice: 1600000000, gasLimit: 2000000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const main = async () => {
   try {
     provider = new ethers.providers.JsonRpcProvider(url);
+    wallet = new ethers.Wallet(privateKey, provider);
     questContract = new ethers.Contract(questContractDFKQCV2, abi, provider);
 
     checkForQuests();
@@ -39,7 +40,7 @@ const checkForQuests = async () => {
   try {
     console.log("\nChecking for quests...\n");
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
-    console.log(activeQuests);
+    // console.log(activeQuests);
     // console.log(`Active Quests: ${activeQuests}`);
     // console.log(`Complete at Time : ${activeQuests[0][7]}`);
     // console.log(`Current Time: ${Math.round(Date.now() / 1000)} `);
@@ -63,6 +64,11 @@ const checkForQuests = async () => {
     for (quest of doneQuests) {
       await completeQuest(quest.heroes[0]);
     }
+
+    // let questsToStart = await getQuestsToStart(activeQuests);
+    // for (const quest of questsToStart) {
+    //   await startQuest(quest);
+    // }
   } catch (err) {
     console.log("Check For Quests error: " + err.message);
   }
@@ -119,4 +125,89 @@ const tryTransaction = async (transaction, attempts) => {
   }
 };
 
+// async function getQuestsToStart(activeQuests) {
+//   var questsToStart = new Array();
+//   var questingHeroes = new Array();
+
+//   activeQuests.forEach((q) =>
+//     q.heroes.forEach((h) => questingHeroes.push(Number(h)))
+//   );
+
+//   for (const quest of config.quests) {
+//     if (quest.professionHeroes.length > 0) {
+//       //   var readyHeroes = await getHeroesWithGoodStamina(  assuming all heroes have good stamina
+//       //     questingHeroes,
+//       //     quest,
+//       //     config.professionMaxAttempts,
+//       //     true
+//       //   );
+//       questsToStart.push({
+//         name: quest.name,
+//         address: quest.contractAddress,
+//         professional: true,
+//         heroes: quest.professionHeroes, // assuming all have good stamina
+//         attempts: config.professionMaxAttempts,
+//       });
+//     }
+
+//     // if (quest.nonProfessionHeroes.length > 0) {   // currently all heroes are professional
+//     //   var readyHeroes = await getHeroesWithGoodStamina(
+//     //     questingHeroes,
+//     //     quest,
+//     //     config.nonProfessionMaxAttempts,
+//     //     false
+//     //   );
+//     //   questsToStart.push({
+//     //     name: quest.name,
+//     //     address: quest.contractAddress,
+//     //     professional: false,
+//     //     heroes: readyHeroes,
+//     //     attempts: config.nonProfessionMaxAttempts,
+//     //   });
+//     // }
+//   }
+
+//   return questsToStart;
+// }
+
+// async function startQuest(quest) {
+//   try {
+//     let batch = 0;
+//     while (true) {
+//       var groupStart = batch * config.maxQuestGroupSize;
+//       let questingGroup = quest.heroes.slice(
+//         groupStart,
+//         groupStart + config.maxQuestGroupSize
+//       );
+//       if (questingGroup.length === 0) break;
+
+//       await startQuestBatch(quest, questingGroup);
+//       batch++;
+//     }
+//   } catch (err) {
+//     console.warn(
+//       `Error determining questing group - this will be retried next polling interval`
+//     );
+//   }
+// }
+
 main();
+
+const sendBatch = async () => {
+  provider = new ethers.providers.JsonRpcProvider(url);
+  wallet = new ethers.Wallet(privateKey, provider);
+  config.quests.forEach((quest) => {
+    let contract = new ethers.Contract(questContractDFKQCV2, abi, provider);
+    contract
+      .connect(wallet)
+      .startQuest(
+        quest.professionHeroes,
+        quest.contractAddress,
+        quest.professionMaxAttempts,
+        quest.level,
+        callOptions
+      );
+  });
+};
+
+// sendBatch();
