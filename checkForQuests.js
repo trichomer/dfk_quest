@@ -69,6 +69,7 @@ const checkForQuests = async () => {
     // for (const quest of questsToStart) {
     //   await startQuest(quest);
     // }
+    checkHeroesStamina();
   } catch (err) {
     console.log("Check For Quests error: " + err.message);
   }
@@ -232,6 +233,26 @@ const sendFishers = () => {
   }
 };
 
+const sendForagers = () => {
+  try {
+    provider = new ethers.providers.JsonRpcProvider(url);
+    wallet = new ethers.Wallet(privateKey, provider);
+    let contract = new ethers.Contract(questContractDFKQCV2, abi, provider);
+    let foragingQuest = config.quests[1];
+    contract
+      .connect(wallet)
+      .startQuest(
+        foragingQuest.professionHeroes,
+        foragingQuest.contractAddress,
+        foragingQuest.professionMaxAttempts,
+        foragingQuest.level,
+        callOptions
+      );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const checkHeroeStamina = async (heroId) => {
   let staminaProvider = new ethers.providers.JsonRpcProvider(url);
   let QCV2contract = new ethers.Contract(
@@ -243,13 +264,16 @@ const checkHeroeStamina = async (heroId) => {
   return currnetStamina;
 };
 
-config.quests.forEach((q) => {
-  q.professionHeroes.forEach(async (h) => {
-    let heroStamina = await checkHeroeStamina(h);
-    console.log(`${q.name} Hero ${h} stamina: ${heroStamina}`);
+const checkHeroesStamina = async () => {
+  config.quests.forEach((q) => {
+    q.professionHeroes.forEach(async (h) => {
+      let heroStamina = await checkHeroeStamina(h);
+      console.log(`${q.name} Hero ${h} stamina: ${heroStamina}`);
+    });
   });
-});
+};
 // sendBatch();
 // main();
-// sendFishers();
+sendFishers();
+// sendForagers();
 // checkHeroesStamina();
