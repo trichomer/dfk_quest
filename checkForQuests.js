@@ -21,7 +21,7 @@ let provider = new ethers.providers.JsonRpcProvider(url);
 let questContract = new ethers.Contract(questContractDFKQCV2, abi, provider);
 
 const wallet = new ethers.Wallet(privateKey, provider);
-const callOptions = { gasPrice: 1600000000, gasLimit: 2000000 };
+const callOptions = { gasPrice: 1600000000, gasLimit: 1500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const main = async () => {
@@ -92,16 +92,6 @@ const completeQuest = async (heroId) => {
       }`
     );
 
-    let rwEvents = receipt.events.filter((e) => e.event === "QuestReward");
-    console.log(`Total Reward = ${rwEvents.length}`);
-    rwEvents.forEach((result) =>
-      console.log(
-        `${result.args.itemQuantity} x ${getRewardDescription(
-          result.args.rewardItem
-        )}`
-      )
-    );
-
     console.log("\n*****\n");
   } catch (err) {
     console.log("Complete Quest error: " + err.message);
@@ -124,11 +114,6 @@ const tryTransaction = async (transaction, attempts) => {
     }
   }
 };
-
-function getRewardDescription(rewardAddress) {
-  let desc = rewardLookup[rewardAddress];
-  return desc ? desc : rewardAddress;
-}
 
 main();
 // completeQuest(282744);
