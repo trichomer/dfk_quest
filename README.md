@@ -1,1 +1,3 @@
-# dfk_uniswap
+# dfk_quest
+
+Automate quests on DFK chain
