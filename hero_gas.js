@@ -24,20 +24,14 @@ const heroCoreContract = new ethers.Contract(
 const main = async () => {
     try {
       let heroBalance = await heroCoreContract.balanceOf(testWallet);
-      console.log("Hero NFT Balance: ", heroBalance);
+      console.log(`Hero NFT Balance: ${heroBalance}`);
 
       let checkGasFee = await provider.getFeeData();
-      console.log(
-        "Current Gas Fees On-chain:", 
-        checkGasFee
-        );
+      console.log(`Current Gas Fees On-chain: ${checkGasFee}`);
 
       testTxn = await crystalContract.transfer(trichomerWallet, ethers.utils.parseUnits("0.01"));
       let estimateGas = await provider.estimateGas(testTxn);
-      console.log(
-        "Estimated Gas for ERC20 Token Transfer(): ", 
-        estimateGas
-      );
+      console.log(`Estimated Gas for ERC20 Token Transfer():  ${estimateGas}`);
 
     } catch (err) {
       console.log(`${err.message}`);

@@ -87,6 +87,10 @@ const completeQuest = async (heroId) => {
       3
     );
 
+    // testing estimateGas() for completeQuest()
+    let estimateGas = await provider.estimateGas(receipt);
+    console.log(`Estimated Gas for completeQuest():  ${estimateGas}`);
+
     console.log(`\n **** Completed quest led by hero ${heroId}. ****`);
 
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
@@ -281,8 +285,8 @@ function displayTime(timestamp) {
   return hour + ":" + min + ":" + sec;
 }
 
-main();
-// sendFishers();
+// main();
+sendFishers();
 // sendForagers();
 // checkHeroesStamina();
 // sendAllHeroes();
