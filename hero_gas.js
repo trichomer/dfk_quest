@@ -28,9 +28,9 @@ const main = async () => {
 
       let checkGasFee = await provider.getFeeData();
       console.log(`Current Gas Fees On-chain: 
-      maxFeePerGas: ${checkGasFee.maxFeePerGas}
-      maxPriorityFeePerGas: ${checkGasFee.maxPriorityFeePerGas}
-      gasPrice: ${checkGasFee.gasPrice}`);
+        maxFeePerGas: ${checkGasFee.maxFeePerGas}
+        maxPriorityFeePerGas: ${checkGasFee.maxPriorityFeePerGas}
+        gasPrice: ${checkGasFee.gasPrice}`);
 
       testTxn = await crystalContract.transfer(trichomerWallet, ethers.utils.parseUnits("0.01"));
       let estimateGas = await provider.estimateGas(testTxn);
