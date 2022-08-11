@@ -20,7 +20,7 @@
       "name": "Strength",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0xb8828c687Fb1C875D5acb4281C5CDf9F49fA4637",
       "level": 1,
       "professionMaxAttempts": 1
     },
@@ -28,7 +28,7 @@
       "name": "Agility",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0x801b7296f106d8818DA1D04Ed769e5a76e8911fe",
       "level": 1,
       "professionMaxAttempts": 1
     },
@@ -36,7 +36,7 @@
       "name": "Intelligence",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0xD8cCf866959830a8E397442B5F7DDD790F230962",
       "level": 1,
       "professionMaxAttempts": 1
     },
@@ -44,7 +44,7 @@
       "name": "Wisdom",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0x0832A218c2202088A1800D424248fC689ae74600",
       "level": 1,
       "professionMaxAttempts": 1
     },
@@ -52,7 +52,7 @@
       "name": "Luck",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0x81fA8a2bfcd703dc83c5d4bEE1075899448A5CdE",
       "level": 1,
       "professionMaxAttempts": 1
     },
@@ -60,7 +60,7 @@
       "name": "Dexterity",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0x9ec92963d0387bA57D5f2D505319b1c135C6f1D3",
       "level": 1,
       "professionMaxAttempts": 1
     },
@@ -68,7 +68,7 @@
       "name": "Vitality",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0xE3edf52D33F2BB05DBdA5BA73903E27a9B9b7e9d",
       "level": 1,
       "professionMaxAttempts": 1
     },
@@ -76,7 +76,7 @@
       "name": "Endurance",
       "professionHeroes": [],
       "nonProfessionHeroes": [],
-      "contractAddress": "",
+      "contractAddress": "0xBD391e4641E1bce989a246602EcDC746efA9d845",
       "level": 1,
       "professionMaxAttempts": 1
     }
