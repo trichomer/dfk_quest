@@ -42,8 +42,6 @@ const banger = async () => {
     };
     // await wallet.sendTransaction(tx1);
 
-    getPrice = await wallet.getGasPrice();
-    console.log("\nCurrent gas price on-chain: " + getPrice);
     // gasEstimate = await wallet.estimateGas(tx1);
     // console.log("Estimated gas cost of txn 1: " + gasEstimate);
     
