@@ -51,9 +51,11 @@ const checkForQuests = async () => {
 
     runningQuests.forEach((quest) => {
       console.log(
-        `Quest led by hero ${quest.heroes[0]} is due to complete in ${
-          Date.now() / 1000 - quest.completeAtTime
-        }.`
+        `Quest led by hero ${
+          quest.heroes[0]
+        } is due to complete in ${Math.round(
+          quest.completeAtTime - Date.now() / 1000
+        )} seconds.`
       );
     });
 

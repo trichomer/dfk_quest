@@ -2,11 +2,7 @@
   "quests": [
     {
       "name": "Fishing",
-<<<<<<< HEAD
-      "professionHeroes": [289429, 280279, 288400, 275046, 288416, 283048],
-=======
       "professionHeroes": [289429, 280279, 288400, 283048],
->>>>>>> 9233562c76a7d47426e5b40542e40bab0fb904cb
       "nonProfessionHeroes": [],
       "contractAddress": "0x407ab39B3675f29A719476af6eb3B9E5d93969E6",
       "level": 0,
@@ -86,9 +82,5 @@
     }
   ],
   "gasPrice": 1600000000,
-<<<<<<< HEAD
-  "gasLimit": 3000000
-=======
   "gasLimit": 2800000
->>>>>>> 9233562c76a7d47426e5b40542e40bab0fb904cb
 }
