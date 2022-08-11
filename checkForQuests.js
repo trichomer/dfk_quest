@@ -285,8 +285,8 @@ function displayTime(timestamp) {
   return hour + ":" + min + ":" + sec;
 }
 
-// main();
-sendFishers();
+main();
+// sendFishers();
 // sendForagers();
 // checkHeroesStamina();
 // sendAllHeroes();

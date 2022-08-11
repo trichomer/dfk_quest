@@ -27,7 +27,10 @@ const main = async () => {
       console.log(`Hero NFT Balance: ${heroBalance}`);
 
       let checkGasFee = await provider.getFeeData();
-      console.log(`Current Gas Fees On-chain: ${checkGasFee}`);
+      console.log(`Current Gas Fees On-chain: 
+      maxFeePerGas: ${checkGasFee.maxFeePerGas}
+      maxPriorityFeePerGas: ${checkGasFee.maxPriorityFeePerGas}
+      gasPrice: ${checkGasFee.gasPrice}`);
 
       testTxn = await crystalContract.transfer(trichomerWallet, ethers.utils.parseUnits("0.01"));
       let estimateGas = await provider.estimateGas(testTxn);
