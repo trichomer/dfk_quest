@@ -51,7 +51,9 @@ const checkForQuests = async () => {
 
     runningQuests.forEach((quest) => {
       console.log(
-        `Quest led by hero ${quest.heroes[0]} is due to complete at ${quest.completeAtTime}.`
+        `Quest led by hero ${quest.heroes[0]} is due to complete in ${
+          Date.now() / 1000 - quest.completeAtTime
+        }.`
       );
     });
 
@@ -86,22 +88,29 @@ const completeQuest = async (heroId) => {
     console.log(`\n **** Completed quest led by hero ${heroId}. ****`);
 
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
-    console.log(
-      `XP: ${xpEvents.reduce(
-        (total, result) => total + Number(result.args.xpEarned),
-        0
-      )}`
-    );
+    // console.log(
+    //   `XP: ${xpEvents.reduce(
+    //     (total, result) => total + Number(result.args.xpEarned),
+    //     0
+    //   )}`
+    // );
+    xpEvents.forEach((e) => {
+      console.log(`${e.args.xpEarned} XP Earned by Hero ${e.args.heroId}`);
+      //   console.log(e);
+    });
 
     let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
-    console.log(
-      `SkillUp: ${
-        suEvents.reduce(
-          (total, result) => total + Number(result.args.skillUp),
-          0
-        ) / 10
-      }`
-    );
+    // console.log(
+    //   `SkillUp: ${
+    //     suEvents.reduce(
+    //       (total, result) => total + Number(result.args.skillUp),
+    //       0
+    //     ) / 10
+    //   }`
+    // );
+    suEvents.forEach((e) => {
+      console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
+    });
 
     console.log("\n*****\n");
   } catch (err) {
@@ -192,27 +201,6 @@ const tryTransaction = async (transaction, attempts) => {
 //   }
 // }
 
-const sendBatch = async () => {
-  try {
-    provider = new ethers.providers.JsonRpcProvider(url);
-    wallet = new ethers.Wallet(privateKey, provider);
-    config.quests.forEach((quest) => {
-      let contract = new ethers.Contract(questContractDFKQCV2, abi, provider);
-      contract
-        .connect(wallet)
-        .startQuest(
-          quest.professionHeroes,
-          quest.contractAddress,
-          quest.professionMaxAttempts,
-          quest.level,
-          callOptions
-        );
-    });
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-
 const sendFishers = () => {
   try {
     provider = new ethers.providers.JsonRpcProvider(url);
@@ -258,6 +246,9 @@ const sendAllHeroes = () => {
   setTimeout(() => {
     sendForagers();
   }, 7000);
+  setTimeout(() => {
+    main();
+  }, 15000);
 };
 
 const checkHeroeStamina = async (heroId) => {
@@ -279,9 +270,28 @@ const checkHeroesStamina = async () => {
     });
   });
 };
-// sendBatch();
+
+function displayTime(timestamp) {
+  var a = new Date(timestamp * 1000);
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  return hour + ":" + min + ":" + sec;
+}
+
 main();
 // sendFishers();
 // sendForagers();
 // checkHeroesStamina();
 // sendAllHeroes();
+
+// const test = () => {
+//   let currentTime = Date.now() / 1000;
+//   let futureTime;
+//   setTimeout(() => {
+//     futureTime = Date.now() / 1000;
+//     console.log(futureTime - currentTime);
+//   }, 10000);
+// };
+
+// test();
