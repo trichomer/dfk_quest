@@ -83,7 +83,7 @@
   ],
   "gasPrice": 1600000000,
   "gasLimit": 2800000,
-  "meditationStats": [
+  "meditationStats": 
     {
       "STR": 0,
       "AGI": 1,
@@ -97,5 +97,4 @@
       "MP": 9,
       "Stamina": 10
     }
-  ] 
 }

@@ -13,12 +13,11 @@ const start = async () => {
     try {
         let contract = new ethers.Contract(meditationContractAddress, abi, provider);
         contract.connect(wallet).startMeditation(
-         229837, 
-         config.meditationStats, 
-         2, 
-         6, 
-         "0x0000000000000000000000000000000000000000", 
-         callOptions
+         281958, 
+         config.meditationStats.WIS, 
+         config.meditationStats.INT, 
+         config.meditationStats.LCK, 
+         "0x0000000000000000000000000000000000000000"
         );
 
         console.log(`Starting Meditation... ${contract}\n ...`);
@@ -31,7 +30,7 @@ const start = async () => {
 const finish = async () => {
     try {
         let contract = new ethers.Contract(meditationContractAddress, abi, provider);
-        contract.connect(wallet).completeMeditation(229837);
+        contract.connect(wallet).completeMeditation(281958);
         console.log(`Finishing Ritual... ${contract}\n ...`);
   
       } catch (err) {
