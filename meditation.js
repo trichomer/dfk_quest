@@ -13,14 +13,14 @@ const start = async () => {
     try {
         let contract = new ethers.Contract(meditationContractAddress, abi, provider);
         contract.connect(wallet).startMeditation(
-         281958, 
-         config.meditationStats.WIS, 
-         config.meditationStats.INT, 
-         config.meditationStats.LCK, 
-         "0x0000000000000000000000000000000000000000"
+         281958, // heroId
+         config.meditationStats.WIS, // primary stat
+         config.meditationStats.INT, // secondary stat
+         config.meditationStats.LCK, // tertiary stat
+         "0x0000000000000000000000000000000000000000" // attunement crystal address (zero address for no token)
         );
 
-        console.log(`Starting Meditation... ${contract}\n ...`);
+        console.log("Starting Meditation...", contract);
 
     } catch (err) {
       console.log(`${err.message}`);
@@ -31,7 +31,7 @@ const finish = async () => {
     try {
         let contract = new ethers.Contract(meditationContractAddress, abi, provider);
         contract.connect(wallet).completeMeditation(281958);
-        console.log(`Finishing Ritual... ${contract}\n ...`);
+        console.log("Finishing Ritual...", contract);
   
       } catch (err) {
         console.log(`${err.message}`);
