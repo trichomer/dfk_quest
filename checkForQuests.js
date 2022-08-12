@@ -16,6 +16,8 @@ const abi = [
   "event QuestReward(uint256 indexed questId, address indexed player, uint256 heroId, address rewardItem, uint256 itemQuantity)",
   "function multiStartQuest(address[] _questAddress, uint256[][] _heroIds, uint8[] _attempts, uint8[] _level) external",
   "function startQuest(uint256[] _heroIds, address _questAddress, uint8 _attempts, uint8 _level)",
+  "event TrainingAttemptDone(bool success, uint256 attempt, uint256 indexed heroId)",
+  "event TrainingSuccessRatio(uint256 winCount, uint256 attempts, uint256 indexed heroId)",
 ];
 let provider;
 let questContract;

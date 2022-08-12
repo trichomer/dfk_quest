@@ -83,18 +83,17 @@
   ],
   "gasPrice": 1600000000,
   "gasLimit": 2800000,
-  "meditationStats": 
-    {
-      "STR": 0,
-      "AGI": 1,
-      "INT": 2,
-      "WIS": 3,
-      "LCK": 4,
-      "VIT": 5,
-      "END": 6,
-      "DEX": 7,
-      "HP": 8,
-      "MP": 9,
-      "Stamina": 10
-    }
+  "meditationStats": {
+    "STR": 0,
+    "AGI": 1,
+    "INT": 2,
+    "WIS": 3,
+    "LCK": 4,
+    "VIT": 5,
+    "END": 6,
+    "DEX": 7,
+    "HP": 8,
+    "MP": 9,
+    "Stamina": 10
+  }
 }
