@@ -277,14 +277,6 @@ const checkHeroesStamina = async () => {
   });
 };
 
-function displayTime(timestamp) {
-  var a = new Date(timestamp * 1000);
-  var hour = a.getHours();
-  var min = a.getMinutes();
-  var sec = a.getSeconds();
-  return hour + ":" + min + ":" + sec;
-}
-
 main();
 // sendFishers();
 // sendForagers();
