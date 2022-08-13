@@ -84,7 +84,26 @@ const getHeroesFromWallet = async () => {
 //   //   console.log(stamina);
 //   return stamina;
 // };
-getHeroesFromWallet().then((data) => console.log(`${data}`));
+getHeroesFromWallet().then((data) => {
+  const quests = config.quests;
+  // quests.forEach((q) => {
+  //   console.log(q.professionHeroes);
+  // });
+  const updatedQuests = quests.map((q) => {
+    const heroIds = data.map((h) => {
+      return Number(h);
+    });
+    const hardCodedHeroes = q.professionHeroes;
+    const updatedHeroes = hardCodedHeroes.filter((h) => heroIds.includes(h));
+    q.professionHeroes = updatedHeroes;
+    return q;
+
+    // console.log(q.professionHeroes);
+  });
+  updatedQuests.forEach((q) => {
+    console.log(q.professionHeroes);
+  });
+});
 
 const resolve = async () => {
   const heroes = await getHeroesFromWallet();
