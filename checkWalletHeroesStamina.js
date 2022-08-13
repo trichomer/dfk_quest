@@ -63,7 +63,7 @@ const getHeroesFromWallet = async () => {
   const heroesWithGoodStamina = await heroesWithGoodStaminaRaw.filter(
     (h) => !!h
   );
-
+  console.log(heroesWithGoodStamina);
   // heroesWithGoodStamina.forEach((h) => {
   //   console.log(`${h}`);
   // });
@@ -84,4 +84,13 @@ const getHeroesFromWallet = async () => {
 //   //   console.log(stamina);
 //   return stamina;
 // };
-getHeroesFromWallet();
+getHeroesFromWallet().then((data) => console.log(`${data}`));
+
+const resolve = async () => {
+  const heroes = await getHeroesFromWallet();
+  heroes.forEach((hero) => {
+    console.log(`Hero ${hero} ready!`);
+  });
+};
+
+// resolve();
