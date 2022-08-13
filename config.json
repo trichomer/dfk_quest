@@ -82,7 +82,7 @@
     }
   ],
   "gasPrice": 1600000000,
-  "gasLimit": 2800000,
+  "gasLimit": 3000000,
   "meditationStats": {
     "STR": 0,
     "AGI": 1,
