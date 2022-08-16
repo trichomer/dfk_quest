@@ -65,7 +65,7 @@ const crystalUsdcContract = new ethers.Contract(
   provider
 );
 const jewelXJewelPair = "0x6AC38A4C112F125eac0eBDbaDBed0BC8F4575d0d";
-const jewelXJewelAbi = fs.readFileSync("./abis/ethUsdcAbi.json").toString();
+const jewelXJewelAbi = fs.readFileSync("./abis/erc20.json").toString();
 const jewelXJewelContract = new ethers.Contract(
   jewelXJewelPair,
   jewelXJewelAbi,
@@ -94,7 +94,7 @@ const ethUrl =
   "https://eth-mainnet.g.alchemy.com/v2/Me9TM57oKMh4sMHIiLBSLgOfWG1SCqx0";
 const ethProvider = new ethers.providers.JsonRpcProvider(ethUrl);
 const ethUsdcEthPair = "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc";
-const ethUsdcAbi = fs.readFileSync("./abis/ethUsdcAbi.json").toString();
+const ethUsdcAbi = fs.readFileSync("./abis/erc20.json").toString();
 const ethUsdcEthContract = new ethers.Contract(
   ethUsdcEthPair,
   ethUsdcAbi,
@@ -104,7 +104,7 @@ const ethUsdcEthContract = new ethers.Contract(
 const hmyUrl = "https://api.s0.t.hmny.io/";
 const hmyProvider = new ethers.providers.JsonRpcProvider(hmyUrl);
 const woneJewelPair = "0xEb579ddcD49A7beb3f205c9fF6006Bb6390F138f";
-const woneJewelAbi = fs.readFileSync("./abis/ethUsdcAbi.json").toString();
+const woneJewelAbi = fs.readFileSync("./abis/erc20.json").toString();
 const woneJewelContract = new ethers.Contract(
   woneJewelPair,
   woneJewelAbi,
@@ -216,18 +216,7 @@ const balances = async () => {
 
 
   
-  reserves = await jewelXJewelContract.functions.getReserves();
-  console.log(
-    "\n #### DFK Chain - wJEWEL-xJEWEL pair token reserves #### \n",
-    reserves,
-    "\n"
-  );
 
-  console.log(
-    `reserve[0]: ${reserves[0]} \n reserve[1]: ${reserves[1]} \n ${
-      reserves[0] / reserves[1]
-    } \n reverse: ${reserves[1] / reserves[0]}`
-  );
 
 
 
@@ -242,8 +231,22 @@ const balances = async () => {
     pair1
   );
 
-  const route = new Route([pair1, wjewelAddress]);
-  console.log(route);
+  reserves = await jewelXJewelContract.functions.getReserves();
+  console.log(
+    "\n #### DFK Chain - wJEWEL-xJEWEL pair token reserves #### \n",
+    reserves,
+    "\n"
+  );
+
+  // console.log(
+  //   `reserve[0]: ${reserves[0]} \n reserve[1]: ${reserves[1]} \n ${
+  //     reserves[0] / reserves[1]
+  //   } \n reverse: ${reserves[1] / reserves[0]}`
+  // );
+
+  // const route = new Route([pair1, wjewelAddress]);
+  // console.log(route);
+
   // const trade = new Trade(route, new TokenAmount(wjewelAddress, '100000000000000', TradeType.EXACT_INPUT));
   // console.log(trade);
 
