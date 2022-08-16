@@ -50,7 +50,7 @@
     },
     {
       "name": "Luck",
-      "professionHeroes": [],
+      "professionHeroes": [267579,282744,288400,280279,275213,289429,283048,288416,275046,35449],
       "nonProfessionHeroes": [],
       "contractAddress": "0x81fA8a2bfcd703dc83c5d4bEE1075899448A5CdE",
       "level": 1,
