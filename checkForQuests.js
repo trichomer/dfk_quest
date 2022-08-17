@@ -279,11 +279,11 @@ const checkHeroesStamina = async () => {
   });
 };
 
-main();
+// main();
 // sendFishers();
 // sendForagers();
 // checkHeroesStamina();
-// sendAllHeroes();
+sendAllHeroes();
 
 // const test = () => {
 //   let currentTime = Date.now() / 1000;

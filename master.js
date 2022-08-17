@@ -52,9 +52,56 @@ const checkForQuests = async () => {
     let doneQuests = activeQuests.filter(
       (quest) => !runningQuests.includes(quest)
     );
+
+    for (const quest of doneQuests) {
+      await completeQuest(quest.heroes[0]);
+    }
   } catch (err) {
     console.log();
   }
 };
 
 checkForQuests();
+
+const completeQuest = async (heroId) => {
+  try {
+    console.log(`Completing quest led by hero ${heroId}.`);
+    let receipt = await tryTransaction(
+      () => questContract.connect(wallet).completeQuest(heroId, callOptions),
+      3
+    );
+
+    let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
+
+    xpEvents.forEach((e) => {
+      console.log(`${e.args.xpEarned} XP Earned by Hero ${e.args.heroId}`);
+    });
+
+    let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
+
+    suEvents.forEach((e) => {
+      console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
+    });
+
+    console.log("\n*****\n");
+  } catch (err) {
+    console.log("Complete Quest error: " + err.message);
+  }
+};
+
+const tryTransaction = async (transaction, attempts) => {
+  for (let i = 0; i < attempts; i++) {
+    try {
+      var tx = await transaction();
+      let receipt = await tx.wait();
+      if (receipt.status === undefined) {
+        console.log(tx);
+      }
+      if (receipt.status !== 1)
+        throw new Error(`Receipt had a status of ${receipt.status}`);
+      return receipt;
+    } catch (err) {
+      if (i === attempts - 1) throw err;
+    }
+  }
+};
