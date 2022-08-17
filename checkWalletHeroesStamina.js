@@ -25,31 +25,13 @@ const getHeroesFromWallet = async () => {
   );
   let walletHeroes = await heroContract.getUserHeroes(testWallet);
   console.log("walletHeroes " + walletHeroes);
-  //   const fiveAttemptHeroes = [];
-  //   console.log(walletHeroes.length + " total heroes!");
-  //   walletHeroes.forEach(async (h) => {
-  //     let stamina = await checkHeroStamina(h);
-  //     console.log(`Hero ${h} stamina = ${await checkHeroStamina(h)}`);
-  //     if ((await stamina) >= 25) {
-  //       fiveAttemptHeroes.push(h);
-  //     }
-  //     fiveAttemptHeroes.forEach((hero) => {
-  //       console.log(`${hero}`);
-  //     });
-  //   });
-  //   return fiveAttemptHeroes;
+
   const promises = walletHeroes.map((hero) => {
     return questContract.getCurrentStamina(hero);
   });
 
   const results = await Promise.all(promises);
   console.log("results" + results);
-  // const mappedR = results.map((h) => {
-  //   const stamina = h;
-  //   return stamina;
-  // });
-
-  // console.log(mappedR);
 
   const heroesWithGoodStaminaRaw = results.map((value, index) => {
     const stamina = Number(`${value}`);
@@ -60,10 +42,8 @@ const getHeroesFromWallet = async () => {
     return null;
   });
 
-  const heroesWithGoodStamina = await heroesWithGoodStaminaRaw.filter(
-    (h) => !!h
-  );
-  console.log(heroesWithGoodStamina);
+  const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
+  // console.log(heroesWithGoodStamina);
   // heroesWithGoodStamina.forEach((h) => {
   //   console.log(`${h}`);
   // });
@@ -101,7 +81,9 @@ getHeroesFromWallet().then((data) => {
     // console.log(q.professionHeroes);
   });
   updatedQuests.forEach((q) => {
-    console.log(q.professionHeroes);
+    if (q.professionHeroes.length > 0) {
+      console.log(q.professionHeroes);
+    }
   });
 });
 
