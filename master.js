@@ -28,12 +28,13 @@ const heroABI = [
 const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
-let provider = new ethers.providers.JsonRpcProvider(url);
+let questContract, provider;
 
 const checkForQuests = async () => {
   try {
     console.log("\n Checking Quests\n");
-    let questContract = new ethers.Contract(testWallet, questABI, provider);
+    provider = new ethers.providers.JsonRpcProvider(url);
+    questContract = new ethers.Contract(testWallet, questABI, provider);
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
     console.log(activeQuests);
 
