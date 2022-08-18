@@ -62,14 +62,38 @@ const questsWithFullStamHeroes = filterFullStamHeroes.filter(
 
 console.log(questsWithFullStamHeroes);
 
-questsWithFullStamHeroes.forEach((quest) => {
-  const allHeroes = quest.professionHeroes;
-  const questWithMaximumSixHeroes = new Array();
-  const heroGroup = new Array();
-  let i = 0;
-  while (i < allHeroes.length) {
-    heroGroup.push(allHeroes.slice(i, (i += 6)));
-  }
+// questsWithFullStamHeroes.forEach((quest) => {
+//   const allHeroes = quest.professionHeroes;
+//   const heroGroups = new Array();
+//   const questWithMaximumSixHeroes = new Array();
+//   let i = 0;
+//   while (i < allHeroes.length) {
+//     heroGroups.push(allHeroes.slice(i, (i += 6)));
+//   }
 
-  console.log(heroGroup);
-});
+//   console.log(heroGroups);
+// });
+
+const mapFullstamQuests = () => {
+  const heroGroups = new Array();
+  const questWithMaximumSixHeroes = new Array();
+  questsWithFullStamHeroes.forEach((quest) => {
+    const allHeroes = quest.professionHeroes;
+    let i = 0;
+    while (i < allHeroes.length) {
+      heroGroups.push(allHeroes.slice(i, (i += 6)));
+    }
+  });
+
+  const updatedQuests = heroGroups.map((group) => {
+    const quests = [...questsWithFullStamHeroes];
+    const targetQuest = quests.filter((quest) =>
+      quest.professionHeroes.includes(group[0])
+    );
+    targetQuest.professionHeroes = group;
+    return targetQuest;
+  });
+  return updatedQuests;
+};
+
+console.log(mapFullstamQuests());
