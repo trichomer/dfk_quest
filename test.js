@@ -43,6 +43,7 @@ const quests = [
 ];
 
 const filterFullStamHeroes = quests.map((quest) => {
+  // get full stamina heroes
   const hardCodedHeroes = quest.professionHeroes;
   const updatedHeroes = hardCodedHeroes.filter((h) =>
     fullStamHeroes.includes(h)
@@ -57,27 +58,17 @@ filterFullStamHeroes.forEach((q) => {
 // console.log(filterFullStamHeroes);
 
 const questsWithFullStamHeroes = filterFullStamHeroes.filter(
+  // get quests that contain full stamina heroes
   (q) => q.professionHeroes.length > 0
 );
 
 console.log(questsWithFullStamHeroes);
 
-// questsWithFullStamHeroes.forEach((quest) => {
-//   const allHeroes = quest.professionHeroes;
-//   const heroGroups = new Array();
-//   const questWithMaximumSixHeroes = new Array();
-//   let i = 0;
-//   while (i < allHeroes.length) {
-//     heroGroups.push(allHeroes.slice(i, (i += 6)));
-//   }
-
-//   console.log(heroGroups);
-// });
-
 const mapFullstamQuests = () => {
   const heroGroups = new Array();
   const questWithMaximumSixHeroes = new Array();
   questsWithFullStamHeroes.forEach((quest) => {
+    // chunk full stam heroes into groups of 6
     const allHeroes = quest.professionHeroes;
     let i = 0;
     while (i < allHeroes.length) {
@@ -86,6 +77,7 @@ const mapFullstamQuests = () => {
   });
 
   const updatedQuests = heroGroups.map((group) => {
+    // duplicate quest info to contain hero groups of max size 6
     const quests = [...questsWithFullStamHeroes];
     const targetQuest = quests.filter((quest) =>
       quest.professionHeroes.includes(group[0])
