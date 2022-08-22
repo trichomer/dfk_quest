@@ -44,3 +44,66 @@ const duelABI = [
 
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 let provider = new ethers.providers.JsonRpcProvider(url);
+
+const completeQuest = async (heroId) => {
+    try {
+      console.log(`Completing quest led by hero ${heroId}.`);
+      let receipt = await tryTransaction(
+        () => questContract.connect(wallet).completeQuest(heroId, callOptions),
+        3
+      );
+  
+      // testing estimateGas() for completeQuest()
+      let estimateGas = await provider.estimateGas(receipt);
+      console.log(`Estimated Gas for completeQuest():  ${estimateGas}`);
+  
+      console.log(`\n **** Completed quest led by hero ${heroId}. ****`);
+  
+      let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
+      // console.log(
+      //   `XP: ${xpEvents.reduce(
+      //     (total, result) => total + Number(result.args.xpEarned),
+      //     0
+      //   )}`
+      // );
+      xpEvents.forEach((e) => {
+        console.log(`${e.args.xpEarned} XP Earned by Hero ${e.args.heroId}`);
+        //   console.log(e);
+      });
+  
+      let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
+      // console.log(
+      //   `SkillUp: ${
+      //     suEvents.reduce(
+      //       (total, result) => total + Number(result.args.skillUp),
+      //       0
+      //     ) / 10
+      //   }`
+      // );
+      suEvents.forEach((e) => {
+        console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
+      });
+  
+      console.log("\n*****\n");
+    } catch (err) {
+      console.log("Complete Quest error: " + err.message);
+    }
+  };
+  
+  const tryTransaction = async (transaction, attempts) => {
+    for (let i = 0; i < attempts; i++) {
+      try {
+        var tx = await transaction();
+        let receipt = await tx.wait();
+        if (receipt.status === undefined) {
+          console.log(tx);
+        }
+        if (receipt.status !== 1)
+          throw new Error(`Receipt had a status of ${receipt.status}`);
+        return receipt;
+      } catch (err) {
+        if (i === attempts - 1) throw err;
+      }
+    }
+  };
+
