@@ -32,7 +32,7 @@ const heroABI = [
 const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
-let questContract, provider;
+let questContract, provider, heroContract;
 
 let fullStaminaHeroes, heroesOnQuest;
 
@@ -46,6 +46,8 @@ const checkForAndCompleteQuests = async () => {
       questABI,
       provider
     );
+    heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
+
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
     console.log(activeQuests.length + " Active Quests");
 
@@ -93,8 +95,9 @@ const checkForAndCompleteQuests = async () => {
 
     heroesOnQuest = stillQuestingHeroes;
     console.log(
-      `${heroesOnQuest.length} Heroes remaining on quest after finished quests completing eligible quests : ${heroesOnQuest}`
+      `${heroesOnQuest.length} Heroes remaining on quest after completing eligible quests : ${heroesOnQuest}`
     );
+    updateHeroesWithGoodStamina();
   } catch (err) {
     console.log(err);
   }
@@ -127,6 +130,31 @@ const completeQuest = async (heroId) => {
   } catch (err) {
     console.log("Complete Quest error: " + err.message);
   }
+};
+
+const updateHeroesWithGoodStamina = async () => {
+  let walletHeroes = await heroContract.getUserHeroes(testWallet);
+  console.log(`${walletHeroes.length} Heroes in wallet: ${walletHeroes}`);
+
+  const promises = walletHeroes.map((hero) => {
+    return questContract.getCurrentStamina(hero);
+  });
+
+  const results = await Promise.all(promises);
+
+  const heroesWithGoodStaminaRaw = results.map((value, index) => {
+    const stamina = Number(value);
+    if (stamina > 25) {
+      return walletHeroes[index];
+    }
+    return null;
+  });
+
+  const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
+  fullStaminaHeroes = heroesWithGoodStamina;
+  console.log(
+    `${fullStaminaHeroes.length} full stamina heroes: ${fullStaminaHeroes}`
+  );
 };
 
 const tryTransaction = async (transaction, attempts) => {
