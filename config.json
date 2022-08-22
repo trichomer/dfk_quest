@@ -81,6 +81,20 @@
       "professionMaxAttempts": 1
     }
   ],
+  "duels": [
+    {
+      "name": "Solo",
+      "duelHeroes": []
+    },
+    {
+      "name": "Squad",
+      "duelHeroes": []
+    },
+    {
+      "name": "War",
+      "duelHeroes": []
+    }
+  ],
   "gasPrice": 1600000000,
   "gasLimit": 3000000,
   "meditationStats": {
