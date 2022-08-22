@@ -281,9 +281,9 @@ const checkHeroesStamina = async () => {
 
 // main();
 // sendFishers();
-// sendForagers();
+sendForagers();
 // checkHeroesStamina();
-sendAllHeroes();
+// sendAllHeroes();
 
 // const test = () => {
 //   let currentTime = Date.now() / 1000;

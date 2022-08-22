@@ -1,11 +1,13 @@
-const allHeroes = [
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  22, 23, 24, 25, 26,
-];
+// const allHeroes = [
+//   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+//   22, 23, 24, 25, 26,
+// ];
 
 const fullStamHeroes = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
 ];
+
+const heroesOnQuest = [1, 2];
 
 const quests = [
   {
@@ -45,8 +47,8 @@ const quests = [
 const filterFullStamHeroes = quests.map((quest) => {
   // get full stamina heroes
   const hardCodedHeroes = quest.professionHeroes;
-  const updatedHeroes = hardCodedHeroes.filter((h) =>
-    fullStamHeroes.includes(h)
+  const updatedHeroes = hardCodedHeroes.filter(
+    (h) => fullStamHeroes.includes(h) && !heroesOnQuest.includes(h)
   );
   quest.professionHeroes = updatedHeroes;
   return quest;
@@ -66,13 +68,12 @@ console.log(questsWithFullStamHeroes);
 
 const mapFullstamQuests = () => {
   const heroGroups = new Array();
-  const questWithMaximumSixHeroes = new Array();
   questsWithFullStamHeroes.forEach((quest) => {
     // chunk full stam heroes into groups of 6
-    const allHeroes = quest.professionHeroes;
+    const allQuestHeroes = quest.professionHeroes;
     let i = 0;
-    while (i < allHeroes.length) {
-      heroGroups.push(allHeroes.slice(i, (i += 6)));
+    while (i < allQuestHeroes.length) {
+      heroGroups.push(allQuestHeroes.slice(i, (i += 6)));
     }
   });
 

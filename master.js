@@ -1,5 +1,9 @@
 const { ethers } = require("ethers");
 const config = require("./config.json");
+const fs = require("fs");
+const { syncBuiltinESMExports } = require("module");
+
+const privateKey = fs.readFileSync(".secret").toString().trim();
 
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const DFKQuestCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
@@ -25,21 +29,39 @@ const heroABI = [
   "function getCurrentStamina(uint256 _heroId) external view returns (uint256)",
 ];
 
-const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
+const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 let questContract, provider;
 
-const checkForQuests = async () => {
+let fullStaminaHeroes, heroesOnQuest;
+
+const checkForAndCompleteQuests = async () => {
   try {
     console.log("\n Checking Quests\n");
+    let localQuestingHeroes = new Array();
     provider = new ethers.providers.JsonRpcProvider(url);
-    questContract = new ethers.Contract(testWallet, questABI, provider);
+    questContract = new ethers.Contract(
+      DFKQuestCoreV2Address,
+      questABI,
+      provider
+    );
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
-    console.log(activeQuests);
+    console.log(activeQuests.length + " Active Quests");
+
+    activeQuests.forEach((quest) => {
+      quest.heroes.forEach((hero) => {
+        localQuestingHeroes.push(hero);
+      });
+    });
+
+    heroesOnQuest = localQuestingHeroes;
+    console.log(
+      `${heroesOnQuest.length} Heroes On Quest before completing: ${heroesOnQuest}`
+    );
 
     let runningQuests = activeQuests.filter(
-      (quest) => quest.completeTime >= Math.round(Date.now() / 1000)
+      (quest) => quest.completeAtTime >= Math.round(Date.now() / 1000)
     );
 
     runningQuests.forEach((quest) => {
@@ -57,15 +79,32 @@ const checkForQuests = async () => {
     for (const quest of doneQuests) {
       await completeQuest(quest.heroes[0]);
     }
+    sleep(3000);
+    console.log(`${runningQuests.length} running quests.`);
+    let stillActiveQuests = await questContract.getAccountActiveQuests(
+      testWallet
+    );
+    let stillQuestingHeroes = new Array();
+    stillActiveQuests.forEach((quest) => {
+      quest.heroes.forEach((hero) => {
+        stillQuestingHeroes.push(hero);
+      });
+    });
+
+    heroesOnQuest = stillQuestingHeroes;
+    console.log(
+      `${heroesOnQuest.length} Heroes remaining on quest after finished quests completing eligible quests : ${heroesOnQuest}`
+    );
   } catch (err) {
-    console.log();
+    console.log(err);
   }
 };
 
-checkForQuests();
+checkForAndCompleteQuests();
 
 const completeQuest = async (heroId) => {
   try {
+    let wallet = new ethers.Wallet(privateKey, provider);
     console.log(`Completing quest led by hero ${heroId}.`);
     let receipt = await tryTransaction(
       () => questContract.connect(wallet).completeQuest(heroId, callOptions),
@@ -105,4 +144,12 @@ const tryTransaction = async (transaction, attempts) => {
       if (i === attempts - 1) throw err;
     }
   }
+};
+
+const sleep = (milliseconds) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 };
