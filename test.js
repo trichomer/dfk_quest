@@ -70,10 +70,10 @@ const mapFullstamQuests = () => {
   const heroGroups = new Array();
   questsWithFullStamHeroes.forEach((quest) => {
     // chunk full stam heroes into groups of 6
-    const allQuestHeroes = quest.professionHeroes;
+    const allHeroes = quest.professionHeroes;
     let i = 0;
-    while (i < allQuestHeroes.length) {
-      heroGroups.push(allQuestHeroes.slice(i, (i += 6)));
+    while (i < allHeroes.length) {
+      heroGroups.push(allHeroes.slice(i, (i += 6)));
     }
   });
 
@@ -83,10 +83,10 @@ const mapFullstamQuests = () => {
     const targetQuest = quests.filter((quest) =>
       quest.professionHeroes.includes(group[0])
     );
-    targetQuest.professionHeroes = group;
-    return targetQuest;
+    return { ...targetQuest[0], professionHeroes: group };
   });
   return updatedQuests;
 };
 
 console.log(mapFullstamQuests());
+// mapFullstamQuests();

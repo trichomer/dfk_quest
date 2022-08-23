@@ -32,7 +32,8 @@ const heroABI = [
 const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
-const MINIMUM_STAMINA = 25;
+const MINIMUM_STAMINA = 10;
+const MAX_QUEST_GROUP_SIZE = 3;
 
 let questContract, provider, heroContract;
 
@@ -154,6 +155,7 @@ const updateHeroesWithGoodStamina = async () => {
 
   const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
   fullStaminaHeroes = heroesWithGoodStamina;
+  console.log(`Full Stamina Threshold = ${MINIMUM_STAMINA}`);
   console.log(
     `${fullStaminaHeroes.length} full stamina heroes: ${fullStaminaHeroes}`
   );
@@ -183,7 +185,30 @@ const getQuestsWithFullStamHeroes = async () => {
     (quest) => quest.professionHeroes.length > 0
   );
 
-  console.log(questsWithOnlyFullStamHeroes);
+  //   console.log(questsWithOnlyFullStamHeroes);
+
+  const heroGroups = new Array();
+  questsWithOnlyFullStamHeroes.forEach((quest) => {
+    const allQuestHeroes = quest.professionHeroes;
+    let i = 0;
+    while (i < allQuestHeroes.length) {
+      heroGroups.push(allQuestHeroes.slice(i, (i += MAX_QUEST_GROUP_SIZE)));
+    }
+  });
+
+  const questsWithFullStamHeroesAtMaxGroupSize = heroGroups.map((group) => {
+    const quests = [...questsWithOnlyFullStamHeroes];
+    // console.log(quests);
+    const targetQuest = quests.filter((quest) =>
+      quest.professionHeroes.includes(group[0])
+    );
+
+    const questToUpdate = targetQuest[0];
+
+    return { ...questToUpdate, professionHeroes: group };
+  });
+
+  console.log(questsWithFullStamHeroesAtMaxGroupSize);
 };
 
 const tryTransaction = async (transaction, attempts) => {
