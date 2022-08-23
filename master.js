@@ -32,6 +32,8 @@ const heroABI = [
 const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
+const MINIMUM_STAMINA = 25;
+
 let questContract, provider, heroContract;
 
 let fullStaminaHeroes, heroesOnQuest;
@@ -144,7 +146,7 @@ const updateHeroesWithGoodStamina = async () => {
 
   const heroesWithGoodStaminaRaw = results.map((value, index) => {
     const stamina = Number(value);
-    if (stamina > 25) {
+    if (stamina >= MINIMUM_STAMINA) {
       return walletHeroes[index];
     }
     return null;
@@ -169,9 +171,6 @@ const getQuestsWithFullStamHeroes = async () => {
     const heroesOnQuestInts = heroesOnQuest.map((hero) => {
       return Number(hero);
     });
-    console.log(hardCodedHeroes);
-    console.log(fullStaminaHeroes);
-    console.log(heroesOnQuest);
     const updatedHeroes = hardCodedHeroes.filter(
       (hero) =>
         fullStamHeroInts.includes(hero) && !heroesOnQuestInts.includes(hero)
@@ -179,7 +178,12 @@ const getQuestsWithFullStamHeroes = async () => {
     quest.professionHeroes = updatedHeroes;
     return quest;
   });
-  console.log(questsWithOnlyFullStamHeroesRaw);
+
+  const questsWithOnlyFullStamHeroes = questsWithOnlyFullStamHeroesRaw.filter(
+    (quest) => quest.professionHeroes.length > 0
+  );
+
+  console.log(questsWithOnlyFullStamHeroes);
 };
 
 const tryTransaction = async (transaction, attempts) => {
