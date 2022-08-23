@@ -95,7 +95,7 @@ const checkForAndCompleteQuests = async () => {
 
     heroesOnQuest = stillQuestingHeroes;
     console.log(
-      `${heroesOnQuest.length} Heroes remaining on quest after completing eligible quests : ${heroesOnQuest}`
+      `${heroesOnQuest.length} Heroes remain on quests : ${heroesOnQuest}`
     );
     updateHeroesWithGoodStamina();
   } catch (err) {
@@ -155,6 +155,31 @@ const updateHeroesWithGoodStamina = async () => {
   console.log(
     `${fullStaminaHeroes.length} full stamina heroes: ${fullStaminaHeroes}`
   );
+
+  getQuestsWithFullStamHeroes();
+};
+
+const getQuestsWithFullStamHeroes = async () => {
+  const quests = config.quests;
+  const questsWithOnlyFullStamHeroesRaw = quests.map((quest) => {
+    const hardCodedHeroes = quest.professionHeroes;
+    const fullStamHeroInts = fullStaminaHeroes.map((hero) => {
+      return Number(hero);
+    });
+    const heroesOnQuestInts = heroesOnQuest.map((hero) => {
+      return Number(hero);
+    });
+    console.log(hardCodedHeroes);
+    console.log(fullStaminaHeroes);
+    console.log(heroesOnQuest);
+    const updatedHeroes = hardCodedHeroes.filter(
+      (hero) =>
+        fullStamHeroInts.includes(hero) && !heroesOnQuestInts.includes(hero)
+    );
+    quest.professionHeroes = updatedHeroes;
+    return quest;
+  });
+  console.log(questsWithOnlyFullStamHeroesRaw);
 };
 
 const tryTransaction = async (transaction, attempts) => {

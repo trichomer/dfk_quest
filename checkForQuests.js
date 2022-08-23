@@ -280,8 +280,8 @@ const checkHeroesStamina = async () => {
 };
 
 // main();
-// sendFishers();
-sendForagers();
+sendFishers();
+// sendForagers();
 // checkHeroesStamina();
 // sendAllHeroes();
 
