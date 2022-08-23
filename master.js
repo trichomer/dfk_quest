@@ -32,7 +32,7 @@ const heroABI = [
 const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
-const MINIMUM_STAMINA = 10;
+const MINIMUM_STAMINA = 5;
 const MAX_QUEST_GROUP_SIZE = 3;
 
 let questContract, provider, heroContract;
@@ -215,6 +215,7 @@ const sendReadyQuests = (questGroup) => {
     console.log(
       `Sending ${quest.professionHeroes.length} heroes on quest led by ${quest.professionHeroes[0]}.`
     );
+    sleep(3000);
     provider = new ethers.providers.JsonRpcProvider(url);
     let wallet = new ethers.Wallet(privateKey, provider);
     let contract = new ethers.Contract(
