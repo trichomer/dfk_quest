@@ -33,17 +33,32 @@ const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const MINIMUM_STAMINA = 5;
-const MAX_QUEST_GROUP_SIZE = 3;
+const MAX_QUEST_GROUP_SIZE = 6;
 
-let provider = new ethers.providers.JsonRpcProvider(url);
-let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
-let questContract = new ethers.Contract(
-  DFKQuestCoreV2Address,
-  questABI,
-  provider
-);
+// let provider = new ethers.providers.JsonRpcProvider(url);
+// let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
+// let questContract = new ethers.Contract(
+//   DFKQuestCoreV2Address,
+//   questABI,
+//   provider
+// );
+let provider, heroContract, questContract;
 
 let fullStaminaHeroes, heroesOnQuest;
+
+const getConfigHeroes = () => {
+  const configHeroes = new Array();
+  config.quests.forEach((q) => {
+    if (q.professionHeroes.length > 0) {
+      q.professionHeroes.forEach((h) => configHeroes.push(h));
+    }
+  });
+
+  //   console.log(configHeroes);
+  return configHeroes;
+};
+
+const configHeroes = getConfigHeroes();
 
 const sleep = (milliseconds) => {
   const date = Date.now();
@@ -58,13 +73,13 @@ const checkForAndCompleteQuests = async () => {
   try {
     console.log("\n Checking Quests\n");
     let localQuestingHeroes = new Array();
-    // provider = new ethers.providers.JsonRpcProvider(url);
-    // questContract = new ethers.Contract(
-    //   DFKQuestCoreV2Address,
-    //   questABI,
-    //   provider
-    // );
-    // heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
+    provider = new ethers.providers.JsonRpcProvider(url);
+    questContract = new ethers.Contract(
+      DFKQuestCoreV2Address,
+      questABI,
+      provider
+    );
+    heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
 
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
     console.log(activeQuests.length + " Active Quests");
@@ -111,6 +126,8 @@ const checkForAndCompleteQuests = async () => {
       });
     });
 
+    sleep(3000);
+
     heroesOnQuest = stillQuestingHeroes;
     console.log(
       `${heroesOnQuest.length} Heroes remain on quests : ${heroesOnQuest}`
@@ -120,8 +137,6 @@ const checkForAndCompleteQuests = async () => {
     console.log(err);
   }
 };
-
-checkForAndCompleteQuests();
 
 const completeQuest = async (heroId) => {
   try {
@@ -151,10 +166,29 @@ const completeQuest = async (heroId) => {
 };
 
 const updateHeroesWithGoodStamina = async () => {
+  console.log(`Updating Heroes with good stamina (*.*)/`);
+  sleep(2000);
   let walletHeroes = await heroContract.getUserHeroes(testWallet);
-  console.log(`${walletHeroes.length} Heroes in wallet: ${walletHeroes}`);
+  const walletHeroesInts = walletHeroes.map((h) => Number(h));
+  console.log(
+    `${walletHeroesInts.length} Heroes in wallet: ${walletHeroesInts}`
+  );
 
-  const promises = walletHeroes.map((hero) => {
+  console.log(`${configHeroes.length} Heroes in config`);
+
+  const heroesInWalletButNotConfig = walletHeroesInts.filter(
+    (h) => !configHeroes.includes(h)
+  );
+
+  heroesInWalletButNotConfig &&
+    console.log(
+      `${heroesInWalletButNotConfig.length} on wallet but not in config`
+    );
+
+  heroesInWalletButNotConfig &&
+    heroesInWalletButNotConfig.forEach((h) => console.log(h));
+
+  const promises = configHeroes.map((hero) => {
     return questContract.getCurrentStamina(hero);
   });
 
@@ -163,7 +197,7 @@ const updateHeroesWithGoodStamina = async () => {
   const heroesWithGoodStaminaRaw = results.map((value, index) => {
     const stamina = Number(value);
     if (stamina >= MINIMUM_STAMINA) {
-      return walletHeroes[index];
+      return configHeroes[index];
     }
     return null;
   });
@@ -179,6 +213,7 @@ const updateHeroesWithGoodStamina = async () => {
 };
 
 const getQuestsWithFullStamHeroes = () => {
+  console.log(`Mapping Ready Quest Groups`);
   const quests = config.quests;
   const questsWithOnlyFullStamHeroesRaw = quests.map((quest) => {
     const hardCodedHeroes = quest.professionHeroes;
@@ -220,9 +255,12 @@ const getQuestsWithFullStamHeroes = () => {
     return { ...questToUpdate, professionHeroes: group };
   });
 
-  setTimeout(() => {
-    sendReadyQuests(questsWithFullStamHeroesAtMaxGroupSize);
-  }, 5000);
+  //   questsWithFullStamHeroesAtMaxGroupSize.forEach((q) => {
+  //     console.log(q);
+  //   });
+
+  sleep(2000);
+  sendReadyQuests(questsWithFullStamHeroesAtMaxGroupSize);
 };
 
 const sendReadyQuests = (questGroup) => {
@@ -231,7 +269,7 @@ const sendReadyQuests = (questGroup) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on quest led by ${quest.professionHeroes[0]}.`
       );
-      sleep(3000);
+
       provider = new ethers.providers.JsonRpcProvider(url);
       let wallet = new ethers.Wallet(privateKey, provider);
       let contract = new ethers.Contract(
@@ -248,6 +286,7 @@ const sendReadyQuests = (questGroup) => {
           quest.level,
           callOptions
         );
+      sleep(8000);
     });
     sleep(20000);
     checkForAndCompleteQuests();
@@ -272,3 +311,6 @@ const tryTransaction = async (transaction, attempts) => {
     }
   }
 };
+
+// console.log(getConfigHeroes());
+checkForAndCompleteQuests();
