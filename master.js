@@ -32,24 +32,39 @@ const heroABI = [
 const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
-const MINIMUM_STAMINA = 10;
+const MINIMUM_STAMINA = 5;
 const MAX_QUEST_GROUP_SIZE = 3;
 
-let questContract, provider, heroContract;
+let provider = new ethers.providers.JsonRpcProvider(url);
+let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
+let questContract = new ethers.Contract(
+  DFKQuestCoreV2Address,
+  questABI,
+  provider
+);
 
 let fullStaminaHeroes, heroesOnQuest;
 
+const sleep = (milliseconds) => {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+};
+
 const checkForAndCompleteQuests = async () => {
+  sleep(5000);
   try {
     console.log("\n Checking Quests\n");
     let localQuestingHeroes = new Array();
-    provider = new ethers.providers.JsonRpcProvider(url);
-    questContract = new ethers.Contract(
-      DFKQuestCoreV2Address,
-      questABI,
-      provider
-    );
-    heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
+    // provider = new ethers.providers.JsonRpcProvider(url);
+    // questContract = new ethers.Contract(
+    //   DFKQuestCoreV2Address,
+    //   questABI,
+    //   provider
+    // );
+    // heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
 
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
     console.log(activeQuests.length + " Active Quests");
@@ -211,27 +226,34 @@ const getQuestsWithFullStamHeroes = () => {
 };
 
 const sendReadyQuests = (questGroup) => {
-  questGroup.forEach((quest) => {
-    console.log(
-      `Sending ${quest.professionHeroes.length} heroes on quest led by ${quest.professionHeroes[0]}.`
-    );
-    provider = new ethers.providers.JsonRpcProvider(url);
-    let wallet = new ethers.Wallet(privateKey, provider);
-    let contract = new ethers.Contract(
-      DFKQuestCoreV2Address,
-      questABI,
-      provider
-    );
-    contract
-      .connect(wallet)
-      .startQuest(
-        quest.professionHeroes,
-        quest.contractAddress,
-        quest.professionMaxAttempts,
-        quest.level,
-        callOptions
+  try {
+    questGroup.forEach((quest) => {
+      console.log(
+        `Sending ${quest.professionHeroes.length} heroes on quest led by ${quest.professionHeroes[0]}.`
       );
-  });
+      sleep(3000);
+      provider = new ethers.providers.JsonRpcProvider(url);
+      let wallet = new ethers.Wallet(privateKey, provider);
+      let contract = new ethers.Contract(
+        DFKQuestCoreV2Address,
+        questABI,
+        provider
+      );
+      contract
+        .connect(wallet)
+        .startQuest(
+          quest.professionHeroes,
+          quest.contractAddress,
+          quest.professionMaxAttempts,
+          quest.level,
+          callOptions
+        );
+    });
+    sleep(20000);
+    checkForAndCompleteQuests();
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const tryTransaction = async (transaction, attempts) => {
@@ -249,12 +271,4 @@ const tryTransaction = async (transaction, attempts) => {
       if (i === attempts - 1) throw err;
     }
   }
-};
-
-const sleep = (milliseconds) => {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
 };
