@@ -9,6 +9,23 @@ const privateKey = fs.readFileSync(".secret").toString().trim();
 const wallet = new ethers.Wallet(privateKey, provider);
 const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
 
+const tryTransaction = async (transaction, attempts) => {
+    for (let i = 0; i < attempts; i++) {
+      try {
+        var tx = await transaction();
+        let receipt = await tx.wait();
+        if (receipt.status === undefined) {
+          console.log(tx);
+        }
+        if (receipt.status !== 1)
+          throw new Error(`Receipt had a status of ${receipt.status}`);
+        return receipt;
+      } catch (err) {
+        if (i === attempts - 1) throw err;
+      }
+    }
+  };
+
 const privateBuyTest = async () => {
     try {
         let contract = new ethers.Contract(saleAuctionContractAddress, abi, wallet);
