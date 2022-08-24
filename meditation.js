@@ -9,7 +9,7 @@ const privateKey = fs.readFileSync(".secret").toString().trim();
 const wallet = new ethers.Wallet(privateKey, provider);
 const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
 
-const start = async () => {
+const startMed = async () => {
     try {
         let contract = new ethers.Contract(meditationContractAddress, abi, provider);
         contract.connect(wallet).startMeditation(
@@ -27,7 +27,7 @@ const start = async () => {
     }
 };
 
-const finish = async () => {
+const finishMed = async () => {
     try {
         let contract = new ethers.Contract(meditationContractAddress, abi, provider);
         contract.connect(wallet).completeMeditation(282744);
@@ -38,13 +38,13 @@ const finish = async () => {
       }
 };
 
-const startAndFinish = () => {
-    start();
+const startAndFinishMed = () => {
+    startMed();
     setTimeout(() => {
-     finish();
+     finishMed();
     }, 40000);
 };
 
 // start();
 // finish();
-startAndFinish();
+startAndFinishMed();
