@@ -17,7 +17,7 @@ const start = async () => {
          config.meditationStats.DEX, // primary stat
          config.meditationStats.INT, // secondary stat
          config.meditationStats.LCK, // tertiary stat
-         config.meditationCrystals.LesserWIS // attunement crystal address (zero address for no token)
+         config.meditationCrystals.none // attunement crystal address (zero address for no token)
         );
 
         console.log("Starting Meditation...", contract);
