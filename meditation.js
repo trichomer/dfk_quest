@@ -9,6 +9,7 @@ const privateKey = fs.readFileSync(".secret").toString().trim();
 const wallet = new ethers.Wallet(privateKey, provider);
 const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
 
+<<<<<<< HEAD
 const eventAbi = [
   "event StatUp( address indexed player, uint256 indexed heroId, uint256 stat, uint8 increase, uint8 updateType);",
 ];
@@ -27,6 +28,18 @@ const start = async () => {
       config.meditationStats.LCK, // tertiary stat
       config.meditationCrystals.none // attunement crystal address (zero address for no token)
     );
+=======
+const startMed = async () => {
+    try {
+        let contract = new ethers.Contract(meditationContractAddress, abi, provider);
+        contract.connect(wallet).startMeditation(
+        282744, // heroId
+         config.meditationStats.DEX, // primary stat
+         config.meditationStats.INT, // secondary stat
+         config.meditationStats.LCK, // tertiary stat
+         config.meditationCrystals.none // attunement crystal address (zero address for no token)
+        );
+>>>>>>> 08f686077b53af6a8608728ab6b55b2757413570
 
     console.log("Starting Meditation...", contract);
   } catch (err) {
@@ -34,6 +47,7 @@ const start = async () => {
   }
 };
 
+<<<<<<< HEAD
 const finish = async () => {
   try {
     let contract = new ethers.Contract(
@@ -53,10 +67,29 @@ const startAndFinish = () => {
   setTimeout(() => {
     finish();
   }, 40000);
+=======
+const finishMed = async () => {
+    try {
+        let contract = new ethers.Contract(meditationContractAddress, abi, provider);
+        contract.connect(wallet).completeMeditation(282744);
+        console.log("Finishing Ritual...", contract);
+  
+      } catch (err) {
+        console.log(`${err.message}`);
+      }
+};
+
+const startAndFinishMed = () => {
+    startMed();
+    setTimeout(() => {
+     finishMed();
+    }, 40000);
+>>>>>>> 08f686077b53af6a8608728ab6b55b2757413570
 };
 
 // start();
 // finish();
+<<<<<<< HEAD
 // startAndFinish();
 
 const getLevelUpStats = async () => {
@@ -90,3 +123,6 @@ const getLevelUpStats = async () => {
   // console.log(topic);
 };
 getLevelUpStats();
+=======
+startAndFinishMed();
+>>>>>>> 08f686077b53af6a8608728ab6b55b2757413570
