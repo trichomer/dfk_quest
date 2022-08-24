@@ -12,17 +12,10 @@ const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
 const privateBuyTest = async () => {
     try {
         let contract = new ethers.Contract(saleAuctionContractAddress, abi, wallet);
-        // contract.connect(wallet).getCurrentPrice(
-        //  275046, // heroId
-        // );
-
-        // console.log("TEST", contract);
         let getPrice = await contract.getCurrentPrice(275046);
         console.log(`Hero 275046 current price: ${getPrice}`);
-
         console.log(`Bidding ${getPrice} CRYSTAL...`);
         let bidTest = await contract.bid(275046, getPrice);
-
     } catch (err) {
       console.log(`${err.message}`);
     }
