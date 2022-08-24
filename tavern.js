@@ -16,6 +16,8 @@ const privateBuyTest = async () => {
         console.log(`Hero 275046 current price: ${getPrice}`);
         console.log(`Bidding ${getPrice} CRYSTAL...`);
         let bidTest = await contract.bid(275046, getPrice);
+        let successEvent = bidTest.events.filter(AuctionSuccessful);
+        console.log(`AuctionSuccessful Event: ${successEvent}`);
     } catch (err) {
       console.log(`${err.message}`);
     }
