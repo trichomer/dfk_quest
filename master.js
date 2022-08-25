@@ -89,7 +89,7 @@ const checkForAndCompleteQuests = async () => {
         localQuestingHeroes.push(hero);
       });
     });
-
+    sleep(3000);
     heroesOnQuest = localQuestingHeroes;
     console.log(
       `${heroesOnQuest.length} Heroes On Quest before completing: ${heroesOnQuest}`
@@ -186,7 +186,9 @@ const updateHeroesWithGoodStamina = async () => {
     );
 
   heroesInWalletButNotConfig &&
-    heroesInWalletButNotConfig.forEach((h) => console.log(h));
+    heroesInWalletButNotConfig.forEach((h) =>
+      console.log(`${h} not in config`)
+    );
 
   const promises = configHeroes.map((hero) => {
     return questContract.getCurrentStamina(hero);
@@ -203,7 +205,7 @@ const updateHeroesWithGoodStamina = async () => {
   });
 
   const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
-  fullStaminaHeroes = heroesWithGoodStamina;
+  fullStaminaHeroes = [...heroesWithGoodStamina];
   console.log(`Full Stamina Threshold = ${MINIMUM_STAMINA}`);
   console.log(
     `${fullStaminaHeroes.length} full stamina heroes: ${fullStaminaHeroes}`
@@ -215,37 +217,64 @@ const updateHeroesWithGoodStamina = async () => {
 const getQuestsWithFullStamHeroes = () => {
   console.log(`Mapping Ready Quest Groups`);
   const quests = config.quests;
-  const questsWithOnlyFullStamHeroesRaw = quests.map((quest) => {
-    const hardCodedHeroes = quest.professionHeroes;
-    const fullStamHeroInts = fullStaminaHeroes.map((hero) => {
-      return Number(hero);
-    });
-    const heroesOnQuestInts = heroesOnQuest.map((hero) => {
-      return Number(hero);
-    });
-    const updatedHeroes = hardCodedHeroes.filter(
-      (hero) =>
-        fullStamHeroInts.includes(hero) && !heroesOnQuestInts.includes(hero)
-    );
-    quest.professionHeroes = updatedHeroes;
-    return quest;
+  console.log(`Full Stam Heroes: ${fullStaminaHeroes}`);
+  console.log(`Heroes On Quest: ${heroesOnQuest}`);
+  const fullStamHeroInts = fullStaminaHeroes.map((hero) => {
+    return Number(hero);
   });
 
-  const questsWithOnlyFullStamHeroes = questsWithOnlyFullStamHeroesRaw.filter(
-    (quest) => quest.professionHeroes.length > 0
+  console.log(`${fullStamHeroInts.length} Full Stam`);
+  const heroesOnQuestInts = heroesOnQuest.map((hero) => {
+    return Number(hero);
+  });
+
+  console.log(`${heroesOnQuestInts.length} heroes on quests.`);
+
+  const questsWithOnlyFullStamHeroesRaw = quests.map((quest) => {
+    const hardCodedHeroes = quest.professionHeroes.map((h) => Number(h));
+    const updatedHeroesWithFullStam = hardCodedHeroes.filter((hero) =>
+      fullStamHeroInts.includes(hero)
+    );
+
+    const updatedHeoresWithFullStamNotOnQuests =
+      updatedHeroesWithFullStam.filter(
+        (hero) => !heroesOnQuestInts.includes(hero)
+      );
+
+    console.log(updatedHeoresWithFullStamNotOnQuests);
+
+    const updatedQuest = {
+      ...quest,
+      professionHeroes: updatedHeoresWithFullStamNotOnQuests,
+    };
+
+    return updatedQuest;
+  });
+
+  console.log(
+    `${questsWithOnlyFullStamHeroesRaw.length} full stam quests raw.`
+  );
+
+  const questsWithOnlyFullStamHeroesNotOnQuests =
+    questsWithOnlyFullStamHeroesRaw.filter(
+      (quest) => quest.professionHeroes.length > 0
+    );
+
+  console.log(
+    `${questsWithOnlyFullStamHeroesNotOnQuests.length} quests with full stam heroes not on quests.`
   );
 
   const heroGroups = new Array();
-  questsWithOnlyFullStamHeroes.forEach((quest) => {
+  questsWithOnlyFullStamHeroesNotOnQuests.forEach((quest) => {
     const allQuestHeroes = quest.professionHeroes;
     let i = 0;
     while (i < allQuestHeroes.length) {
       heroGroups.push(allQuestHeroes.slice(i, (i += MAX_QUEST_GROUP_SIZE)));
     }
   });
-
+  console.log(`${heroGroups} hero groups`);
   const questsWithFullStamHeroesAtMaxGroupSize = heroGroups.map((group) => {
-    const quests = [...questsWithOnlyFullStamHeroes];
+    const quests = [...questsWithOnlyFullStamHeroesNotOnQuests];
     const targetQuest = quests.filter((quest) =>
       quest.professionHeroes.includes(group[0])
     );
@@ -258,6 +287,7 @@ const getQuestsWithFullStamHeroes = () => {
   //   questsWithFullStamHeroesAtMaxGroupSize.forEach((q) => {
   //     console.log(q);
   //   });
+  console.log(`${questsWithFullStamHeroesAtMaxGroupSize.length} ready quests.`);
 
   sleep(2000);
   sendReadyQuests(questsWithFullStamHeroesAtMaxGroupSize);
