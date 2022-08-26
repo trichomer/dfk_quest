@@ -69,7 +69,7 @@ const sleep = (milliseconds) => {
 };
 
 const checkForAndCompleteQuests = async () => {
-  sleep(5000);
+  sleep(10000);
   try {
     console.log("\n Checking Quests\n");
     let localQuestingHeroes = new Array();
@@ -207,9 +207,7 @@ const updateHeroesWithGoodStamina = async () => {
   const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
   fullStaminaHeroes = [...heroesWithGoodStamina];
   console.log(`Full Stamina Threshold = ${MINIMUM_STAMINA}`);
-  console.log(
-    `${fullStaminaHeroes.length} full stamina heroes: ${fullStaminaHeroes}`
-  );
+  console.log(`${fullStaminaHeroes.length} full stamina heroes.`);
 
   getQuestsWithFullStamHeroes();
 };
@@ -241,8 +239,6 @@ const getQuestsWithFullStamHeroes = () => {
         (hero) => !heroesOnQuestInts.includes(hero)
       );
 
-    console.log(updatedHeoresWithFullStamNotOnQuests);
-
     const updatedQuest = {
       ...quest,
       professionHeroes: updatedHeoresWithFullStamNotOnQuests,
@@ -250,10 +246,6 @@ const getQuestsWithFullStamHeroes = () => {
 
     return updatedQuest;
   });
-
-  console.log(
-    `${questsWithOnlyFullStamHeroesRaw.length} full stam quests raw.`
-  );
 
   const questsWithOnlyFullStamHeroesNotOnQuests =
     questsWithOnlyFullStamHeroesRaw.filter(
@@ -272,7 +264,6 @@ const getQuestsWithFullStamHeroes = () => {
       heroGroups.push(allQuestHeroes.slice(i, (i += MAX_QUEST_GROUP_SIZE)));
     }
   });
-  console.log(`${heroGroups} hero groups`);
   const questsWithFullStamHeroesAtMaxGroupSize = heroGroups.map((group) => {
     const quests = [...questsWithOnlyFullStamHeroesNotOnQuests];
     const targetQuest = quests.filter((quest) =>
@@ -293,13 +284,13 @@ const getQuestsWithFullStamHeroes = () => {
   sendReadyQuests(questsWithFullStamHeroesAtMaxGroupSize);
 };
 
-const sendReadyQuests = (questGroup) => {
+const sendReadyQuests = async (questGroup) => {
   try {
-    questGroup.forEach((quest) => {
+    questGroup.forEach(async (quest) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on quest led by ${quest.professionHeroes[0]}.`
       );
-
+      sleep(3000);
       provider = new ethers.providers.JsonRpcProvider(url);
       let wallet = new ethers.Wallet(privateKey, provider);
       let contract = new ethers.Contract(
@@ -307,15 +298,20 @@ const sendReadyQuests = (questGroup) => {
         questABI,
         provider
       );
-      contract
-        .connect(wallet)
-        .startQuest(
-          quest.professionHeroes,
-          quest.contractAddress,
-          quest.professionMaxAttempts,
-          quest.level,
-          callOptions
-        );
+
+      await tryTransaction(
+        () =>
+          contract
+            .connect(wallet)
+            .startQuest(
+              quest.professionHeroes,
+              quest.contractAddress,
+              quest.professionMaxAttempts,
+              quest.level,
+              callOptions
+            ),
+        2
+      );
       sleep(8000);
     });
     sleep(20000);
