@@ -54,7 +54,6 @@ const getConfigHeroes = () => {
     }
   });
 
-  //   console.log(configHeroes);
   return configHeroes;
 };
 
@@ -253,8 +252,12 @@ const getQuestsWithFullStamHeroes = () => {
     );
 
   console.log(
-    `${questsWithOnlyFullStamHeroesNotOnQuests.length} quests with full stam heroes not on quests.`
+    `${questsWithOnlyFullStamHeroesNotOnQuests.length} quests with full stam heroes not on quests: `
   );
+
+  questsWithOnlyFullStamHeroesNotOnQuests.forEach((quest) => {
+    console.log(`${quest.name} `);
+  });
 
   const heroGroups = new Array();
   questsWithOnlyFullStamHeroesNotOnQuests.forEach((quest) => {
@@ -278,7 +281,9 @@ const getQuestsWithFullStamHeroes = () => {
   //   questsWithFullStamHeroesAtMaxGroupSize.forEach((q) => {
   //     console.log(q);
   //   });
-  console.log(`${questsWithFullStamHeroesAtMaxGroupSize.length} ready quests.`);
+  console.log(
+    `${questsWithFullStamHeroesAtMaxGroupSize.length} ready quest groups.`
+  );
 
   sleep(2000);
   sendReadyQuests(questsWithFullStamHeroesAtMaxGroupSize);
@@ -299,7 +304,7 @@ const sendReadyQuests = async (questGroup) => {
         provider
       );
 
-      await tryTransaction(
+      let receipt = await tryTransaction(
         () =>
           contract
             .connect(wallet)
@@ -310,11 +315,17 @@ const sendReadyQuests = async (questGroup) => {
               quest.level,
               callOptions
             ),
-        2
+        3
       );
-      sleep(8000);
+
+      receipt
+        ? console.log(
+            `Heroes successfully sent at total gas: ${receipt.cumulativeGasUsed}`
+          )
+        : console.log("Failed sending heroes");
+      sleep(50000);
     });
-    sleep(20000);
+    sleep(400000);
     checkForAndCompleteQuests();
   } catch (err) {
     console.log(err);
