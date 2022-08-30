@@ -17,7 +17,7 @@ const startMed = async () => {
       provider
     );
     contract.connect(wallet).startMeditation(
-      267579, // heroId
+      275046, // heroId
       config.meditationStats.DEX, // primary stat
       config.meditationStats.INT, // secondary stat
       config.meditationStats.LCK, // tertiary stat
@@ -37,7 +37,7 @@ const finishMed = async () => {
       abi,
       provider
     );
-    contract.connect(wallet).completeMeditation(267579);
+    contract.connect(wallet).completeMeditation(275046);
     console.log("Finishing Ritual...", contract);
   } catch (err) {
     console.log(`${err.message}`);

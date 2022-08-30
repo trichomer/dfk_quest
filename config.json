@@ -2,7 +2,7 @@
   "quests": [
     {
       "name": "Fishing",
-      "professionHeroes": [],
+      "professionHeroes": [283048, 289429, 280279, 275046, 288416, 288400],
       "nonProfessionHeroes": [],
       "contractAddress": "0x407ab39B3675f29A719476af6eb3B9E5d93969E6",
       "level": 0,
@@ -10,7 +10,7 @@
     },
     {
       "name": "Foraging",
-      "professionHeroes": [],
+      "professionHeroes": [275213, 267579, 282744],
       "nonProfessionHeroes": [],
       "contractAddress": "0xAd51199B453075C73FA106aFcAAD59f705EF7872",
       "level": 0,
@@ -50,10 +50,7 @@
     },
     {
       "name": "Luck",
-      "professionHeroes": [
-        35449, 283048, 289429, 288400, 288416, 280279, 275213, 267579, 282744,
-        275046
-      ],
+      "professionHeroes": [35449],
       "nonProfessionHeroes": [],
       "contractAddress": "0x81fA8a2bfcd703dc83c5d4bEE1075899448A5CdE",
       "level": 1,
