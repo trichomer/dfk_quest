@@ -70,9 +70,6 @@ const checkForAndCompleteQuests = async () => {
       provider
     );
 
-    let getCode = await provider.getCode(testWallet);
-    console.log(getCode);
-
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
     console.log(activeQuests.length + " Active Quests");
 
@@ -123,7 +120,7 @@ const checkForAndCompleteQuests = async () => {
     console.log(
       `${heroesOnQuest.length} Heroes remain on quests : ${heroesOnQuest}`
     );
-    updateHeroesWithGoodStamina();
+    setTimeout(() => updateHeroesWithGoodStamina(), 30000);
   } catch (err) {
     console.log(err);
   }
