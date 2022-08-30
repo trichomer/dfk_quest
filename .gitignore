@@ -3,3 +3,4 @@
 .secret
 .test_wallet
 /node_modules
+/.vscode
