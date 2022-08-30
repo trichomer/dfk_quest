@@ -35,20 +35,7 @@ const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 const MINIMUM_STAMINA = 5;
 const MAX_QUEST_GROUP_SIZE = 6;
 
-// let provider = new ethers.providers.JsonRpcProvider(url);
-// let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
-// let questContract = new ethers.Contract(
-//   DFKQuestCoreV2Address,
-//   questABI,
-//   provider
-// );
-// let provider, heroContract, questContract;
-
 let fullStaminaHeroes, heroesOnQuest;
-
-// let sendHeoroesQuestAttempts = 0;
-// let sendQuestNonce = 1;
-// let receiptState = null;
 
 const getConfigHeroes = () => {
   const configHeroes = new Array();
@@ -120,11 +107,6 @@ const checkForAndCompleteQuests = async () => {
     }
     console.log(`${runningQuests.length} running quests.`);
 
-    // const updatedQuestCheckContract = new ethers.Contract(
-    //   DFKQuestCoreV2Address,
-    //   questABI,
-    //   provider
-    // );
     let stillActiveQuests = await questContract.getAccountActiveQuests(
       testWallet
     );
@@ -157,17 +139,11 @@ const completeQuest = async (heroId) => {
       questABI,
       provider
     );
-    // let receipt = await tryTransaction(
-    //   () => questContract.connect(wallet).completeQuest(heroId, callOptions),
-    //   1
-    // );
+
     let receipt = await tryTransaction(
       () => questContract.connect(wallet).completeQuest(heroId, callOptions),
       3
     );
-
-    // let getCode = await provider.getCode(receipt.contractAddress);
-    // console.log(getCode);
 
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
 
@@ -190,7 +166,6 @@ const completeQuest = async (heroId) => {
 const updateHeroesWithGoodStamina = async () => {
   console.log(`Updating Heroes with good stamina (*.*)/`);
   let provider = new ethers.providers.JsonRpcProvider(url);
-  //   sleep(2000);
   let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
   let walletHeroes = await heroContract.getUserHeroes(testWallet);
   let questContract = new ethers.Contract(
@@ -308,14 +283,10 @@ const getQuestsWithFullStamHeroes = () => {
     return { ...questToUpdate, professionHeroes: group };
   });
 
-  //   questsWithFullStamHeroesAtMaxGroupSize.forEach((q) => {
-  //     console.log(q);
-  //   });
   console.log(
     `${questsWithFullStamHeroesAtMaxGroupSize.length} ready quest groups.`
   );
 
-  //   sleep(2000);
   sendReadyQuests(questsWithFullStamHeroesAtMaxGroupSize);
 };
 
@@ -325,7 +296,6 @@ const sendReadyQuests = async (questGroup) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on a ${quest.name} quest led by ${quest.professionHeroes[0]}.`
       );
-      //   sleep(3000);
       provider = new ethers.providers.JsonRpcProvider(url);
       let wallet = new ethers.Wallet(privateKey, provider);
       let contract = new ethers.Contract(
@@ -348,17 +318,6 @@ const sendReadyQuests = async (questGroup) => {
         3
       );
       console.log(`${receipt.gasUsed} gas used to send heroes on quest.`);
-      //   let getCode = await provider.getCode(receipt.contractAddress);
-      //   console.log(getCode);
-      //   receipt
-      //     ? console.log(
-      //         `Heroes successfully sent at total gas: ${receipt.cumulativeGasUsed}`
-      //       )
-      //     : console.log("Failed sending heroes");
-      //   sleep(50000);
-      //   const contractAddress = receipt.contractAddress;
-      //   const code = await provider.getCode(contractAddress);
-      //   console.log(code);
     });
 
     setTimeout(() => checkForAndCompleteQuests(), 150000);
@@ -385,5 +344,4 @@ const tryTransaction = async (transaction, attempts) => {
   }
 };
 
-// console.log(getConfigHeroes());
 checkForAndCompleteQuests();
