@@ -46,9 +46,9 @@ const MAX_QUEST_GROUP_SIZE = 6;
 
 let fullStaminaHeroes, heroesOnQuest;
 
-let sendHeoroesQuestAttempts = 0;
-let sendQuestNonce = 1;
-let receiptState = null;
+// let sendHeoroesQuestAttempts = 0;
+// let sendQuestNonce = 1;
+// let receiptState = null;
 
 const getConfigHeroes = () => {
   const configHeroes = new Array();
@@ -74,6 +74,7 @@ const sleep = (milliseconds) => {
 const checkForAndCompleteQuests = async () => {
   try {
     console.log("\n Checking Quests\n");
+    sleep(10000);
     let localQuestingHeroes = new Array();
     let provider = new ethers.providers.JsonRpcProvider(url);
     let questContract = new ethers.Contract(
@@ -81,11 +82,9 @@ const checkForAndCompleteQuests = async () => {
       questABI,
       provider
     );
-    let heroContract = new ethers.Contract(
-      DFKHeroCoreAddress,
-      heroABI,
-      provider
-    );
+
+    let getCode = await provider.getCode(testWallet);
+    console.log(getCode);
 
     let activeQuests = await questContract.getAccountActiveQuests(testWallet);
     console.log(activeQuests.length + " Active Quests");
@@ -117,7 +116,7 @@ const checkForAndCompleteQuests = async () => {
     );
 
     for (const quest of doneQuests) {
-      await completeQuest(quest.heroes[0], provider, questContract);
+      await completeQuest(quest.heroes[0]);
     }
     console.log(`${runningQuests.length} running quests.`);
 
@@ -142,24 +141,33 @@ const checkForAndCompleteQuests = async () => {
     console.log(
       `${heroesOnQuest.length} Heroes remain on quests : ${heroesOnQuest}`
     );
-    updateHeroesWithGoodStamina(heroContract, questContract);
+    updateHeroesWithGoodStamina();
   } catch (err) {
     console.log(err);
   }
 };
 
-const completeQuest = async (heroId, provider, questContract) => {
+const completeQuest = async (heroId) => {
   try {
+    let provider = new ethers.providers.JsonRpcProvider(url);
     let wallet = new ethers.Wallet(privateKey, provider);
     console.log(`Completing quest led by hero ${heroId}.`);
+    let questContract = new ethers.Contract(
+      DFKQuestCoreV2Address,
+      questABI,
+      provider
+    );
     // let receipt = await tryTransaction(
     //   () => questContract.connect(wallet).completeQuest(heroId, callOptions),
     //   1
     // );
     let receipt = await tryTransaction(
       () => questContract.connect(wallet).completeQuest(heroId, callOptions),
-      1
+      3
     );
+
+    // let getCode = await provider.getCode(receipt.contractAddress);
+    // console.log(getCode);
 
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
 
@@ -179,10 +187,17 @@ const completeQuest = async (heroId, provider, questContract) => {
   }
 };
 
-const updateHeroesWithGoodStamina = async (heroContract, questContract) => {
+const updateHeroesWithGoodStamina = async () => {
   console.log(`Updating Heroes with good stamina (*.*)/`);
+  let provider = new ethers.providers.JsonRpcProvider(url);
   //   sleep(2000);
+  let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
   let walletHeroes = await heroContract.getUserHeroes(testWallet);
+  let questContract = new ethers.Contract(
+    DFKQuestCoreV2Address,
+    questABI,
+    provider
+  );
   const walletHeroesInts = walletHeroes.map((h) => Number(h));
   console.log(
     `${walletHeroesInts.length} Heroes in wallet: ${walletHeroesInts}`
@@ -330,18 +345,23 @@ const sendReadyQuests = async (questGroup) => {
               quest.level,
               callOptions
             ),
-        1
+        3
       );
       console.log(`${receipt.gasUsed} gas used to send heroes on quest.`);
+      //   let getCode = await provider.getCode(receipt.contractAddress);
+      //   console.log(getCode);
       //   receipt
       //     ? console.log(
       //         `Heroes successfully sent at total gas: ${receipt.cumulativeGasUsed}`
       //       )
       //     : console.log("Failed sending heroes");
       //   sleep(50000);
+      //   const contractAddress = receipt.contractAddress;
+      //   const code = await provider.getCode(contractAddress);
+      //   console.log(code);
     });
-    // sleep(10000);
-    checkForAndCompleteQuests();
+
+    setTimeout(() => checkForAndCompleteQuests(), 150000);
   } catch (err) {
     console.log(err);
   }
