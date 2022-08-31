@@ -32,7 +32,7 @@ const heroABI = [
 const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
-const MINIMUM_STAMINA = 5;
+const MINIMUM_STAMINA = 10;
 const MAX_QUEST_GROUP_SIZE = 6;
 
 let fullStaminaHeroes, heroesOnQuest;

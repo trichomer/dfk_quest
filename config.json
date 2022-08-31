@@ -6,7 +6,7 @@
       "nonProfessionHeroes": [],
       "contractAddress": "0x407ab39B3675f29A719476af6eb3B9E5d93969E6",
       "level": 0,
-      "professionMaxAttempts": 1
+      "professionMaxAttempts": 5
     },
     {
       "name": "Foraging",
@@ -14,7 +14,7 @@
       "nonProfessionHeroes": [],
       "contractAddress": "0xAd51199B453075C73FA106aFcAAD59f705EF7872",
       "level": 0,
-      "professionMaxAttempts": 1
+      "professionMaxAttempts": 5
     },
     {
       "name": "Strength",
@@ -54,7 +54,7 @@
       "nonProfessionHeroes": [],
       "contractAddress": "0x81fA8a2bfcd703dc83c5d4bEE1075899448A5CdE",
       "level": 1,
-      "professionMaxAttempts": 1
+      "professionMaxAttempts": 5
     },
     {
       "name": "Dexterity",
