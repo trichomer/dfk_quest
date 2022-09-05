@@ -30,7 +30,7 @@ const heroABI = [
 ];
 
 const callOptions = { gasPrice: 210000000, gasLimit: 3700000 };
-const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
+// const testWallet = "0x2469B86d03B791C6316BA5B876cF7dF53be08a65";
 
 const MINIMUM_STAMINA = 20;
 const MAX_QUEST_GROUP_SIZE = 6;
@@ -70,7 +70,7 @@ const checkForAndCompleteQuests = async () => {
       provider
     );
 
-    let activeQuests = await questContract.getAccountActiveQuests(testWallet);
+    let activeQuests = await questContract.getAccountActiveQuests(config.testWallet);
     console.log(activeQuests.length + " Active Quests");
 
     activeQuests.forEach((quest) => {
@@ -105,7 +105,7 @@ const checkForAndCompleteQuests = async () => {
     console.log(`${runningQuests.length} running quests.`);
 
     let stillActiveQuests = await questContract.getAccountActiveQuests(
-      testWallet
+      config.testWallet
     );
     let stillQuestingHeroes = new Array();
     stillActiveQuests.forEach((quest) => {
@@ -164,7 +164,7 @@ const updateHeroesWithGoodStamina = async () => {
   console.log(`Updating Heroes with good stamina (*.*)/`);
   let provider = new ethers.providers.JsonRpcProvider(url);
   let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
-  let walletHeroes = await heroContract.getUserHeroes(testWallet);
+  let walletHeroes = await heroContract.getUserHeroes(config.testWallet);
   let questContract = new ethers.Contract(
     DFKQuestCoreV2Address,
     questABI,
