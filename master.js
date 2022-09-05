@@ -29,10 +29,10 @@ const heroABI = [
   "function getCurrentStamina(uint256 _heroId) external view returns (uint256)",
 ];
 
-const callOptions = { gasPrice: 1900000000, gasLimit: 3500000 };
+const callOptions = { gasPrice: 210000000, gasLimit: 3700000 };
 const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
-const MINIMUM_STAMINA = 5;
+const MINIMUM_STAMINA = 20;
 const MAX_QUEST_GROUP_SIZE = 6;
 
 let fullStaminaHeroes, heroesOnQuest;

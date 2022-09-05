@@ -1,5 +1,5 @@
-#config.json
 # run 'git rm --cached config.json' on local repo and delete on GitHub before production build
+config.json
 .secret
 .test_wallet
 /node_modules
