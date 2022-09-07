@@ -30,9 +30,6 @@ const heroABI = [
 ];
 
 const callOptions = { gasPrice: 210000000, gasLimit: 3700000 };
-// const testWallet = "0x2469B86d03B791C6316BA5B876cF7dF53be08a65";
-
-const MINIMUM_STAMINA = 20;
 const MAX_QUEST_GROUP_SIZE = 6;
 
 let fullStaminaHeroes, heroesOnQuest;
@@ -201,7 +198,7 @@ const updateHeroesWithGoodStamina = async () => {
 
   const heroesWithGoodStaminaRaw = results.map((value, index) => {
     const stamina = Number(value);
-    if (stamina >= MINIMUM_STAMINA) {
+    if (stamina >= config.minimum_stamina) {
       return configHeroes[index];
     }
     return null;
@@ -209,7 +206,7 @@ const updateHeroesWithGoodStamina = async () => {
 
   const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
   fullStaminaHeroes = [...heroesWithGoodStamina];
-  console.log(`Full Stamina Threshold = ${MINIMUM_STAMINA}`);
+  console.log(`Full Stamina Threshold = ${config.minimum_stamina}`);
   console.log(`${fullStaminaHeroes.length} full stamina heroes.`);
 
   getQuestsWithFullStamHeroes();
