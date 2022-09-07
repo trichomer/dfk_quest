@@ -198,7 +198,7 @@ const updateHeroesWithGoodStamina = async () => {
 
   const heroesWithGoodStaminaRaw = results.map((value, index) => {
     const stamina = Number(value);
-    if (stamina >= config.minimum_stamina) {
+    if (stamina >= config.minimumStamina) {
       return configHeroes[index];
     }
     return null;
@@ -206,7 +206,7 @@ const updateHeroesWithGoodStamina = async () => {
 
   const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
   fullStaminaHeroes = [...heroesWithGoodStamina];
-  console.log(`Full Stamina Threshold = ${config.minimum_stamina}`);
+  console.log(`Full Stamina Threshold = ${config.minimumStamina}`);
   console.log(`${fullStaminaHeroes.length} full stamina heroes.`);
 
   getQuestsWithFullStamHeroes();
