@@ -70,7 +70,9 @@ const checkForAndCompleteQuests = async () => {
       provider
     );
 
-    let activeQuests = await questContract.getAccountActiveQuests(config.testWallet);
+    let activeQuests = await questContract.getAccountActiveQuests(
+      config.testWallet
+    );
     console.log(activeQuests.length + " Active Quests");
 
     activeQuests.forEach((quest) => {
@@ -314,7 +316,9 @@ const sendReadyQuests = async (questGroup) => {
             ),
         3
       );
-      console.log(`${receipt.gasUsed} gas used to send heroes on quest.`);
+      console.log(
+        `${receipt.gasUsed} gas used to send heroes on quest. Effective Gas Price: ${receipt.effectiveGasPrice}`
+      );
     });
 
     setTimeout(() => checkForAndCompleteQuests(), 150000);
