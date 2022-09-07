@@ -39,13 +39,21 @@ let saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 // address winner);
 
 const getHeroDetails = async (heroId) => {
-  let heroDetailsContract = new ethers.Contract(
-    DFKHeroCoreAddress,
-    heroABI,
-    provider
-  );
-  let heroDetails = await heroDetailsContract.getHero(heroid);
-  console.log(heroDetails);
+  try {
+    let heroDetailsContract = new ethers.Contract(
+      DFKHeroCoreAddress,
+      heroABI,
+      provider
+    );
+    let heroIdInt = Number(heroId);
+    let heroDetails = await heroDetailsContract.getHero(heroIdInt);
+
+    console.log(heroDetails);
+    console.log(heroDetails.length);
+    // return heroDetails;
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 saleContract.on(
