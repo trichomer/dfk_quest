@@ -12,6 +12,33 @@ const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const heroABI = [
   "function getHero ( uint256 _id ) external view returns ( tuple )",
 ];
+const config = require("./config.json");
+const TelegramBot = require('node-telegram-bot-api');
+const bot = new TelegramBot(config.botToken, {polling: true});
+
+
+// Matches "/echo [whatever]"
+// bot.onText(/\/echo (.+)/, (msg, match) => {
+//     // 'msg' is the received Message from Telegram
+//     // 'match' is the result of executing the regexp above on the text content
+//     // of the message
+//     const chatId = msg.chat.id;
+//     const resp = match[1]; // the captured "whatever"
+//     // send back the matched "whatever" to the chat
+//     bot.sendMessage(chatId, resp);
+// });
+  // Listen for any kind of message. There are different kinds of
+  // messages.
+// bot.on('message', (msg) => {
+//     const chatId = msg.chat.id;
+//     // send a message to the chat acknowledging receipt of their message
+//     bot.sendMessage(chatId, 'Received your message, ' + msg.from.first_name);
+// });
+
+
+
+
+
 // let crystalContract = new ethers.Contract(
 //     crystalAddress,
 //     erc20Abi,
@@ -38,23 +65,23 @@ let saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 // uint256 duration,
 // address winner);
 
-const getHeroDetails = async (heroId) => {
-  try {
-    let heroDetailsContract = new ethers.Contract(
-      DFKHeroCoreAddress,
-      heroABI,
-      provider
-    );
-    let heroIdInt = Number(heroId);
-    let heroDetails = await heroDetailsContract.getHero(heroIdInt);
+// const getHeroDetails = async (heroId) => {
+//   try {
+//     let heroDetailsContract = new ethers.Contract(
+//       DFKHeroCoreAddress,
+//       heroABI,
+//       provider
+//     );
+//     let heroIdInt = Number(heroId);
+//     let heroDetails = await heroDetailsContract.getHero(heroIdInt);
 
-    console.log(heroDetails);
-    console.log(heroDetails.length);
-    // return heroDetails;
-  } catch (err) {
-    console.log(err.message);
-  }
-};
+//     console.log(heroDetails);
+//     console.log(heroDetails.length);
+//     // return heroDetails;
+//   } catch (err) {
+//     console.log(err.message);
+//   }
+// };
 
 saleContract.on(
   "AuctionCreated",
@@ -65,6 +92,14 @@ saleContract.on(
         18
       )} CRYSTAL`
     );
-    getHeroDetails(tokenId);
+    // getHeroDetails(tokenId);
+    bot.on('message', (msg) => {
+        const chatId = msg.chat.id;
+        bot.sendMessage(chatId, `Hero ${tokenId} posted by ${owner} for ${ethers.utils.formatUnits(
+            startingPrice,
+            18
+          )} CRYSTAL`);
+    });
   }
 );
+
