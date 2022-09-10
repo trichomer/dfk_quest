@@ -13,9 +13,6 @@ const heroABI = [
   "function getHero ( uint256 _id ) external view returns ( tuple )",
 ];
 const config = require("./config.json");
-const TelegramBot = require('node-telegram-bot-api');
-const bot = new TelegramBot(config.botToken, {polling: true});
-
 
 // Matches "/echo [whatever]"
 // bot.onText(/\/echo (.+)/, (msg, match) => {
@@ -83,6 +80,9 @@ let saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 //   }
 // };
 
+const TelegramBot = require('node-telegram-bot-api');
+const bot = new TelegramBot(config.botToken, {polling: true});
+
 saleContract.on(
   "AuctionCreated",
   (auctionId, owner, tokenId, startingPrice, endingPrice, duration, winner) => {
@@ -93,13 +93,7 @@ saleContract.on(
       )} CRYSTAL`
     );
     // getHeroDetails(tokenId);
-    bot.on('message', (msg) => {
-        const chatId = msg.chat.id;
-        bot.sendMessage(chatId, `Hero ${tokenId} posted by ${owner} for ${ethers.utils.formatUnits(
-            startingPrice,
-            18
-          )} CRYSTAL`);
-    });
+    bot.sendMessage(503468588, `Hero ${tokenId} posted for ${ethers.utils.formatUnits(startingPrice, 18)} CRYSTAL \n https://heroes.defikingdoms.com/image/${tokenId}`);
   }
 );
 
