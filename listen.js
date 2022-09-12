@@ -13,6 +13,8 @@ const heroABI = [
   "function getHero ( uint256 _id ) external view returns ( tuple )",
 ];
 const config = require("./config.json");
+const queries = require("./queries.json");
+const { gql } = require("@apollo/client");
 
 // Matches "/echo [whatever]"
 // bot.onText(/\/echo (.+)/, (msg, match) => {
@@ -64,13 +66,8 @@ let saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 
 // const getHeroDetails = async (heroId) => {
 //   try {
-//     let heroDetailsContract = new ethers.Contract(
-//       DFKHeroCoreAddress,
-//       heroABI,
-//       provider
-//     );
 //     let heroIdInt = Number(heroId);
-//     let heroDetails = await heroDetailsContract.getHero(heroIdInt);
+//     let heroDetails = gql########;
 
 //     console.log(heroDetails);
 //     console.log(heroDetails.length);
