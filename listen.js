@@ -14,7 +14,7 @@ const heroABI = [
   "function getHero ( uint256 _id ) external view returns ( tuple )",
 ];
 const config = require("./config.json");
-const queries = require("./queries.json");
+const https = require('https');
 
 // Matches "/echo [whatever]"
 // bot.onText(/\/echo (.+)/, (msg, match) => {
@@ -76,6 +76,47 @@ let saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 //     console.log(err.message);
 //   }
 // };
+
+
+
+const data = JSON.stringify({
+  query: ``,
+});
+
+const options = {
+  hostname: 'defi-kingdoms-community-api-gateway-co06z8vi.uc.gateway.dev',
+  path: '/graphql',
+  port: 443,
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Content-Length': data.length,
+    'User-Agent': 'Node',
+  },
+};
+
+const req = https.request(options, (res) => {
+  let data = '';
+  console.log(`statusCode: ${res.statusCode}`);
+
+  res.on('data', (d) => {
+    data += d;
+  });
+  res.on('end', () => {
+    console.log(JSON.parse(data).data);
+  });
+});
+
+req.on('error', (error) => {
+  console.error(error);
+});
+
+req.write(data);
+req.end();
+
+
+
+
 
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(config.botToken, {polling: true});
