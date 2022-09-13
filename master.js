@@ -8,8 +8,11 @@ const privateKey = fs.readFileSync(".secret").toString().trim();
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const DFKQuestCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
 
-const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 
+const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
+// const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
+
+const provider = new ethers.providers.JsonRpcProvider(url);
 const questABI = [
   "function getCurrentStamina(uint256 _heroId) external view returns (uint256)",
   "function getAccountActiveQuests(address _account) external view returns (tuple(uint256 id, address questAddress, uint8 level, uint256[] heroes, address player, uint256 startBlock, uint256 startAtTime, uint256 completeAtTime, uint8 attempts, uint8 status)[])",
@@ -23,13 +26,16 @@ const questABI = [
   "event TrainingAttemptDone(bool success, uint256 attempt, uint256 indexed heroId)",
   "event TrainingSuccessRatio(uint256 winCount, uint256 attempts, uint256 indexed heroId)",
 ];
-
+const questContract = new ethers.Contract(
+  DFKQuestCoreV2Address,
+  questABI,
+  provider
+);
 const heroABI = [
   "function getUserHeroes ( address _address ) external view returns ( uint256[] )",
   "function getCurrentStamina(uint256 _heroId) external view returns (uint256)",
 ];
 
-const callOptions = { gasPrice: 240000000, gasLimit: 5000000 };
 const MAX_QUEST_GROUP_SIZE = 6;
 
 let fullStaminaHeroes, heroesOnQuest;
@@ -60,12 +66,6 @@ const checkForAndCompleteQuests = async () => {
     console.log("\n Checking Quests\n");
     sleep(10000);
     let localQuestingHeroes = new Array();
-    let provider = new ethers.providers.JsonRpcProvider(url);
-    let questContract = new ethers.Contract(
-      DFKQuestCoreV2Address,
-      questABI,
-      provider
-    );
 
     let activeQuests = await questContract.getAccountActiveQuests(
       config.testWallet
@@ -127,17 +127,11 @@ const checkForAndCompleteQuests = async () => {
 
 const completeQuest = async (heroId) => {
   try {
-    let provider = new ethers.providers.JsonRpcProvider(url);
     let wallet = new ethers.Wallet(privateKey, provider);
     console.log(`Completing quest led by hero ${heroId}.`);
-    let questContract = new ethers.Contract(
-      DFKQuestCoreV2Address,
-      questABI,
-      provider
-    );
 
     let receipt = await tryTransaction(
-      () => questContract.connect(wallet).completeQuest(heroId, callOptions),
+      () => questContract.connect(wallet).completeQuest(heroId, config.txnOptions),
       3
     );
 
@@ -161,14 +155,9 @@ const completeQuest = async (heroId) => {
 
 const updateHeroesWithGoodStamina = async () => {
   console.log(`Updating Heroes with good stamina (*.*)/`);
-  let provider = new ethers.providers.JsonRpcProvider(url);
   let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
   let walletHeroes = await heroContract.getUserHeroes(config.testWallet);
-  let questContract = new ethers.Contract(
-    DFKQuestCoreV2Address,
-    questABI,
-    provider
-  );
+
   const walletHeroesInts = walletHeroes.map((h) => Number(h));
   console.log(
     `${walletHeroesInts.length} Heroes in wallet: ${walletHeroesInts}`
@@ -292,7 +281,6 @@ const sendReadyQuests = async (questGroup) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on a ${quest.name} quest led by ${quest.professionHeroes[0]}.`
       );
-      provider = new ethers.providers.JsonRpcProvider(url);
       let wallet = new ethers.Wallet(privateKey, provider);
       let contract = new ethers.Contract(
         DFKQuestCoreV2Address,
@@ -309,7 +297,7 @@ const sendReadyQuests = async (questGroup) => {
               quest.contractAddress,
               quest.professionMaxAttempts,
               quest.level,
-              callOptions
+              config.txnOptions
             ),
         3
       );
