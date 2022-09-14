@@ -17,7 +17,9 @@ const config = require("./config.json");
 const https = require('https');
 const fetch = require('node-fetch');
 
-let saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
+const saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
+const TelegramBot = require('node-telegram-bot-api');
+const bot = new TelegramBot(config.botToken, {polling: true});
 
 async function getData(id) {
   const data = JSON.stringify({
@@ -86,15 +88,16 @@ async function getData(id) {
 
   const json = await response.json();
   console.log(json.data);
-}
+  bot.sendMessage(503468588, `Hero ${id} posted \n ${json.data} ${json.level}`);
+  // bot.sendMessage(503468588, `Hero ${tokenId} posted for ${ethers.utils.formatUnits(startingPrice, 18)} CRYSTAL \n https://heroes.defikingdoms.com/image/${tokenId}`);
+};
 
-getData(93141);
+// getData(93141);
 
 
 
 
-const TelegramBot = require('node-telegram-bot-api');
-const bot = new TelegramBot(config.botToken, {polling: true});
+
 
 saleContract.on(
   "AuctionCreated",
@@ -105,8 +108,7 @@ saleContract.on(
         18
       )} CRYSTAL`
     );
-    // let heroId = await getData(tokenId);
-    bot.sendMessage(503468588, `Hero ${tokenId} posted for ${ethers.utils.formatUnits(startingPrice, 18)} CRYSTAL \n https://heroes.defikingdoms.com/image/${tokenId}`);
+    getData(tokenId);
   }
 );
 
