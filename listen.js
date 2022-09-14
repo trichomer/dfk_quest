@@ -88,7 +88,7 @@ async function getData(id) {
 
   const json = await response.json();
   console.log(json.data);
-  bot.sendMessage(503468588, `Hero ${id} posted \n ${json.data} ${json.level}`);
+  bot.sendMessage(503468588, `Hero ${id} posted \n ${json[0].level}`);
   // bot.sendMessage(503468588, `Hero ${tokenId} posted for ${ethers.utils.formatUnits(startingPrice, 18)} CRYSTAL \n https://heroes.defikingdoms.com/image/${tokenId}`);
 };
 
