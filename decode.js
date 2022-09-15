@@ -22,9 +22,9 @@ const heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
 
 heroContract.on(
     "HeroUpdated",
-    (owner, heroId) => {
+    (owner, tokenId, heroId, state) => {
       console.log(
-        `test ${heroId} \n ${owner} \n `
+        `test \n ${heroId} \n ${owner} \n ${tokenId}`
       );
     }
   );
