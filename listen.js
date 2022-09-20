@@ -87,14 +87,33 @@ async function getData(id, price) {
   );
 
   const json = await response.json();
-  // console.log(json.data);
-  bot.sendMessage(503468588, `Hero ${id} \n ${ethers.utils.formatUnits(price, 18)} CRYSTAL
-   \n Lv. ${json.data.heroes[0].level} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}\n 
-   Gen ${json.data.heroes[0].generation} ${json.data.heroes[0].rarity} \n
-   Active1: ${json.data.heroes[0].active1}\n
-   Active2: ${json.data.heroes[0].active2}\n
-   Passive1: ${json.data.heroes[0].passive1}\n
-   Passive2: ${json.data.heroes[0].passive2}\n
+  console.log(json.data);
+  console.log(`Total Stats:`, 
+  json.data.heroes[0].strength + 
+  json.data.heroes[0].agility +
+  json.data.heroes[0].endurance +
+  json.data.heroes[0].wisdom +
+  json.data.heroes[0].dexterity +
+  json.data.heroes[0].vitality +
+  json.data.heroes[0].intelligence +
+  json.data.heroes[0].luck
+  );
+
+  bot.sendMessage(503468588, `Hero ${id}\n${ethers.utils.formatUnits(price, 18)} CRYSTAL
+   Lv. ${json.data.heroes[0].level} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}
+   Gen ${json.data.heroes[0].generation} ${json.data.heroes[0].rarity} ${json.data.heroes[0].summonsRemaining}/${json.data.heroes[0].maxSummons}
+   Stats: ${json.data.heroes[0].strength} + 
+    ${json.data.heroes[0].agility} +
+    ${json.data.heroes[0].endurance} +
+    ${json.data.heroes[0].wisdom} +
+    ${json.data.heroes[0].dexterity} +
+    ${json.data.heroes[0].vitality} +
+    ${json.data.heroes[0].intelligence} +
+    ${json.data.heroes[0].luck}
+   A1: ${json.data.heroes[0].active1}
+   A2: ${json.data.heroes[0].active2}
+   P1: ${json.data.heroes[0].passive1}
+   P2: ${json.data.heroes[0].passive2}
    `
    );
 };
