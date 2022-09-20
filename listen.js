@@ -21,7 +21,7 @@ const saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(config.botToken, {polling: true});
 
-async function getData(id) {
+async function getData(id, price) {
   const data = JSON.stringify({
     query: `query myHeroes($id: ID!) {
       heroes(where: {id: $id}, orderBy: rarity, orderDirection: desc){
@@ -87,9 +87,16 @@ async function getData(id) {
   );
 
   const json = await response.json();
-  console.log(json.data);
-  bot.sendMessage(503468588, `test \n `);
-  // bot.sendMessage(503468588, `Hero ${tokenId} posted for ${ethers.utils.formatUnits(startingPrice, 18)} CRYSTAL \n https://heroes.defikingdoms.com/image/${tokenId}`);
+  // console.log(json.data);
+  bot.sendMessage(503468588, `Hero ${id} \n ${ethers.utils.formatUnits(price, 18)} CRYSTAL
+   \n Lv. ${json.data.heroes[0].level} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}\n 
+   Gen ${json.data.heroes[0].generation} ${json.data.heroes[0].rarity} \n
+   Active1: ${json.data.heroes[0].active1}\n
+   Active2: ${json.data.heroes[0].active2}\n
+   Passive1: ${json.data.heroes[0].passive1}\n
+   Passive2: ${json.data.heroes[0].passive2}\n
+   `
+   );
 };
 
 // getData(93141);
@@ -108,7 +115,7 @@ saleContract.on(
         18
       )} CRYSTAL`
     );
-    getData(tokenId);
+    getData(tokenId, startingPrice);
   }
 );
 
