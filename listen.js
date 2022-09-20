@@ -21,6 +21,19 @@ const saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(config.botToken, {polling: true});
 
+const COMMON = fs.readFileSync("./img/common.png");
+const UNCOMMON = fs.readFileSync("./img/uncommon.png");
+const RARE = fs.readFileSync("./img/rare.png");
+const LEGENDARY = fs.readFileSync("./img/legendary.png");
+const MYTHIC = fs.readFileSync("./img/mythic.png");
+const RARITY_ICON = {
+  4: MYTHIC,
+  3: LEGENDARY,
+  2: RARE,
+  1: UNCOMMON,
+  0: COMMON,
+};
+
 async function getData(id, price) {
   const data = JSON.stringify({
     query: `query myHeroes($id: ID!) {
@@ -99,17 +112,19 @@ async function getData(id, price) {
   json.data.heroes[0].luck
   );
 
+  let totalStats = json.data.heroes[0].strength + 
+    json.data.heroes[0].agility +
+    json.data.heroes[0].endurance +
+    json.data.heroes[0].wisdom +
+    json.data.heroes[0].dexterity +
+    json.data.heroes[0].vitality +
+    json.data.heroes[0].intelligence +
+    json.data.heroes[0].luck;
+
   bot.sendMessage(503468588, `Hero ${id}\n${ethers.utils.formatUnits(price, 18)} CRYSTAL
    Lv. ${json.data.heroes[0].level} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}
-   Gen ${json.data.heroes[0].generation} ${json.data.heroes[0].rarity} ${json.data.heroes[0].summonsRemaining}/${json.data.heroes[0].maxSummons}
-   Stats: ${json.data.heroes[0].strength} + 
-    ${json.data.heroes[0].agility} +
-    ${json.data.heroes[0].endurance} +
-    ${json.data.heroes[0].wisdom} +
-    ${json.data.heroes[0].dexterity} +
-    ${json.data.heroes[0].vitality} +
-    ${json.data.heroes[0].intelligence} +
-    ${json.data.heroes[0].luck}
+   Gen ${json.data.heroes[0].generation} ${RARITY_ICON[json.data.heroes[0].rarity]} ${json.data.heroes[0].summonsRemaining}/${json.data.heroes[0].maxSummons}
+   Stats: ${totalStats}
    A1: ${json.data.heroes[0].active1}
    A2: ${json.data.heroes[0].active2}
    P1: ${json.data.heroes[0].passive1}
