@@ -21,11 +21,11 @@ const saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(config.botToken, {polling: true});
 
-const COMMON = fs.readFileSync("./img/common.png");
-const UNCOMMON = fs.readFileSync("./img/uncommon.png");
-const RARE = fs.readFileSync("./img/rare.png");
-const LEGENDARY = fs.readFileSync("./img/legendary.png");
-const MYTHIC = fs.readFileSync("./img/mythic.png");
+const COMMON = "⬜";
+const UNCOMMON = "🟩";
+const RARE = "🟦";
+const LEGENDARY = "🟧";
+const MYTHIC = "🟪";
 const RARITY_ICON = {
   4: MYTHIC,
   3: LEGENDARY,
@@ -111,6 +111,7 @@ async function getData(id, price) {
   json.data.heroes[0].intelligence +
   json.data.heroes[0].luck
   );
+  console.log(RARITY_ICON[json.data.heroes[0].rarity]);
 
   let totalStats = json.data.heroes[0].strength + 
     json.data.heroes[0].agility +
