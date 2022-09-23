@@ -8,7 +8,8 @@ const gas = async () => {
     let gasDate = new Date();
     curGasPrice = await provider.getGasPrice();
     let dynGasPrice = (curGasPrice + (curGasPrice * 0.1));
-    console.log(`Current gas price: ${curGasPrice}`, gasDate, dynGasPrice);
+    console.log(`Current gas price: ${curGasPrice}`, gasDate);
+    console.log(`Dynamic gas price: ${dynGasPrice}`);
 };
 
 gas();
