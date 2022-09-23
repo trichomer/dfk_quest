@@ -2,12 +2,8 @@ const { ethers } = require("ethers");
 const fs = require("fs");
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
-const rxWalletAddress = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
 const privateKey = fs.readFileSync(".secret").toString().trim();
 const wallet = new ethers.Wallet(privateKey, provider);
-
-const trichomerWallet = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
-const signerWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 const foragingAddress = "0xAd51199B453075C73FA106aFcAAD59f705EF7872";
 const crystalAddress = "0x04b9dA42306B023f3572e106B11D82aAd9D32EBb";
 const crystalAbi = fs.readFileSync("./abis/erc20.json").toString();
@@ -37,7 +33,7 @@ const banger = async () => {
         "\nNonce: " + 
         nonce);
     tx1 = {
-        to: trichomerWallet,
+        to: xWallet,
         value: ethers.utils.parseEther("0.01")
     };
     // await wallet.sendTransaction(tx1);
@@ -53,13 +49,13 @@ const banger = async () => {
     erc20Bal = await crystalContract.balanceOf(thisWallet);
     // console.log("ERC20 Token Balance: " + erc20Bal / 1e(erc20Dec));
 
-    console.log("\nSending 0.01 ERC20 to: " + trichomerWallet);
+    console.log("\nSending 0.01 ERC20 to: " + xWallet);
     preBalSrc = await crystalContract.balanceOf(thisWallet);
     console.log("\nSource ERC20 Balance Before txn: " + preBalSrc / 1e18 + " " + erc20Symbol);
-    preBalDest = await crystalContract.balanceOf(trichomerWallet);
+    preBalDest = await crystalContract.balanceOf(xWallet);
     console.log("Destination ERC20 Balance Before txn: " + preBalDest / 1e18 + " " + erc20Symbol);
     console.log("\nCalling Transfer...");
-    tx2 = await crystalContract.transfer(trichomerWallet, ethers.utils.parseUnits("0.01"));
+    tx2 = await crystalContract.transfer(xWallet, ethers.utils.parseUnits("0.01"));
     // gasEstimate2 = await wallet.estimateGas(tx2);
     // console.log("Estimated gas cost of txn 1: " + gasEstimate2);
     // console.log(tx2);
@@ -67,7 +63,7 @@ const banger = async () => {
     // console.log(tx2Pending);
     postBalSrc = await crystalContract.balanceOf(thisWallet);
     console.log("\nSource ERC20 Balance After txn: " + postBalSrc / 1e18 + " " + erc20Symbol);
-    postBalDest = await crystalContract.balanceOf(trichomerWallet);
+    postBalDest = await crystalContract.balanceOf(xWallet);
     console.log("Destination ERC20 Balance After txn: " + postBalDest / 1e18 + " " + erc20Symbol);
 }
 

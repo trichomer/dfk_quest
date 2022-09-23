@@ -122,7 +122,7 @@ async function getData(id, price) {
     json.data.heroes[0].intelligence +
     json.data.heroes[0].luck;
 
-  bot.sendMessage(503468588, `Hero ${id}\n${ethers.utils.formatUnits(price, 18)} CRYSTAL
+  bot.sendMessage(config.chatID, `Hero ${id}\n${ethers.utils.formatUnits(price, 18)} CRYSTAL
    Lv. ${json.data.heroes[0].level} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}
    Gen ${json.data.heroes[0].generation} ${RARITY_ICON[json.data.heroes[0].rarity]} ${json.data.heroes[0].summonsRemaining}/${json.data.heroes[0].maxSummons}
    Stats: ${totalStats}
@@ -133,12 +133,6 @@ async function getData(id, price) {
    `
    );
 };
-
-// getData(93141);
-
-
-
-
 
 
 saleContract.on(

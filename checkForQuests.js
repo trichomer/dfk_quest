@@ -23,8 +23,6 @@ let provider;
 let questContract;
 let wallet;
 
-const callOptions = { gasPrice: config.gasPrice, gasLimit: config.gasLimit };
-const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 
 const main = async () => {
   try {
@@ -41,7 +39,7 @@ const main = async () => {
 const checkForQuests = async () => {
   try {
     console.log("\nChecking for quests...\n");
-    let activeQuests = await questContract.getAccountActiveQuests(testWallet);
+    let activeQuests = await questContract.getAccountActiveQuests(config.testWallet);
     // console.log(activeQuests);
     // console.log(`Active Quests: ${activeQuests}`);
     // console.log(`Complete at Time : ${activeQuests[0][7]}`);
@@ -85,7 +83,7 @@ const completeQuest = async (heroId) => {
   try {
     console.log(`Completing quest led by hero ${heroId}.`);
     let receipt = await tryTransaction(
-      () => questContract.connect(wallet).completeQuest(heroId, callOptions),
+      () => questContract.connect(wallet).completeQuest(heroId, config.txnOptions),
       3
     );
 
@@ -222,7 +220,7 @@ const sendFishers = () => {
         fishingQuest.contractAddress,
         fishingQuest.professionMaxAttempts,
         fishingQuest.level,
-        callOptions
+        config.txnOptions
       );
   } catch (err) {
     console.log(err);

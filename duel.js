@@ -42,14 +42,13 @@ const duelABI = [
     "function startPrivateDuel(uint256 _type, uint256[] _heroIds, address _opponent, uint8 _background, uint8 _stat)",
 ];
 
-const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 let provider = new ethers.providers.JsonRpcProvider(url);
 
 const completeQuest = async (heroId) => {
     try {
       console.log(`Completing quest led by hero ${heroId}.`);
       let receipt = await tryTransaction(
-        () => questContract.connect(wallet).completeQuest(heroId, callOptions),
+        () => questContract.connect(wallet).completeQuest(heroId, config.txnOptions),
         3
       );
   

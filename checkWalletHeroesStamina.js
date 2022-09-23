@@ -13,7 +13,6 @@ const heroABI = [
   "function getCurrentStamina(uint256 _heroId) external view returns (uint256)",
 ];
 
-const testWallet = "0x2E314D94fd218fA08A71bC6c9113e1b603B9d483";
 let provider = new ethers.providers.JsonRpcProvider(url);
 
 const getHeroesFromWallet = async () => {
@@ -23,7 +22,7 @@ const getHeroesFromWallet = async () => {
     heroABI,
     provider
   );
-  let walletHeroes = await heroContract.getUserHeroes(testWallet);
+  let walletHeroes = await heroContract.getUserHeroes(config.testWallet);
   console.log("walletHeroes " + walletHeroes);
 
   const promises = walletHeroes.map((hero) => {

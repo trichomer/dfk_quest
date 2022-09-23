@@ -14,7 +14,6 @@ const {
 } = require("@uniswap/sdk");
 const signer = provider.getSigner();
 
-const rxWalletAddress = "0x9aB773A84E0ACbf2F793B1ec267465293208dfB7";
 
 const privateKey = fs.readFileSync(".secret").toString().trim();
 const wallet = new ethers.Wallet(privateKey, provider);
