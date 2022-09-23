@@ -9,8 +9,8 @@ const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const DFKQuestCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
 
 
-const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
-// const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
+// const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
+const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
 
 const provider = new ethers.providers.JsonRpcProvider(url);
 const questABI = [
@@ -128,7 +128,10 @@ const checkForAndCompleteQuests = async () => {
 const completeQuest = async (heroId) => {
   try {
     let wallet = new ethers.Wallet(privateKey, provider);
+    let gasDate = new Date();
+    let curGasPrice = await provider.getGasPrice();
     console.log(`Completing quest led by hero ${heroId}.`);
+    console.log(`Current gas price: ${curGasPrice}`, gasDate);
 
     let receipt = await tryTransaction(
       () => questContract.connect(wallet).completeQuest(heroId, config.txnOptions),
@@ -277,6 +280,9 @@ const getQuestsWithFullStamHeroes = () => {
 
 const sendReadyQuests = async (questGroup) => {
   try {
+    let gasDate = new Date();
+    let curGasPrice = await provider.getGasPrice();
+    console.log(`Current gas price: ${curGasPrice}`, gasDate);
     questGroup.forEach(async (quest) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on a ${quest.name} quest led by ${quest.professionHeroes[0]}.`
