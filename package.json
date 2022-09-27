@@ -1,6 +1,6 @@
 {
   "name": "dfk_quest",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,6 @@
   "dependencies": {
     "@uniswap/sdk": "^3.0.3",
     "@uniswap/sdk-core": "^3.0.1",
-    "bignumber.js": "^9.1.0",
     "ethers": "^5.7.0",
     "node-telegram-bot-api": "^0.59.0"
   }
