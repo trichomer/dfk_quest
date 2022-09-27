@@ -8,11 +8,11 @@ const gas = async () => {
     let curGasPrice = await provider.getGasPrice();
     let numGas = curGasPrice.toNumber();
     let useGasPrice = numGas * 1.1;
-    let bnGasPrice = ethers.BigNumber.from(useGasPrice);
+    // let bnGasPrice = ethers.BigNumber.from(useGasPrice);
     console.log(`Current gas price: ${curGasPrice}`, gasDate);
     console.log(`toNum(): ${numGas}`);
     console.log(`useGasPrice: ${useGasPrice}`);
-    console.log(`BigNumber gasPrice: ${bnGasPrice}`);
+    // console.log(`BigNumber gasPrice: ${bnGasPrice}`);
 };
 
 gas();
