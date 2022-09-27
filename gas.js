@@ -3,13 +3,16 @@ const { ethers } = require("ethers");
 const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
 
-
 const gas = async () => {
     let gasDate = new Date();
-    curGasPrice = await provider.getGasPrice();
-    let dynGasPrice = (curGasPrice + (curGasPrice * 0.1));
+    let curGasPrice = await provider.getGasPrice();
+    let numGas = curGasPrice.toNumber();
+    let useGasPrice = numGas * 1.1;
+    let bnGasPrice = ethers.BigNumber.from(useGasPrice);
     console.log(`Current gas price: ${curGasPrice}`, gasDate);
-    console.log(`Dynamic gas price: ${dynGasPrice}`);
+    console.log(`toNum(): ${numGas}`);
+    console.log(`useGasPrice: ${useGasPrice}`);
+    console.log(`BigNumber gasPrice: ${bnGasPrice}`);
 };
 
 gas();
