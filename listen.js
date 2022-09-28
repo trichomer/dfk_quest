@@ -152,8 +152,7 @@ saleContract.on(
 );
 
 const profile = async (owner) => {
-  let profName = await profilesContract.getProfileByAddress(config.queryWallet);
+  let profName = await profilesContract.getProfileByAddress(owner);
   console.log(`Profile name: ${profName[2]}`);
-  return profName[2]
 };
 
