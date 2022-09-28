@@ -1,23 +1,25 @@
 const { ethers } = require("ethers");
 const fs = require("fs");
-const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
-// const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
+const config = require("./config.json");
 const erc20Abi = fs.readFileSync("./abis/erc20.json").toString();
 const saleAbi = fs
   .readFileSync("./abis/HeroAuctionUpgradeable.json")
   .toString();
 const crystalAddress = "0x04b9dA42306B023f3572e106B11D82aAd9D32EBb";
 const saleAddress = "0xc390fAA4C7f66E4D62E59C231D5beD32Ff77BEf0";
-const provider = new ethers.providers.JsonRpcProvider(url);
+const hmyProvider = new ethers.providers.JsonRpcProvider(config.hmyRPC);
+const dfkProvider = new ethers.providers.JsonRpcProvider(config.dfkRPC);
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const heroABI = [
   "function getHero ( uint256 _id ) external view returns ( tuple )",
 ];
-const config = require("./config.json");
+
 const https = require('https');
 const fetch = require('node-fetch');
-
-const saleContract = new ethers.Contract(saleAddress, saleAbi, provider);
+const profilesAddress = "0x6391F796D56201D279a42fD3141aDa7e26A3B4A5";
+const profilesAbi = fs.readFileSync("./abis/Profiles.json").toString();
+const profilesContract = new ethers.Contract(profilesAddress, profilesAbi, hmyProvider);
+const saleContract = new ethers.Contract(saleAddress, saleAbi, dfkProvider);
 const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(config.botToken, {polling: true});
 
@@ -138,6 +140,7 @@ async function getData(id, price) {
 saleContract.on(
   "AuctionCreated",
   (auctionId, owner, tokenId, startingPrice, endingPrice, duration, winner) => {
+    profile(owner);
     console.log(
       `Hero ${tokenId} posted by ${owner} for ${ethers.utils.formatUnits(
         startingPrice,
@@ -147,4 +150,10 @@ saleContract.on(
     getData(tokenId, startingPrice);
   }
 );
+
+const profile = async (owner) => {
+  let profName = await profilesContract.getProfileByAddress(config.queryWallet);
+  console.log(`Profile name: ${profName[2]}`);
+  return profName[2]
+};
 

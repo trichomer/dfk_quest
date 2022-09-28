@@ -1,11 +1,11 @@
 const { ethers } = require("ethers");
-// const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
-const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
-const provider = new ethers.providers.JsonRpcProvider(url);
+const config = require("./config.json");
+const dfkProvider = new ethers.providers.JsonRpcProvider(config.dfkRPC);
+const hmyProvider = new ethers.providers.JsonRpcProvider(config.hmyRPC);
 
 const gas = async () => {
     let gasDate = new Date();
-    let curGasPrice = await provider.getGasPrice();
+    let curGasPrice = await dfkProvider.getGasPrice();
     let numGas = curGasPrice.toNumber();
     let useGasPrice = numGas * 1.1;
     // let bnGasPrice = ethers.BigNumber.from(useGasPrice);
@@ -15,7 +15,7 @@ const gas = async () => {
     console.log(`useGasPrice: ${useGasPrice}\n`);
     // console.log(`BigNumber gasPrice: ${bnGasPrice}`);
 
-    let feeData = await provider.getFeeData();
+    let feeData = await dfkProvider.getFeeData();
     console.log(`Gas Price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}
     Max Fee per Gas: ${ethers.utils.formatUnits(feeData.maxFeePerGas, "gwei")}
     Max Priority Fee per Gas: ${ethers.utils.formatUnits(feeData.maxPriorityFeePerGas, "gwei")}`);
