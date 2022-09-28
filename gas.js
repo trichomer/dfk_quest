@@ -10,9 +10,15 @@ const gas = async () => {
     let useGasPrice = numGas * 1.1;
     // let bnGasPrice = ethers.BigNumber.from(useGasPrice);
     console.log(`Current gas price: ${curGasPrice}`, gasDate);
+    console.log(`Current price (gwei): ${ethers.utils.formatUnits(curGasPrice, "gwei")}`);
     console.log(`toNum(): ${numGas}`);
-    console.log(`useGasPrice: ${useGasPrice}`);
+    console.log(`useGasPrice: ${useGasPrice}\n`);
     // console.log(`BigNumber gasPrice: ${bnGasPrice}`);
+
+    let feeData = await provider.getFeeData();
+    console.log(`Gas Price: ${feeData.gasPrice}\nMax Fee per Gas: ${feeData.maxFeePerGas}\nMax Priority Fee per Gas: ${feeData.maxPriorityFeePerGas}`);
+    console.log(`Formatted: ${ethers.utils.formatUnits(feeData.maxFeePerGas, "gwei")}`);
+
 };
 
 gas();
