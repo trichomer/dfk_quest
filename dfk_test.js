@@ -90,7 +90,7 @@ const goldAddress = "0x576C260513204392F0eC0bc865450872025CB1cA";
 const goldContract = new ethers.Contract(goldAddress, erc20Abi, provider);
 
 const ethUrl =
-  "https://eth-mainnet.g.alchemy.com/v2/Me9TM57oKMh4sMHIiLBSLgOfWG1SCqx0";
+  "";
 const ethProvider = new ethers.providers.JsonRpcProvider(ethUrl);
 const ethUsdcEthPair = "0xB4e16d0168e52d35CaCD2c6185b44281Ec28C9Dc";
 const ethUsdcAbi = fs.readFileSync("./abis/erc20.json").toString();

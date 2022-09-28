@@ -1,6 +1,6 @@
 const { ethers } = require("ethers");
 const fs = require("fs");
-const url = "https://eth-mainnet.g.alchemy.com/v2/Me9TM57oKMh4sMHIiLBSLgOfWG1SCqx0";
+const url = "";
 const provider = new ethers.providers.JsonRpcProvider(url);
 const parallelAddress = "0x76BE3b62873462d2142405439777e971754E8E77";
 const parallelABI = fs.readFileSync("./abis/ParallelNFT.json").toString();
