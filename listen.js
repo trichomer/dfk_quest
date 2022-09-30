@@ -21,7 +21,7 @@ const profilesAbi = fs.readFileSync("./abis/Profiles.json").toString();
 const profilesContract = new ethers.Contract(profilesAddress, profilesAbi, hmyProvider);
 const saleContract = new ethers.Contract(saleAddress, saleAbi, dfkProvider);
 const TelegramBot = require('node-telegram-bot-api');
-const bot = new TelegramBot(config.botToken, {polling: true});
+const bot = new TelegramBot(config.tBotToken, {polling: true});
 
 const COMMON = "⬜";
 const UNCOMMON = "🟩";
