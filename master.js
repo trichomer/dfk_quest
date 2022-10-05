@@ -128,10 +128,10 @@ const checkForAndCompleteQuests = async () => {
 const completeQuest = async (heroId) => {
   try {
     let wallet = new ethers.Wallet(privateKey, provider);
-    let gasDate = new Date();
-    let curGasPrice = await provider.getGasPrice();
     console.log(`Completing quest led by hero ${heroId}.`);
-    console.log(`Current gas price: ${curGasPrice}`, gasDate);
+    
+    let feeData = await provider.getFeeData();
+    console.log(`Current gasPrice: ${feeData.gasPrice}`);
 
     let receipt = await tryTransaction(
       () => questContract.connect(wallet).completeQuest(heroId, config.txnOptions),

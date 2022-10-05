@@ -16,7 +16,9 @@ const gas = async () => {
     // console.log(`BigNumber gasPrice: ${bnGasPrice}`);
 
     let feeData = await dfkProvider.getFeeData();
-    console.log(`Gas Price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}
+    console.log(`Provider recommended fee data:`);
+    console.log(`
+    Gas Price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}
     Max Fee per Gas: ${ethers.utils.formatUnits(feeData.maxFeePerGas, "gwei")}
     Max Priority Fee per Gas: ${ethers.utils.formatUnits(feeData.maxPriorityFeePerGas, "gwei")}`);
 
