@@ -129,9 +129,9 @@ const completeQuest = async (heroId) => {
   try {
     let wallet = new ethers.Wallet(privateKey, provider);
     console.log(`Completing quest led by hero ${heroId}.`);
-    
+
     let feeData = await provider.getFeeData();
-    console.log(`Current gasPrice: ${feeData.gasPrice}`);
+    console.log(`Current gasPrice: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
 
     let receipt = await tryTransaction(
       () => questContract.connect(wallet).completeQuest(heroId, config.txnOptions),
@@ -282,7 +282,7 @@ const sendReadyQuests = async (questGroup) => {
   try {
     let gasDate = new Date();
     let curGasPrice = await provider.getGasPrice();
-    console.log(`Current gas price: ${curGasPrice}`, gasDate);
+    console.log(`Current gas price: ${ethers.utils.formatUnits(curGasPrice, "gwei")}`, gasDate);
     questGroup.forEach(async (quest) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on a ${quest.name} quest led by ${quest.professionHeroes[0]}.`
@@ -308,7 +308,7 @@ const sendReadyQuests = async (questGroup) => {
         3
       );
       console.log(
-        `${receipt.gasUsed} gas used to send heroes on quest. Effective Gas Price: ${receipt.effectiveGasPrice}`
+        `${receipt.gasUsed} gas used to send heroes on quest. Effective Gas Price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
       );
     });
 
