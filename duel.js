@@ -75,4 +75,8 @@ dfkDuelContract.on(
 );
 
 
-
+const getHeroScore = async (id) => {
+  let heroScore = await dfkDuelContract.getCurrentHeroScoreDuelId(id);
+  console.log(`Hero test score: ${heroScore}`);
+};
+getHeroScore(config.testHeroScore);
