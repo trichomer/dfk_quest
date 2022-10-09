@@ -75,8 +75,10 @@ dfkDuelContract.on(
 );
 
 
-const getHeroScore = async (id) => {
-  let heroScore = await dfkDuelContract.getCurrentHeroScoreDuelId(id);
-  console.log(`Hero test score: ${heroScore}`);
+const getHeroScore = async (id1, id2) => {
+  let heroScore1 = await dfkDuelContract.getCurrentHeroScoreDuelId(id1);
+  console.log(`Hero ${config.testHero1}: ${heroScore1}`);
+  let heroScore2 = await dfkDuelContract.getCurrentHeroScoreDuelId(id2);
+  console.log(`Hero ${config.testHero2}: ${heroScore2}`);
 };
-getHeroScore(config.testHeroScore);
+getHeroScore(config.testHero1, config.testHero2);
