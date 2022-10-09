@@ -47,15 +47,32 @@ const dfkDuelContract = new ethers.Contract(dfkDuelAddress, dfkDuelABI, provider
 
 
 dfkDuelContract.on(
+  "DuelEntryCreated",
+  (id, player, heroIds) => {
+    console.log(`~~ DUEL ENTRY CREATED ~~\nID: ${id}\nPlayer: ${player}\nHero ID(s): ${heroIds[0]}\n----`);
+  }
+);
+
+dfkDuelContract.on(
   "DuelEntryMatched",
   (duelId, duelEntryId, player1, player2) => {
-    console.log(`## DUEL BOT ##\nDuel ID: ${duelId}\nDuel Entry ID: ${duelEntryId}\nPlayer 1: ${player1}\nPlayer 2: ${player2}\n----`);
+    console.log(`## DUEL ENTRY MATCHED ##\nDuel ID: ${duelId}\nDuel Entry ID: ${duelEntryId}\nPlayer 1: ${player1}\nPlayer 2: ${player2}\n----`);
+  }
+);
+
+dfkDuelContract.on(
+  "DuelCreated",
+  (duelId, player1, player2) => {
+    console.log(`++ DUEL CREATED ++\nDuel ID: ${duelId}\nPlayer 1: ${player1}\nPlayer 2: ${player2}\n----`);//need to parse the tuples in this event
   }
 );
 
 dfkDuelContract.on(
   "DuelCompleted",
-  (duelId, player1, player2, winner) => {
-    console.log(`DUEL COMPLETED:\nDuel ID: ${duelId}\nWinner: ${winner}\n----`);
+  (duelId, player1, player2) => {
+    console.log(`$$ DUEL COMPLETED $$\nDuel ID: ${duelId}\nWinner: ${winner}\n----`);//need to parse the tuples in this event
   }
 );
+
+
+
