@@ -70,7 +70,7 @@ dfkDuelContract.on(
 dfkDuelContract.on(
   "DuelCompleted",
   (duelId, player1, player2) => {
-    console.log(`$$ DUEL COMPLETED $$\nDuel ID: ${duelId}\nWinner: ${winner}\n----`);//need to parse the tuples in this event
+    console.log(`$$ DUEL COMPLETED $$\nDuel ID: ${duelId}\nWinner: \n----`);//need to parse the tuples in this event
   }
 );
 
