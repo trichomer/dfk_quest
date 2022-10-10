@@ -134,12 +134,19 @@ const completeQuest = async (heroId) => {
     console.log(`Current gasPrice: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
 
     let receipt = await tryTransaction(
-      () => questContract.connect(wallet).completeQuest(heroId, {gasPrice: feeData.gasPrice, gasLimit: 5000000}),
+      () => 
+        questContract
+          .connect(wallet)
+          .completeQuest(
+            heroId, 
+            {gasPrice: feeData.gasPrice, 
+             gasLimit: 5000000}
+          ),
       3
     );
 
     console.log(
-      `${receipt.gasUsed} gas used to send heroes on quest. Effective Gas Price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
+      `${receipt.gasUsed} gas used to send heroes; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
     );
 
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
@@ -284,10 +291,6 @@ const getQuestsWithFullStamHeroes = () => {
 
 const sendReadyQuests = async (questGroup) => {
   try {
-    // let gasDate = new Date();
-    // let curGasPrice = await provider.getGasPrice();
-    // console.log(`Current gas price: ${ethers.utils.formatUnits(curGasPrice, "gwei")}`, gasDate);
-
     let feeData = await provider.getFeeData();
     console.log(`Current gasPrice: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
 
@@ -312,12 +315,12 @@ const sendReadyQuests = async (questGroup) => {
               quest.professionMaxAttempts,
               quest.level,
               {gasPrice: feeData.gasPrice,
-              gasLimit: 5000000}
+               gasLimit: 5000000}
             ),
         3
       );
       console.log(
-        `${receipt.gasUsed} gas used to send heroes on quest. Effective Gas Price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
+        `${receipt.gasUsed} gas used to complete quest; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
       );
     });
 
