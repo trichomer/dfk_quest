@@ -38,9 +38,8 @@ getHeroes(config.queryWallet);
 const getHeroScore = async (id) => {
     let heroScore = await dfkDuelContract.getCurrentHeroScoreDuelId(id);
     if (heroScore > 0) {
-        console.log(`Hero ${id} Score: ${heroScore}`);
         getData(id);
-        
+        console.log(`Hero ${id} Score: ${heroScore}`);
     }
   };
 // getHeroScore();
