@@ -116,7 +116,8 @@ async function getData(id) {
     );
   
     const json = await response.json();
-    console.log(json.data);
+    // console.log(json.data);
+    console.log(`${json.data.heroes[0].id} Lv.${json.data.heroes[0].level} ${RARITY_ICON[json.data.heroes[0].rarity]} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}`);
     console.log(`Total Stats:`, 
     json.data.heroes[0].strength + 
     json.data.heroes[0].agility +
@@ -127,7 +128,6 @@ async function getData(id) {
     json.data.heroes[0].intelligence +
     json.data.heroes[0].luck
     );
-    console.log(RARITY_ICON[json.data.heroes[0].rarity]);
   
 };
 
