@@ -2,10 +2,13 @@ const { ethers } = require("ethers");
 const fs = require("fs");
 const config = require("./config.json");
 const dfkDuelAddress = "0xf724FE22b45D519D149477aA2eC5348Cee08Cae3";
+const dfkHeroAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const dfkDuelABI = require("./abis/DFKDuelS1.json");
+const dfkHeroABI = require("./abis/HeroCore.json");
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
 const dfkDuelContract = new ethers.Contract(dfkDuelAddress, dfkDuelABI, provider);
+const dfkHeroContract = new ethers.Contract(dfkHeroAddress, dfkHeroABI, provider);
 const fetch = require('node-fetch');
 
 const COMMON = "⬜";
@@ -21,13 +24,14 @@ const RARITY_ICON = {
   0: COMMON,
 };
 
-
+// Fetch profile score
 const playerScore = async (prof, type) => {
     let playerScore = await dfkDuelContract.getPlayerScore(prof, type);
     console.log(`${prof} score for type ${type}: ${playerScore}`);
 };
 playerScore(config.queryWallet, 2);
 
+// Fetch individual hero scores from config
 const getHeroScore = async (id1, id2, id3, id4) => {
     let heroScore1 = await dfkDuelContract.getCurrentHeroScoreDuelId(id1);
     console.log(`Hero ${config.testHero1} Score: ${heroScore1}`);
@@ -41,12 +45,16 @@ const getHeroScore = async (id1, id2, id3, id4) => {
 getHeroScore(config.testHero1, config.testHero2, config.testHero3, config.testHero4);
 
 
+// Check wallet and return list of heroes
+const getHeroes = async (wallet) => {
+    let heroes = await dfkHeroContract.getUserHeroes(wallet);
+    console.log(`${wallet} heroes:\n${heroes}`);
+};
+getHeroes(config.queryWallet);
 
 
 
-
-
-
+// Query API for hero details and log total stats
 async function getData(id) {
     const data = JSON.stringify({
       query: `query myHeroes($id: ID!) {
@@ -126,13 +134,6 @@ async function getData(id) {
     );
     console.log(RARITY_ICON[json.data.heroes[0].rarity]);
   
-    let totalStats = json.data.heroes[0].strength + 
-      json.data.heroes[0].agility +
-      json.data.heroes[0].endurance +
-      json.data.heroes[0].wisdom +
-      json.data.heroes[0].dexterity +
-      json.data.heroes[0].vitality +
-      json.data.heroes[0].intelligence +
-      json.data.heroes[0].luck;
-  };
+};
+
 getData(78402);
