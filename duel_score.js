@@ -24,30 +24,33 @@ const RARITY_ICON = {
   0: COMMON,
 };
 
+// Check wallet and return list of heroes
+const getHeroes = async (wallet) => {
+    const heroes = await dfkHeroContract.getUserHeroes(wallet);
+    console.log(`${wallet} heroes:\n${heroes}`);
+    heroes.forEach((h) => getHeroScore(h));
+
+    // return heroesArr;
+};
+getHeroes(config.queryWallet);
+
+// Fetch individual hero scores from config
+const getHeroScore = async (id) => {
+    let heroScore = await dfkDuelContract.getCurrentHeroScoreDuelId(id);
+    if (heroScore > 0) {
+        console.log(`Hero ${id} Score: ${heroScore}`);
+        getData(id);
+        
+    }
+  };
+// getHeroScore();
+
 // Fetch profile score
 // const playerScore = async (prof, type) => {
 //     let playerScore = await dfkDuelContract.getPlayerScore(prof, type);
 //     console.log(`${prof} score for type ${type}: ${playerScore}`);
 // };
 // playerScore(config.queryWallet, 2);
-
-// Fetch individual hero scores from config
-const getHeroScore = async (id) => {
-    let heroScore1 = await dfkDuelContract.getCurrentHeroScoreDuelId(id);
-    console.log(`Hero ${id} Score: ${heroScore1}`);
-    
-  };
-getHeroScore(78402);
-
-
-// Check wallet and return list of heroes
-const getHeroes = async (wallet) => {
-    let heroes = await dfkHeroContract.getUserHeroes(wallet);
-    console.log(`${wallet} heroes:\n${heroes}`);
-};
-getHeroes(config.queryWallet);
-
-
 
 // Query API for hero details and log total stats
 async function getData(id) {
@@ -128,7 +131,5 @@ async function getData(id) {
     json.data.heroes[0].intelligence +
     json.data.heroes[0].luck
     );
-  
 };
-
-getData(78402);
+// getData();
