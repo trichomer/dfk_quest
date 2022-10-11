@@ -24,22 +24,20 @@ const RARITY_ICON = {
   0: COMMON,
 };
 
-// Check wallet and return list of heroes
+// Check wallet from config
 const getHeroes = async (wallet) => {
     const heroes = await dfkHeroContract.getUserHeroes(wallet);
     console.log(`${wallet} heroes:\n${heroes}`);
     heroes.forEach((h) => getHeroScore(h));
-
-    // return heroesArr;
 };
 getHeroes(config.queryWallet);
 
-// Fetch individual hero scores from config
+// Fetch individual hero scores
 const getHeroScore = async (id) => {
     let heroScore = await dfkDuelContract.getCurrentHeroScoreDuelId(id);
     if (heroScore > 0) {
         getData(id);
-        console.log(`Hero ${id} Score: ${heroScore}`);
+        console.log(`Hero ${id} Score: ${heroScore}\n----`);
     }
   };
 // getHeroScore();
