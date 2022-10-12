@@ -34,6 +34,7 @@ const tryTransaction = async (transaction, attempts) => {
 // console.log(`fee BN: ${feeBN}`);
 // console.log(config.backgroundMap[config.testBack]);
 // console.log(config.statMap[config.testStat]);
+
 // Enter Solo duel lobby
 const startSolo = async (type, hero, fee, background, stat) => {
     // console.log(`fee BN: ${fee}`);
@@ -90,6 +91,7 @@ const startSolo = async (type, hero, fee, background, stat) => {
 // // getEntry();
 
 // // function matchMake(uint256 _lobby)
+
 // // Matchmake heroes in lobby
 // const match = async (id) => {
 //     let wallet = new ethers.Wallet(pk, provider);
@@ -101,6 +103,7 @@ const startSolo = async (type, hero, fee, background, stat) => {
 // match();
 
 // function completeDuel(uint256 _duelId)
+
 // Complete matched duel
 const complete = async (id) => {
     let wallet = new ethers.Wallet(pk, provider);
