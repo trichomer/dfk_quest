@@ -11,13 +11,6 @@ const dfkDuelContract = new ethers.Contract(dfkDuelAddress, dfkDuelABI, provider
 const dfkHeroContract = new ethers.Contract(dfkHeroAddress, dfkHeroABI, provider);
 const fetch = require('node-fetch');
 require('dotenv').config();
-const { REST, Routes } = require('discord.js');
-const commands = [
-    {
-      name: 'ping',
-      description: 'Replies with Pong!',
-    },
-  ];
 const COMMON = "⬜";
 const UNCOMMON = "🟩";
 const RARE = "🟦";
@@ -30,7 +23,13 @@ const RARITY_ICON = {
   1: UNCOMMON,
   0: COMMON,
 };
+const { REST, Routes, SlashCommandBuilder } = require('discord.js');
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+const commands = [
+	new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
+	new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
+	new SlashCommandBuilder().setName('user').setDescription('Replies with user info!'),
+  ];
 
 // Register slash commands with Discord API
 (async () => {
@@ -43,7 +42,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
     } catch (error) {
       console.error(error);
     }
-  })();
+})();
   
 const { Client, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -54,10 +53,17 @@ client.on('ready', () => {
   
 client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
+
+    const { commandName } = interaction;
   
-    if (interaction.commandName === 'ping') {
-      await interaction.reply('Pong!');
-    }
+    if (commandName === 'ping') {
+      await getHeroes(config.queryWallet);
+      await interaction.reply({ content: `pong\nYour tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`, ephemeral: true });
+    } else if (commandName === 'server') {
+		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
+	} else if (commandName === 'user') {
+		await interaction.reply('User info.');
+	}
 });
   
 client.login(process.env.TOKEN);
@@ -68,7 +74,7 @@ const getHeroes = async (wallet) => {
     console.log(`${wallet} heroes:\n${heroes}\n`);
     heroes.forEach((h) => getHeroScore(h));
 };
-getHeroes(config.queryWallet);
+// getHeroes(config.queryWallet);
 
 // Fetch individual hero scores
 const getHeroScore = async (id) => {
