@@ -6,3 +6,4 @@ config.json
 /.vscode
 .env
 ens.js
+gas.js
