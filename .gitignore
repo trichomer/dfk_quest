@@ -1,4 +1,4 @@
-# run 'git rm --cached config.json' on local repo and delete on GitHub before production build
+# run 'git rm --cached file.ext' on local repo and delete on GitHub before production build
 config.json
 .secret
 .test_wallet
