@@ -73,7 +73,7 @@ const waitMatch = async (id) => {
         (duelId, duelEntryId, player1, player2) => {
             if (duelId === id) {
                 console.log(`## DUEL ENTRY MATCHED ##\nDuel ID: ${duelId}\nDuel Entry ID: ${duelEntryId}\nPlayer 1: ${player1}\nPlayer 2: ${player2}\n----`);
-                complete(entry.duelId);
+                complete(duelEntryId);
         }}
     );
 };
