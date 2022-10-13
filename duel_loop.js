@@ -63,9 +63,10 @@ const startSolo = async (type, hero, fee, background, stat) => {
     let entry = receipt.events.filter((e) => e.event === "DuelEntryCreated");
     entry.forEach((e) => {
         console.log(`Duel entry ${e.args.id} created`);
+        waitMatch(e.args.id);
     });
 };
-// startSolo(config.testType, config.testHero, config.soloLowC, config.testBack, config.testStat);
+startSolo(config.testType, config.testHero, config.soloLowC, config.testBack, config.testStat);
 
 // function getDuelEntry(uint256 _id) 
 //     view returns (tuple(uint256 id, 
@@ -83,12 +84,25 @@ const startSolo = async (type, hero, fee, background, stat) => {
 //         uint8 status, 
 //         uint64 winStreak, 
 //         uint64 loseStreak));
+
+const waitMatch = async (id) => {
+    dfkDuelContract.on(
+        "DuelEntryMatched",
+        (duelId, duelEntryId, player1, player2) => {
+            if (duelId === id && duelEntryId > 0) {
+                console.log(`## DUEL ENTRY MATCHED ##\nDuel ID: ${duelId}\nDuel Entry ID: ${duelEntryId}\nPlayer 1: ${player1}\nPlayer 2: ${player2}\n----`);
+                complete(entry.duelId);
+        }}
+    );
+};
+
 // const getEntry = async (id) => {
 //     entry = await dfkDuelContract.getDuelEntry(id);
 //     console.log(`ID: ${id}`);
-//     console.log(`Entry: ${entry}`);
+//     console.log(`Entry: ${entry.duelId}`);
+//     complete(entry.duelId);
 // };
-// // getEntry();
+// getEntry();
 
 // // function matchMake(uint256 _lobby)
 
@@ -121,7 +135,7 @@ const complete = async (id) => {
     });
 
 };
-complete();
+// complete();
 
 
 // event DuelCompleted(uint256 indexed duelId, 
