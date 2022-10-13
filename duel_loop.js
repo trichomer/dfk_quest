@@ -23,13 +23,7 @@ const tryTransaction = async (transaction, attempts) => {
       }
     }
 };
-// function enterDuelLobby(uint256 _type, 
-//     uint256[] _heroIds, 
-//     uint256 _tokenFee, 
-//     uint8 _background, 
-//     uint8 _stat)
 
-// let feeBN = ethers.BigNumber.from('100000000000000000');
 // let feeBN = ethers.BigNumber.from(config.soloLowC);
 // console.log(`fee BN: ${feeBN}`);
 // console.log(config.backgroundMap[config.testBack]);
@@ -37,9 +31,6 @@ const tryTransaction = async (transaction, attempts) => {
 
 // Enter Solo duel lobby
 const startSolo = async (type, hero, fee, background, stat) => {
-    // console.log(`fee BN: ${fee}`);
-    // let feeData = await provider.getFeeData();
-    // console.log(`Curr. gas price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
     let wallet = new ethers.Wallet(pk, provider);
     let receipt = await tryTransaction(
       () =>
@@ -63,60 +54,29 @@ const startSolo = async (type, hero, fee, background, stat) => {
     let entry = receipt.events.filter((e) => e.event === "DuelEntryCreated");
     entry.forEach((e) => {
         console.log(`Duel entry ${e.args.id} created`);
-        waitMatch(e.args.id);
+        waitMatch(e.args.id);// Pass in ID from DuelEntryCreated event
     });
 };
 startSolo(config.testType, config.testHero, config.soloLowC, config.testBack, config.testStat);
 
-// function getDuelEntry(uint256 _id) 
-//     view returns (tuple(uint256 id, 
-//         address player, 
-//         uint256[] heroes, 
-//         uint256 startBlock, 
-//         uint256 heroPower, 
-//         uint256 score, 
-//         uint256 scoreAfter, 
-//         uint256 tokenFee, 
-//         uint256 duelId, 
-//         uint256 custom1, 
-//         uint256 custom2, 
-//         uint8 duelType, 
-//         uint8 status, 
-//         uint64 winStreak, 
-//         uint64 loseStreak));
+// event DuelEntryMatched(
+//     uint256 indexed duelId, 
+//     uint256 indexed duelEntryId, 
+//     address indexed player1, 
+//     address player2)
 
+// Listen to DuelEntryMatched events until the argument passed in matches emitted log, 
+// then pass that event's duelEntryId into complete()
 const waitMatch = async (id) => {
     dfkDuelContract.on(
         "DuelEntryMatched",
         (duelId, duelEntryId, player1, player2) => {
-            if (duelId === id && duelEntryId > 0) {
+            if (duelId === id) {
                 console.log(`## DUEL ENTRY MATCHED ##\nDuel ID: ${duelId}\nDuel Entry ID: ${duelEntryId}\nPlayer 1: ${player1}\nPlayer 2: ${player2}\n----`);
                 complete(entry.duelId);
         }}
     );
 };
-
-// const getEntry = async (id) => {
-//     entry = await dfkDuelContract.getDuelEntry(id);
-//     console.log(`ID: ${id}`);
-//     console.log(`Entry: ${entry.duelId}`);
-//     complete(entry.duelId);
-// };
-// getEntry();
-
-// // function matchMake(uint256 _lobby)
-
-// // Matchmake heroes in lobby
-// const match = async (id) => {
-//     let wallet = new ethers.Wallet(pk, provider);
-//     let receipt = await tryTransaction(
-//         () =>
-//           dfkDuelContract.connect(wallet).matchMake(id), 3);
-    
-// };
-// match();
-
-// function completeDuel(uint256 _duelId)
 
 // Complete matched duel
 const complete = async (id) => {
@@ -138,92 +98,22 @@ const complete = async (id) => {
 // complete();
 
 
-// event DuelCompleted(uint256 indexed duelId, 
-//     address indexed player1, 
-//     address indexed player2, 
-//     tuple(uint256 id, 
-//         address player1, 
-//         address player2, 
-//         uint256 player1DuelEntry, 
-//         uint256 player2DuelEntry, 
-//         address winner, 
-//         uint256[] player1Heroes, 
-//         uint256[] player2Heroes, 
-//         uint256 startBlock, 
-//         uint8 duelType, 
-//         uint8 status, 
-//         tuple(uint256 duelId, 
-//             uint16 base, 
-//             uint32 streakBonus, 
-//             uint16 miscBonus, 
-//             uint32 diffBonus, 
-//             uint64 scoreBefore, 
-//             uint64 scoreAfter) 
-//         player1ScoreChange) duel)
+// const getEntry = async (id) => {
+//     entry = await dfkDuelContract.getDuelEntry(id);
+//     console.log(`ID: ${id}`);
+//     console.log(`Entry: ${entry.duelId}`);
+//     complete(entry.duelId);
+// };
+// getEntry();
 
-// event DuelCreated(uint256 indexed duelId, 
-//     address indexed player1, 
-//     address indexed player2, 
-//     tuple(uint256 id, 
-//         address player1, 
-//         address player2, 
-//         uint256 player1DuelEntry, 
-//         uint256 player2DuelEntry, 
-//         address winner, 
-//         uint256[] player1Heroes, 
-//         uint256[] player2Heroes, 
-//         uint256 startBlock, 
-//         uint8 duelType, 
-//         uint8 status, 
-//         tuple(uint256 duelId, 
-//             uint16 base, 
-//             uint32 streakBonus, 
-//             uint16 miscBonus, 
-//             uint32 diffBonus, 
-//             uint64 scoreBefore, 
-//             uint64 scoreAfter) 
-//         player1ScoreChange) duel)
+// // function matchMake(uint256 _lobby)
 
-// event DuelEntryCreated(uint256 id, 
-//     address indexed player, 
-//     uint256[] heroIds)
-
-// event DuelEntryMatched(uint256 indexed duelId, 
-//     uint256 indexed duelEntryId, 
-//     address indexed player1, 
-//     address player2)
-
-// event PlayerScoreChanged(uint256 indexed duelId, 
-//     address indexed player, 
-//     tuple(uint256 duelId, 
-//         uint16 base, 
-//         uint32 streakBonus, 
-//         uint16 miscBonus, 
-//         uint32 diffBonus, 
-//         uint64 scoreBefore, 
-//         uint64 scoreAfter))
-
-// event TurnOutcome(uint256 indexed duelId, 
-//     uint256 indexed player1HeroId, 
-//     uint256 indexed player2HeroId, 
-//     tuple(uint16 turn, 
-//         uint256 player1HeroId, 
-//         uint256 player2HeroId, 
-//         uint8 stat, 
-//         uint8 background, 
-//         tuple(uint8 roll, 
-//             uint16 elementBonus, 
-//             uint16 statValue, 
-//             uint16 backgroundBonus, 
-//             uint16 total) 
-//         hero1Score, 
-//         tuple(uint8 roll, 
-//             uint16 elementBonus, 
-//             uint16 statValue, 
-//             uint16 backgroundBonus, 
-//             uint16 total) 
-//         hero2Score, 
-//         uint256 winnerHeroId, 
-//         address winnerPlayer) 
-//     turnResult)
-
+// // Matchmake heroes in lobby
+// const match = async (id) => {
+//     let wallet = new ethers.Wallet(pk, provider);
+//     let receipt = await tryTransaction(
+//         () =>
+//           dfkDuelContract.connect(wallet).matchMake(id), 3);
+    
+// };
+// match();
