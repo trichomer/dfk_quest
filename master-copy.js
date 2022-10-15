@@ -2,7 +2,8 @@ const { ethers } = require("ethers");
 const config = require("./config.json");
 const rewards = require("./rewards.json");
 const fs = require("fs");
-const privateKey = fs.readFileSync(".secret").toString().trim();
+const readline = require("readline");
+const { mainModule } = require("process");
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const DFKQuestCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
 const halfGwei = ethers.BigNumber.from("500000000");
@@ -37,7 +38,66 @@ const heroABI = [
 
 const MAX_QUEST_GROUP_SIZE = 6;
 
-let fullStaminaHeroes, heroesOnQuest;
+let fullStaminaHeroes, heroesOnQuest, wallet;
+
+
+const first = async () => {
+  console.log("Checking for encrypted file...");
+  try {
+    wallet = fs.existsSync(config.wallet.encWalletPath)
+      ? await getEncWallet()
+      : await createWallet();
+
+    console.clear();
+    checkForAndCompleteQuests();
+  } catch (err) {
+    console.clear();
+    console.error(`Unable to run ${err.message}`);
+  }
+};
+
+const getEncWallet = async () => {
+  try {
+    let encWallet = fs.readFileSync(config.wallet.encWalletPath, "utf8");
+    let decWallet = ethers.Wallet.fromEncryptedJsonSync(encWallet, config.pw);
+    return decWallet.connect(provider);
+  } catch (err) {
+    throw new Error(`Unable to read encrypted wallet`);
+  }
+};
+
+const createWallet = async () => {
+  console.log(`Input private key on first run to be encrypted...`);
+  let pk = await prompt("Please enter private key: ", "private key");
+
+  try {
+    let newWallet = new ethers.Wallet(pk, provider);
+    let enc = await newWallet.encrypt(config.pw);
+    fs.writeFileSync(config.wallet.encWalletPath, enc);
+    return newWallet;
+  } catch (err) {
+    throw new Error(`XXXX \n ERROR: Please verify your private key \n XXXX`);
+  }
+};
+
+const prompt = async (prompt, promptFor) => {
+  const read = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  try {
+    let input = await new Promise((resolve) => {
+      read.question(prompt, (answer) => resolve(answer));
+    });
+    if (!input)
+      throw new Error(`No ${promptFor} provided, try again`);
+      return input;
+  } finally {
+    read.close();
+  }
+};
+
+
 
 const getConfigHeroes = () => {
   const configHeroes = new Array();
@@ -126,9 +186,7 @@ const checkForAndCompleteQuests = async () => {
 
 const completeQuest = async (heroId) => {
   try {
-    let wallet = new ethers.Wallet(privateKey, provider);
     console.log(`Completing quest led by hero ${heroId}...`);
-
     let feeData = await provider.getFeeData();
     let gpBN = ethers.BigNumber.from(feeData.gasPrice);
     let gpPhg = gpBN.add(halfGwei);
@@ -313,7 +371,6 @@ const sendReadyQuests = async (questGroup) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on ${quest.name} quest led by ${quest.professionHeroes[0]}...`
       );
-      let wallet = new ethers.Wallet(privateKey, provider);
       let contract = new ethers.Contract(
         DFKQuestCoreV2Address,
         questABI,
@@ -363,4 +420,5 @@ const tryTransaction = async (transaction, attempts) => {
   }
 };
 
-checkForAndCompleteQuests();
+// checkForAndCompleteQuests();
+first();
