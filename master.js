@@ -63,7 +63,7 @@ const sleep = (milliseconds) => {
 
 const checkForAndCompleteQuests = async () => {
   try {
-    console.log("\n Checking Quests\n");
+    console.log("\n Checking Quests...\n");
     sleep(10000);
     let localQuestingHeroes = new Array();
 
@@ -128,7 +128,7 @@ const checkForAndCompleteQuests = async () => {
 const completeQuest = async (heroId) => {
   try {
     let wallet = new ethers.Wallet(privateKey, provider);
-    console.log(`Completing quest led by hero ${heroId}.`);
+    console.log(`Completing quest led by hero ${heroId}...`);
 
     let feeData = await provider.getFeeData();
     let gpBN = ethers.BigNumber.from(feeData.gasPrice);
@@ -312,7 +312,7 @@ const sendReadyQuests = async (questGroup) => {
     
     questGroup.forEach(async (quest) => {
       console.log(
-        `Sending ${quest.professionHeroes.length} heroes on ${quest.name} quest led by ${quest.professionHeroes[0]}.`
+        `Sending ${quest.professionHeroes.length} heroes on ${quest.name} quest led by ${quest.professionHeroes[0]}...`
       );
       let wallet = new ethers.Wallet(privateKey, provider);
       let contract = new ethers.Contract(
