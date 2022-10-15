@@ -150,7 +150,7 @@ const completeQuest = async (heroId) => {
 
     let trngEvents = receipt.events.filter((e) => e.event === "TrainingSuccessRatio");
     trngEvents.forEach((e) => {
-      console.log(`${e.args.heroId} Training Result: ${e.args.winCount}/${e.args.attempts}`);
+      console.log(`Training Result ${e.args.winCount}/${e.args.attempts} - ${e.args.heroId} `);
     });
 
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
@@ -165,7 +165,11 @@ const completeQuest = async (heroId) => {
 
     let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
     rwEvents.forEach((e) => {
-      console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount}`);
+      if (e.args.reward === "0x576C260513204392F0eC0bc865450872025CB1cA") {
+        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${ethers.utils.formatUnits(e.args.amount, "kwei")}`);
+      } else {
+        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount}`);
+      }
     });
 
     console.log("\n*****\n");
