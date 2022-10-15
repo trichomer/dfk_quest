@@ -2,10 +2,11 @@ const { ethers } = require("ethers");
 const config = require("./config.json");
 const rewards = require("./rewards.json");
 const fs = require("fs");
-const { syncBuiltinESMExports } = require("module");
+const { Big } = require ("big.js");
 const privateKey = fs.readFileSync(".secret").toString().trim();
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const DFKQuestCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
+const halfGwei = ethers.BigNumber.from(config.hG);
 
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 // const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
@@ -130,7 +131,9 @@ const completeQuest = async (heroId) => {
     console.log(`Completing quest led by hero ${heroId}.`);
 
     let feeData = await provider.getFeeData();
-    console.log(`Current gasPrice: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
+    let gpBN = ethers.BigNumber.from(feeData.gasPrice);
+    let gpPhg = gpBN.add(halfGwei);
+    console.log(`Curr. gas price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}\nCurr. gas price + 0.5 gwei: ${ethers.utils.formatUnits(gpPhg, "gwei")}`);
 
     let receipt = await tryTransaction(
       () => 
@@ -138,7 +141,7 @@ const completeQuest = async (heroId) => {
           .connect(wallet)
           .completeQuest(
             heroId, 
-            {gasPrice: feeData.gasPrice, 
+            {gasPrice: gpPhg, 
              gasLimit: 5000000}
           ),
       3
@@ -221,7 +224,7 @@ const updateHeroesWithGoodStamina = async () => {
   const heroesWithGoodStamina = heroesWithGoodStaminaRaw.filter((h) => !!h);
   fullStaminaHeroes = [...heroesWithGoodStamina];
   console.log(`Full Stamina Threshold = ${config.minimumStamina}`);
-  console.log(`${fullStaminaHeroes.length} full stamina heroes.`);
+  console.log(`${fullStaminaHeroes.length} full stamina heroes`);
 
   getQuestsWithFullStamHeroes();
 };
@@ -303,8 +306,10 @@ const getQuestsWithFullStamHeroes = () => {
 const sendReadyQuests = async (questGroup) => {
   try {
     let feeData = await provider.getFeeData();
-    console.log(`Current gas price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
-
+    let gpBN = ethers.BigNumber.from(feeData.gasPrice);
+    let gpPhg = gpBN.add(halfGwei);
+    console.log(`Current gas price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}\nCurr. gas price + 0.5 gwei: ${ethers.utils.formatUnits(gpPhg, "gwei")}`);
+    
     questGroup.forEach(async (quest) => {
       console.log(
         `Sending ${quest.professionHeroes.length} heroes on ${quest.name} quest led by ${quest.professionHeroes[0]}.`
@@ -325,7 +330,7 @@ const sendReadyQuests = async (questGroup) => {
               quest.contractAddress,
               quest.professionMaxAttempts,
               quest.level,
-              {gasPrice: feeData.gasPrice,
+              {gasPrice: gpPhg,
                gasLimit: 5000000}
             ),
         3
