@@ -308,7 +308,7 @@ const sendReadyQuests = async (questGroup) => {
     let feeData = await provider.getFeeData();
     let gpBN = ethers.BigNumber.from(feeData.gasPrice);
     let gpPhg = gpBN.add(halfGwei);
-    console.log(`Current gas price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}\nCurr. gas price + 0.5 gwei: ${ethers.utils.formatUnits(gpPhg, "gwei")}`);
+    console.log(`Curr. gas price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}\nCurr. gas price + 0.5 gwei: ${ethers.utils.formatUnits(gpPhg, "gwei")}`);
     
     questGroup.forEach(async (quest) => {
       console.log(
