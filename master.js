@@ -100,7 +100,7 @@ const checkForAndCompleteQuests = async () => {
     for (const quest of doneQuests) {
       await completeQuest(quest.heroes[0]);
     }
-    console.log(`${runningQuests.length} running quests.`);
+    console.log(`${runningQuests.length} running quests`);
 
     let stillActiveQuests = await questContract.getAccountActiveQuests(
       config.testWallet
@@ -116,7 +116,7 @@ const checkForAndCompleteQuests = async () => {
 
     heroesOnQuest = [...stillQuestingHeroes];
     console.log(
-      `${heroesOnQuest.length} Heroes remain on quests : ${heroesOnQuest}`
+      `${heroesOnQuest.length} Heroes remain on quests: ${heroesOnQuest}`
     );
     setTimeout(() => updateHeroesWithGoodStamina(), 30000);
   } catch (err) {
@@ -179,16 +179,16 @@ const completeQuest = async (heroId) => {
 };
 
 const updateHeroesWithGoodStamina = async () => {
-  console.log(`Updating Heroes with good stamina (*.*)/`);
+  console.log(`Updating heroes with good stamina (*.*)/`);
   let heroContract = new ethers.Contract(DFKHeroCoreAddress, heroABI, provider);
   let walletHeroes = await heroContract.getUserHeroes(config.testWallet);
 
   const walletHeroesInts = walletHeroes.map((h) => Number(h));
   console.log(
-    `${walletHeroesInts.length} Heroes in wallet: ${walletHeroesInts}`
+    `${walletHeroesInts.length} heroes in wallet: ${walletHeroesInts}`
   );
 
-  console.log(`${configHeroes.length} Heroes in config`);
+  console.log(`${configHeroes.length} heroes in config`);
 
   const heroesInWalletButNotConfig = walletHeroesInts.filter(
     (h) => !configHeroes.includes(h)
@@ -196,7 +196,7 @@ const updateHeroesWithGoodStamina = async () => {
 
   heroesInWalletButNotConfig &&
     console.log(
-      `${heroesInWalletButNotConfig.length} on wallet but not in config`
+      `${heroesInWalletButNotConfig.length} in wallet but not in config`
     );
 
   heroesInWalletButNotConfig &&
@@ -240,7 +240,7 @@ const getQuestsWithFullStamHeroes = () => {
     return Number(hero);
   });
 
-  console.log(`${heroesOnQuestInts.length} heroes on quests.`);
+  console.log(`${heroesOnQuestInts.length} heroes on quests`);
 
   const questsWithOnlyFullStamHeroesRaw = quests.map((quest) => {
     const hardCodedHeroes = quest.professionHeroes.map((h) => Number(h));
@@ -267,7 +267,7 @@ const getQuestsWithFullStamHeroes = () => {
     );
 
   console.log(
-    `${questsWithOnlyFullStamHeroesNotOnQuests.length} quests with full stam heroes not on quests: `
+    `${questsWithOnlyFullStamHeroesNotOnQuests.length} quests with full stam heroes not on quests`
   );
 
   questsWithOnlyFullStamHeroesNotOnQuests.forEach((quest) => {
@@ -294,7 +294,7 @@ const getQuestsWithFullStamHeroes = () => {
   });
 
   console.log(
-    `${questsWithFullStamHeroesAtMaxGroupSize.length} ready quest groups.`
+    `${questsWithFullStamHeroesAtMaxGroupSize.length} ready quest groups`
   );
 
   sendReadyQuests(questsWithFullStamHeroesAtMaxGroupSize);
@@ -303,11 +303,11 @@ const getQuestsWithFullStamHeroes = () => {
 const sendReadyQuests = async (questGroup) => {
   try {
     let feeData = await provider.getFeeData();
-    console.log(`Current gasPrice: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
+    console.log(`Current gas price: ${ethers.utils.formatUnits(feeData.gasPrice, "gwei")}`);
 
     questGroup.forEach(async (quest) => {
       console.log(
-        `Sending ${quest.professionHeroes.length} heroes on a ${quest.name} quest led by ${quest.professionHeroes[0]}.`
+        `Sending ${quest.professionHeroes.length} heroes on ${quest.name} quest led by ${quest.professionHeroes[0]}.`
       );
       let wallet = new ethers.Wallet(privateKey, provider);
       let contract = new ethers.Contract(
