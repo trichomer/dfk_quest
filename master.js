@@ -1,13 +1,12 @@
 const { ethers } = require("ethers");
 const config = require("./config.json");
+const rewards = require("./rewards.json");
 const fs = require("fs");
 const { syncBuiltinESMExports } = require("module");
-
 const privateKey = fs.readFileSync(".secret").toString().trim();
-
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
 const DFKQuestCoreV2Address = "0xE9AbfBC143d7cef74b5b793ec5907fa62ca53154";
-
+const DFKQuestRewarderAddress = "0x08D93Db24B783F8eBb68D7604bF358F5027330A6";
 
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
 // const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
@@ -21,6 +20,7 @@ const questABI = [
   "event QuestXP(uint256 indexed questId, address indexed player, uint256 heroId, uint64 xpEarned)",
   "event QuestSkillUp(uint256 indexed questId, address indexed player, uint256 heroId, uint8 profession, uint16 skillUp)",
   "event QuestReward(uint256 indexed questId, address indexed player, uint256 heroId, address rewardItem, uint256 itemQuantity)",
+  "event RewardMinted(uint256 indexed questId, address indexed player, uint256 heroId, address indexed reward, uint256 amount, uint256 data)",
   "function multiStartQuest(address[] _questAddress, uint256[][] _heroIds, uint8[] _attempts, uint8[] _level) external",
   "function startQuest(uint256[] _heroIds, address _questAddress, uint8 _attempts, uint8 _level)",
   "event TrainingAttemptDone(bool success, uint256 attempt, uint256 indexed heroId)",
@@ -150,15 +150,18 @@ const completeQuest = async (heroId) => {
     );
 
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
-
     xpEvents.forEach((e) => {
       console.log(`${e.args.xpEarned} XP Earned by Hero ${e.args.heroId}`);
     });
 
     let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
-
     suEvents.forEach((e) => {
       console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
+    });
+
+    let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
+    rwEvents.forEach((e) => {
+      console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount}`);
     });
 
     console.log("\n*****\n");
