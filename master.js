@@ -148,6 +148,11 @@ const completeQuest = async (heroId) => {
       `${receipt.gasUsed} gas used to Complete quest; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
     );
 
+    let trngEvents = receipt.events.filter((e) => e.event === "TrainingSuccessRatio");
+    trngEvents.forEach((e) => {
+      console.log(`${e.args.heroId} Training Result: ${e.args.winCount}/${e.args.attempts}`);
+    });
+
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
     xpEvents.forEach((e) => {
       console.log(`${e.args.xpEarned} XP Earned by Hero ${e.args.heroId}`);
