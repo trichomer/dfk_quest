@@ -40,10 +40,10 @@ async function fetchHeroXP(wal) {
   );
 
   const json = await response.json();
-  // run forEach? against query response json 
-  // and pipe into if( xpReq === xp ){ log "hero at max xp" } 
-
-  console.log(`${json.data.heroes[0].id} Lv.${json.data.heroes[0].level} ${RARITY_MAP[json.data.heroes[0].rarity]} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}`);
+  let arr = [];
+  arr.push(json);
+  console.log(arr);
+  //console.log(`${json.data.heroes[0].id} Lv.${json.data.heroes[0].level} ${RARITY_MAP[json.data.heroes[0].rarity]} ${json.data.heroes[0].mainClass}/${json.data.heroes[0].subClass}`);
 };
 fetchHeroXP(config.testWallet);
 
