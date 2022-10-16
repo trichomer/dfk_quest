@@ -205,7 +205,7 @@ const completeQuest = async (heroId) => {
     );
 
     console.log(
-      `${receipt.gasUsed} gas used to Complete quest; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
+      `✅${receipt.gasUsed} gas used to Complete quest; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
     );
 
     let trngEvents = receipt.events.filter((e) => e.event === "TrainingSuccessRatio");
@@ -392,7 +392,7 @@ const sendReadyQuests = async (questGroup) => {
         3
       );
       console.log(
-        `${receipt.gasUsed} gas used to Start quest; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
+        `✅${receipt.gasUsed} gas used to Start quest; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
       );
     });
 
