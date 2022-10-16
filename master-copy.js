@@ -226,9 +226,9 @@ const completeQuest = async (heroId) => {
     let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
     rwEvents.forEach((e) => {
       if (e.args.reward === "0x576C260513204392F0eC0bc865450872025CB1cA") {
-        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${ethers.utils.formatUnits(e.args.amount, "kwei")}`);
+        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${ethers.utils.formatUnits(e.args.amount, "kwei")} by Hero ${e.args.heroId}`);
       } else {
-        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount}`);
+        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount} by Hero ${e.args.heroId}`);
       }
     });
 
