@@ -44,10 +44,11 @@ async function fetchHeroXP(wal) {
   arr.push(json.data.heroes);
   console.log(arr);
   arr.forEach((h) => {
-    if ( h.args.xp === reqXP(h.args.id) ) { // if hero xp == xpReq, then log "heroId at max xp"
+    if ( h.args.xp === reqXP(h.args.id) ) { // if hero xp == xpReq, then log "heroId at max xp", else no logging
        console.log(`${h.args.id} ${h.args.level} ${h.args.xp}`);
     }
   });
+
   //console.log(`${json.data.heroes[0].id} 
   //  Lv.${json.data.heroes[0].level} 
   //  ${RARITY_MAP[json.data.heroes[0].rarity]} 
