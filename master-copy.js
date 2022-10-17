@@ -471,7 +471,7 @@ async function fetchHeroXP(wal) {
   
   arr.forEach((h) => {
     if ( h.xp === reqXP(h.level) ) {
-       console.log(`🙏🙏MAX XP: Hero ${h.id} Lv.${h.level} ${RARITY_MAP[h.rarity]} ${h.mainClass}/${h.subClass}`);
+       console.log(`➕➕MAX XP: Hero ${h.id} Lv.${h.level} ${RARITY_MAP[h.rarity]} ${h.mainClass}/${h.subClass}`);
     }
   });
 };
