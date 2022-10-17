@@ -26,8 +26,8 @@ const first = async () => {
         : await createWallet();
   
       console.clear();
-    //   useStamPot(config.testHero2);
-      thirtyStamHeroQuest(config.testHero2arr);
+      useStamPot(config.testHero2);
+    //   thirtyStamHeroQuest(config.testHero2arr);
     } catch (err) {
       console.clear();
       console.error(`Unable to run ${err.message}`);

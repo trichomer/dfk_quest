@@ -45,9 +45,9 @@ async function fetchHeroXP(wal) {
   arr.push(json.data.heroes);
   console.log(arr);
   
-  arr.forEach((h) => {
-    if ( h.args.xp === reqXP(h.args.level) ) { // if hero xp == xpReq, then log "heroId at max xp", else no logging
-       console.log(`${h.args.id} ${h.args.level} ${h.args.xp}`);
+  arr[0].forEach((h) => {
+    if ( h.xp === reqXP(h.level) ) { // if hero xp == xpReq, then log "heroId at max xp", else no logging
+       console.log(`++Hero ${h.id} Lv.${h.level} ${h.mainClass}/${h.subClass} is at max XP`);
     }
   });
 
@@ -59,7 +59,8 @@ async function fetchHeroXP(wal) {
 fetchHeroXP(config.testWallet);
 
 
-async function reqXP(level) {
+
+function reqXP(level) {
     let xpReq;
     const nextLevel = level + 1;
     switch (true) {
