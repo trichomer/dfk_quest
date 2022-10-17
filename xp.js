@@ -40,11 +40,13 @@ async function fetchHeroXP(wal) {
   );
 
   const json = await response.json();
+
   let arr = [];
   arr.push(json.data.heroes);
   console.log(arr);
+  
   arr.forEach((h) => {
-    if ( h.args.xp === reqXP(h.args.id) ) { // if hero xp == xpReq, then log "heroId at max xp", else no logging
+    if ( h.args.xp === reqXP(h.args.level) ) { // if hero xp == xpReq, then log "heroId at max xp", else no logging
        console.log(`${h.args.id} ${h.args.level} ${h.args.xp}`);
     }
   });
