@@ -228,14 +228,20 @@ const completeQuest = async (heroId) => {
       xpEvents.reduce((sum, currentValue) => {
         return sum + Number(currentValue.args.xpEarned);
       }, 0);
-
     xpEvents &&
       console.log(`${totalXP} XP earned by Hero ${xpEvents[0].args.heroId}`);
 
     let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
-    suEvents.forEach((e) => {
-      console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
-    });
+    // suEvents.forEach((e) => {
+    //   console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
+    // });
+    const totalSU =
+      suEvents &&
+      suEvents.reduce((sum, curVal) => {
+        return sum + Number(curVal.args.skillUp);
+      }, 0);
+    suEvents &&
+      console.log(`${totalSU} Skill Up earned by Hero ${suEvents[0].args.heroId}`);
 
     let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
     rwEvents.forEach((e) => {
@@ -426,7 +432,7 @@ const tryTransaction = async (transaction, attempts) => {
       }
       if (receipt.status !== 1)
         throw new Error(`Receipt had a status of ${receipt.status}`);
-      console.log(`Attempt ${i + 1}: ${Object.keys(receipt)}`);
+      console.log(`Try ${i + 1}: ${Object.keys(receipt)}`);
       return receipt;
     } catch (err) {
       if (i === attempts - 1) throw err;

@@ -355,7 +355,7 @@ const tryTransaction = async (transaction, attempts) => {
       }
       if (receipt.status !== 1)
         throw new Error(`Receipt had a status of ${receipt.status}`);
-      console.log(`Attempt ${i + 1}: ${Object.keys(receipt)}`);
+      console.log(`Try ${i + 1}: ${Object.keys(receipt.blockNumber)}`);
       return receipt;
     } catch (err) {
       if (i === attempts - 1) throw err;
