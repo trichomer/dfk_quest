@@ -2,17 +2,20 @@ const { ethers } = require("ethers");
 const fs = require("fs");
 const config = require("./config.json");
 const dfkProvider = new ethers.providers.JsonRpcProvider(config.dfkRPC);
-const hmyProvider = new ethers.providers.JsonRpcProvider(config.hmyRPC);
-const profilesAddress = "0x6391F796D56201D279a42fD3141aDa7e26A3B4A5";
+const dfkProfilesAddress = "0xC4cD8C09D1A90b21Be417be91A81603B03993E81";
 const dfkRafAddress = "0xd8D7CE8921490b75EC489bd076AD0f27DC765675";
 const profilesABI = require("./abis/Profiles.json");
 const dfkRafABI = require("./abis/raffleMaster.json");
-const profilesContract = new ethers.Contract(profilesAddress, profilesABI, hmyProvider);
+const dfkProfilesContract = new ethers.Contract(dfkProfilesAddress, profilesABI, dfkProvider);
 const dfkRafContract = new ethers.Contract(dfkRafAddress, dfkRafABI, dfkProvider);
 const profile = async (owner) => {
-    let profName = await profilesContract.getProfileByAddress(owner);
-    console.log(`Profile name: ${profName[2]}`);
-    return profName;
+    try {
+        let profName = await dfkProfilesContract.getProfileByAddress(owner);
+        console.log(`Profile name: ${profName[2]}`);
+        return profName;
+    } catch (err) {
+        console.log(`Profile error: ${err.message}`);
+    }
 };
 
 
@@ -26,16 +29,18 @@ const profile = async (owner) => {
 //         Tickets: ${tickets}\n`);
 //     }
 // );
-
-dfkRafContract.on(
-    "RaffleDrawn",
-    (raffleId, winner) => {
-        profile(winner);
-        console.log(`Raffle Drawn:
-        Winner: ${winner}
-        Raffle ID: ${raffleId}\n`);
-    }
-);
+async function drawn() {
+    dfkRafContract.on(
+        "RaffleDrawn",
+        (raffleId, winner) => {
+            profile(winner);
+            console.log(`Raffle Drawn:
+            Winner: ${winner}
+            Raffle ID: ${raffleId}\n`);
+        }
+    );
+};
+drawn();
 
 dfkRafContract.on(
     "RaffleClosed",

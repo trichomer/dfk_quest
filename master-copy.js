@@ -233,7 +233,7 @@ const completeQuest = async (heroId) => {
 
     let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
     suEvents.forEach((e) => {
-      console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
+      console.log(`0.${e.args.skillUp} ${config.profMap[e.args.profession]} Skill earned by Hero ${e.args.heroId}`);
     });
     // const totalSU =
     //   suEvents &&
