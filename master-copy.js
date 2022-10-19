@@ -232,16 +232,16 @@ const completeQuest = async (heroId) => {
       console.log(`${totalXP} XP earned by Hero ${xpEvents[0].args.heroId}`);
 
     let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
-    // suEvents.forEach((e) => {
-    //   console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
-    // });
-    const totalSU =
-      suEvents &&
-      suEvents.reduce((sum, curVal) => {
-        return sum + Number(curVal.args.skillUp);
-      }, 0);
-    suEvents &&
-      console.log(`0.${totalSU} ${config.profMap[suEvents[0].args.profession]} Skill earned by Hero ${suEvents[0].args.heroId}`);
+    suEvents.forEach((e) => {
+      console.log(`${e.args.skillUp} Skill Up Earned by Hero ${e.args.heroId}`);
+    });
+    // const totalSU =
+    //   suEvents &&
+    //   suEvents.reduce((sum, curVal) => {
+    //     return sum + Number(curVal.args.skillUp);
+    //   }, 0);
+    // suEvents &&
+    //   console.log(`0.${totalSU} ${config.profMap[suEvents[0].args.profession]} Skill earned by Hero ${suEvents[0].args.heroId}`);
 
     let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
     rwEvents.forEach((e) => {
@@ -446,7 +446,6 @@ async function fetchHeroXP(wal) {
       heroes(where: {owner: $wallet}, orderBy: xp, orderDirection: desc){
         id
         level
-        generation
         rarity
         mainClass
         subClass
