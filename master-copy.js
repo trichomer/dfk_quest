@@ -241,7 +241,7 @@ const completeQuest = async (heroId) => {
         return sum + Number(curVal.args.skillUp);
       }, 0);
     suEvents &&
-      console.log(`${totalSU} Skill Up earned by Hero ${suEvents[0].args.heroId}`);
+      console.log(`0.${totalSU} ${config.profMap[suEvents[0].args.profession]} Skill earned by Hero ${suEvents[0].args.heroId}`);
 
     let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
     rwEvents.forEach((e) => {
