@@ -236,6 +236,15 @@ const completeQuest = async (heroId) => {
     // suEvents &&
     //   console.log(`0.${totalSU} ${config.profMap[suEvents[0].args.profession]} Skill earned by Hero ${suEvents[0].args.heroId}`);
 
+    // Quest reward token event logging
+    let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
+    rwEvents.forEach((e) => {
+      if (e.args.reward === "0x576C260513204392F0eC0bc865450872025CB1cA") {
+        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${ethers.utils.formatUnits(e.args.amount, "kwei")} by Hero ${e.args.heroId}`);
+      } else {
+        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount} by Hero ${e.args.heroId}`);
+      }
+    });
 
     // Quest XP event logging
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
@@ -246,16 +255,6 @@ const completeQuest = async (heroId) => {
       }, 0);
     xpEvents &&
       console.log(`${totalXP} XP earned by Hero ${xpEvents.args.heroId}`);
-
-    // Quest reward token event logging
-    let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
-    rwEvents.forEach((e) => {
-      if (e.args.reward === "0x576C260513204392F0eC0bc865450872025CB1cA") {
-        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${ethers.utils.formatUnits(e.args.amount, "kwei")} by Hero ${e.args.heroId}`);
-      } else {
-        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount} by Hero ${e.args.heroId}`);
-      }
-    });
 
     console.log("\n*****\n");
   } catch (err) {
