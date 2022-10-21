@@ -44,7 +44,7 @@ async function fetchHeroXP(wal) {
   let arr = json.data.heroes
   
   arr.forEach((h) => {
-    if ( h.xp === reqXP(h.level) ) { // if hero xp == xpReq, then log "heroId at max xp", else no logging
+    if ( h.xp === reqXP(h.level) ) {
        console.log(`➕ Hero ${h.id} Lv.${h.level} ${RARITY_MAP[h.rarity]} ${h.mainClass}/${h.subClass} is at max XP`);
     }
   });

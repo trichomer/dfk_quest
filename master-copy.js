@@ -195,7 +195,7 @@ const checkForAndCompleteQuests = async () => {
 
 const completeQuest = async (heroId) => {
   try {
-    console.log(`Completing quest led by hero ${heroId}...`);
+    console.log(`⌛Completing quest led by hero ${heroId}...`);
     let feeData = await provider.getFeeData();
     let gpBN = ethers.BigNumber.from(feeData.gasPrice);
     let gpPhg = gpBN.add(halfGwei);
@@ -217,20 +217,13 @@ const completeQuest = async (heroId) => {
       `✅${receipt.gasUsed} gas used to Complete quest; eff. gas price: ${ethers.utils.formatUnits(receipt.effectiveGasPrice, "gwei")}`
     );
 
+    // Training quest event logging
     let trngEvents = receipt.events.filter((e) => e.event === "TrainingSuccessRatio");
     trngEvents.forEach((e) => {
       console.log(`Training Result ${e.args.winCount}/${e.args.attempts} - ${e.args.heroId} `);
     });
 
-    let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
-    const totalXP =
-      xpEvents &&
-      xpEvents.reduce((sum, currentValue) => {
-        return sum + Number(currentValue.args.xpEarned);
-      }, 0);
-    xpEvents &&
-      console.log(`${totalXP} XP earned by Hero ${xpEvents.args.heroId}`);
-
+    // Quest skill up event logging
     let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
     suEvents.forEach((e) => {
       console.log(`0.${e.args.skillUp} ${config.profMap[e.args.profession]} Skill earned by Hero ${e.args.heroId}`);
@@ -243,6 +236,18 @@ const completeQuest = async (heroId) => {
     // suEvents &&
     //   console.log(`0.${totalSU} ${config.profMap[suEvents[0].args.profession]} Skill earned by Hero ${suEvents[0].args.heroId}`);
 
+
+    // Quest XP event logging
+    let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
+    const totalXP =
+      xpEvents &&
+      xpEvents.reduce((sum, currentValue) => {
+        return sum + Number(currentValue.args.xpEarned);
+      }, 0);
+    xpEvents &&
+      console.log(`${totalXP} XP earned by Hero ${xpEvents.args.heroId}`);
+
+    // Quest reward token event logging
     let rwEvents = receipt.events.filter((e) => e.event === "RewardMinted");
     rwEvents.forEach((e) => {
       if (e.args.reward === "0x576C260513204392F0eC0bc865450872025CB1cA") {
@@ -389,7 +394,7 @@ const sendReadyQuests = async (questGroup) => {
     
     questGroup.forEach(async (quest) => {
       console.log(
-        `Sending ${quest.professionHeroes.length} heroes on ${quest.name} quest led by ${quest.professionHeroes[0]}...`
+        `⌛Sending ${quest.professionHeroes.length} heroes on ${quest.name} quest led by ${quest.professionHeroes[0]}...`
       );
       let contract = new ethers.Contract(
         DFKQuestCoreV2Address,
