@@ -229,7 +229,7 @@ const completeQuest = async (heroId) => {
         return sum + Number(currentValue.args.xpEarned);
       }, 0);
     xpEvents &&
-      console.log(`${totalXP} XP earned by Hero ${xpEvents[0].args.heroId}`);
+      console.log(`${totalXP} XP earned by Hero ${xpEvents.args.heroId}`);
 
     let suEvents = receipt.events.filter((e) => e.event === "QuestSkillUp");
     suEvents.forEach((e) => {
