@@ -3,8 +3,8 @@ const config = require("./config.json");
 const rewards = require("./rewards.json");
 const fs = require("fs");
 const readline = require("readline");
-//const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
-const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
+const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
+// const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
 const { mainModule } = require("process");
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
@@ -207,8 +207,7 @@ const completeQuest = async (heroId) => {
           .connect(wallet)
           .completeQuest(
             heroId, 
-            {gasPrice: gpPhg, 
-             gasLimit: 5000000}
+            {gasPrice: gpPhg}
           ),
       3
     );
@@ -410,8 +409,7 @@ const sendReadyQuests = async (questGroup) => {
               quest.contractAddress,
               quest.professionMaxAttempts,
               quest.level,
-              {gasPrice: gpPhg,
-               gasLimit: 5000000}
+              {gasPrice: gpPhg}
             ),
         3
       );
