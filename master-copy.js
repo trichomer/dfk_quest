@@ -247,13 +247,16 @@ const completeQuest = async (heroId) => {
 
     // Quest XP event logging
     let xpEvents = receipt.events.filter((e) => e.event === "QuestXP");
-    const totalXP =
-      xpEvents &&
-      xpEvents.reduce((sum, currentValue) => {
-        return sum + Number(currentValue.args.xpEarned);
-      }, 0);
-    xpEvents &&
-      console.log(`${totalXP} XP earned by Hero ${xpEvents.args.heroId}`);
+    xpEvents.forEach((e) => {
+      console.log(`${e.args.xpEarned} XP earned by Hero ${e.args.heroId}`);
+    });
+    // const totalXP =
+    //   xpEvents &&
+    //   xpEvents.reduce((sum, currentValue) => {
+    //     return sum + Number(currentValue.args.xpEarned);
+    //   }, 0);
+    // xpEvents &&
+    //   console.log(`${totalXP} XP earned by Hero ${xpEvents.args.heroId}`);
 
     console.log("\n*****\n");
   } catch (err) {
