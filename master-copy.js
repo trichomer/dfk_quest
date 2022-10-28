@@ -4,7 +4,7 @@ const rewards = require("./rewards.json");
 const fs = require("fs");
 const readline = require("readline");
 const url = "https://subnets.avax.network/defi-kingdoms/dfk-chain/rpc";
-// const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
+//const url = "https://avax-dfk.gateway.pokt.network/v1/lb/6244818c00b9f0003ad1b619/ext/bc/q2aTwKuyzgs8pynF7UXBZCU7DejbZbZ6EUyHr3JQzYgwNPUPi/rpc";
 const provider = new ethers.providers.JsonRpcProvider(url);
 const { mainModule } = require("process");
 const DFKHeroCoreAddress = "0xEb9B61B145D6489Be575D3603F4a704810e143dF";
@@ -240,6 +240,8 @@ const completeQuest = async (heroId) => {
     rwEvents.forEach((e) => {
       if (e.args.reward === "0x576C260513204392F0eC0bc865450872025CB1cA") {
         console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${ethers.utils.formatUnits(e.args.amount, "kwei")} by Hero ${e.args.heroId}`);
+      } else if (e.args.reward ==="0x04b9dA42306B023f3572e106B11D82aAd9D32EBb" || e.args.reward==="0xCCb93dABD71c8Dad03Fc4CE5559dC3D89F67a260") {
+        console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${ethers.utils.formatEther(e.args.amount)} by Hero ${e.args.heroId}`);
       } else {
         console.log(`**Looted: ${rewards.rewardsMap[e.args.reward]} x${e.args.amount} by Hero ${e.args.heroId}`);
       }
