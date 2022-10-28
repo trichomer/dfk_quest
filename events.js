@@ -25,7 +25,7 @@ console.log(`${ccCrystalSummoned[1]}`);
 
 
 async function gc () {
-    let ccGetCrystal = await CrystalCoreUpgradeableContract.getCrystal(430);
+    let ccGetCrystal = await CrystalCoreUpgradeableContract.getCrystal(29452);
     console.log(`
         Owner: ${ccGetCrystal[0]}
         summonerId: ${ccGetCrystal[1]}
