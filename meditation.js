@@ -8,7 +8,7 @@ const abi = fs.readFileSync("./abis/MeditationCircle.json").toString();
 const privateKey = fs.readFileSync(".secret").toString().trim();
 const wallet = new ethers.Wallet(privateKey, provider);
 
-const startMed = async () => {
+const startMed = async (id) => {
   try {
     let contract = new ethers.Contract(
       meditationContractAddress,
@@ -16,11 +16,11 @@ const startMed = async () => {
       provider
     );
     contract.connect(wallet).startMeditation(
-      1, // heroId
-      config.meditationStats.DEX, // primary stat
+      id, // heroId
+      config.meditationStats.VIT, // primary stat
       config.meditationStats.INT, // secondary stat
-      config.meditationStats.LCK, // tertiary stat
-      config.meditationCrystals.none // attunement crystal address (zero address for no token)
+      config.meditationStats.WIS, // tertiary stat
+      config.meditationCrystals.LesserWIS // attunement crystal address (zero address for no token)
     );
 
     console.log("Starting Meditation...");
@@ -29,7 +29,7 @@ const startMed = async () => {
   }
 };
 
-const finishMed = async () => {
+const finishMed = async (id) => {
   try {
     let contract = new ethers.Contract(
       meditationContractAddress,
@@ -43,13 +43,13 @@ const finishMed = async () => {
   }
 };
 
-const startAndFinishMed = () => {
-  startMed();
+const startAndFinishMed = (id) => {
+  startMed(id);
   setTimeout(() => {
-    finishMed();
+    finishMed(id);
   }, 40000);
 };
 
 // start();
 // finish();
-startAndFinishMed();
+startAndFinishMed(config.medID);
