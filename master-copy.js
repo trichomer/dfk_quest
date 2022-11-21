@@ -479,9 +479,9 @@ async function fetchHeroXP(wal) {
 
   const json = await response.json();
 
-  let arr = json.data.heroes
+  let arr = json && json.data.heroes;
   
-  arr.forEach((h) => {
+  arr && arr.forEach((h) => {
     if ( h.xp === reqXP(h.level) ) {
        console.log(`➕MAX XP: Hero ${h.id} Lv.${h.level} ${RARITY_MAP[h.rarity]} ${h.mainClass}/${h.subClass}`);
     }
